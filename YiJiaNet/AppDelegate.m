@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "CODMainTabBarController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,26 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    // root
+    
+    CODMainTabBarController *mainTabBarController = [[CODMainTabBarController alloc] init];
+    self.window.rootViewController = mainTabBarController;
+    [self.window makeKeyAndVisible];
+    // statusBar、NavigationBar
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    [UINavigationBar appearance].tintColor = [UIColor whiteColor];
+//    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+//    [[UINavigationBar appearance] setBackgroundImage:[UIImage cod_imageWithColor:CODColorRed] forBarMetrics:UIBarMetricsDefault];
+    // 判断QQ、微信设备上是否安装了
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
+        [kUserCenter setObject:@"QQ" forKey:klogin_QQ];
+    }
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL  URLWithString:@"weixin://"]]) {
+        [kUserCenter setObject:@"WeChat" forKey:klogin_WeChat];
+    }
+    
     return YES;
 }
 
