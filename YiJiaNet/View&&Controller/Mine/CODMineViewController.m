@@ -26,6 +26,8 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataSource;
 
+@property (nonatomic, strong) UILabel *navLabel;
+
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIImageView *backHeaderImgaeView;
 
@@ -143,6 +145,16 @@ static CGFloat const kItmeHeaderViewHeight = 124;
     
     self.tableView.tableHeaderView = self.topView;
     
+    self.navLabel = ({
+        UILabel *label = [[UILabel alloc] init];
+        label.font = kFont(18);
+        label.textColor = [UIColor whiteColor];
+        label.text = @"我的";
+        label.textAlignment = 1;
+        label;
+    });
+    [self.backHeaderImgaeView addSubview:self.navLabel];
+
     self.messageButton = ({
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(0, 0, 20, 20);
@@ -191,7 +203,12 @@ static CGFloat const kItmeHeaderViewHeight = 124;
         imageView;
     });
     [self.backHeaderImgaeView addSubview:self.arrowImageView];
-    
+    // 约束
+    [self.navLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.backHeaderImgaeView).offset(30);
+        make.centerX.offset(0);
+        make.width.equalTo(@100);
+    }];
     [self.messageButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(20, 20));
         make.top.equalTo(self.backHeaderImgaeView).offset(30);
