@@ -1,14 +1,14 @@
 //
-//  StoreConditionPopVW.h
-//  WGC
+//  ConditionPopView.h
+//  YiJiaNet
 //
-//  Created by Tang on 2018/4/11.
-//  Copyright © 2018年 EndureTang. All rights reserved.
+//  Created by KUANG on 2019/1/3.
+//  Copyright © 2019年 JIARUI. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface StoreConditionPopVW : UIView
+@interface ConditionPopView : UIView
 
 
 /**

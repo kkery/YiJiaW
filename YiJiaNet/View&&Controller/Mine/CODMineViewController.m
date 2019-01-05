@@ -14,6 +14,10 @@
 #import "UIView+BlockGesture.h"
 #import "XWXShareView.h"
 #import "CODMessageViewController.h"
+#import "UIViewController+COD.h"
+#import "CODAuthenViewController.h"
+#import "CODAuthenStatusViewController.h"
+#import "CODSettingViewController.h"
 
 static NSString * const kMineTicketCell = @"MineTicketCell";
 static NSString * const kBaseCell = @"BaseCell";
@@ -162,7 +166,7 @@ static CGFloat const kItmeHeaderViewHeight = 124;
         @weakify(self);
         [[button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [self gotoLogin];
+            [self gotoSetting];
         }];
         button;
     });
@@ -193,6 +197,10 @@ static CGFloat const kItmeHeaderViewHeight = 124;
         label.layer.cornerRadius = 12;
         label.layer.masksToBounds = YES;
         label.textAlignment = 1;
+        label.userInteractionEnabled = YES;
+        [label addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+            [self authenAction];
+        }];
         label;
     });
     [self.backHeaderImgaeView addSubview:self.authenLabel];
@@ -328,12 +336,32 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"推荐给好友"]) {
+    
+//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的收藏"]) {
         XWXShareView *ShareView = [[XWXShareView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
         [ShareView show];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"消息中心"]) {
         CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
+    } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的足迹"]) {
+        CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
+        [self.navigationController pushViewController:messageVC animated:YES];
+    } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"意见反馈"]) {
+        CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
+        [self.navigationController pushViewController:messageVC animated:YES];
+    } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"客服中心"]) {
+        [self alertVcTitle:nil message:@"拨打10086" leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+        } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
+            dispatch_async(dispatch_get_main_queue(), ^{;
+                NSMutableString * str = [[NSMutableString alloc] initWithFormat:@"tel://%@",@"10086"];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+            });
+        }];
+    } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"推荐给好友"]) {
+        XWXShareView *ShareView = [[XWXShareView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
+        [ShareView show];
     }
 }
 
@@ -351,6 +379,28 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 //        [self fetchMessageUnreadCount];
 //    };
     [self presentViewController:navigationController animated:YES completion:nil];
+}
+- (void)gotoSetting {
+    CODSettingViewController *setVC = [[CODSettingViewController alloc] init];
+    [self.navigationController pushViewController:setVC animated:YES];
+}
+
+- (void)authenAction {
+    //（1审核中、2审核失败、3审核成功、4未认证）
+    NSInteger status = 4;
+    if (status == 4) {
+        CODAuthenViewController *authenVC = [[CODAuthenViewController alloc] init];
+        [self.navigationController pushViewController:authenVC animated:YES];
+    } else if (status == 3) {
+        CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
+        authenVC.status = status;
+        [self.navigationController pushViewController:authenVC animated:YES];
+    } else {
+        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
+        webView.webTitleString = @"实名认证";
+        [self.navigationController pushViewController:webView animated:YES];
+
+    }
 }
 
 @end

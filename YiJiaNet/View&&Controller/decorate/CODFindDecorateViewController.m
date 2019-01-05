@@ -34,6 +34,10 @@
 #import "HPSearchViewController.h"
 #import "CODCompanyDetailViewController.h"
 #import "CODAllDecorateViewController.h"
+
+#import "ConditionPopView.h"
+#import "DecorateConditionView.h"
+
 static CGFloat const kBannerRadio = 375 / 751.0;// 广告图片比例
 static CGFloat const kPadding = 12;
 
@@ -51,6 +55,16 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 
 @property (nonatomic, strong) CODIntrinsicTitleView *titleView;// 标题视图
 
+
+/** 条件帅选框*/
+@property (nonatomic, strong) DecorateConditionView *conditionTitleView;
+/** 下拉视图 */
+@property (nonatomic,strong) ConditionPopView *popVW;
+/** 下拉选项数据*/
+@property (nonatomic,strong)NSMutableArray *choseArr;
+/** 请求参数*/
+@property(nonatomic,strong) NSMutableDictionary *parDic;
+
 @property (nonatomic, strong) UIView *searchView;// 搜索视图
 @property (nonatomic, strong) UILabel *searchTextLable;// 搜索视图;
 @property (nonatomic, strong) UIButton *msgBtn;
@@ -66,9 +80,6 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 @property (nonatomic, strong) NSArray *dataArray;
 
 
-@property (nonatomic, strong) DecorateConditionView *conditionTitleView;
-
-
 @end
 
 @implementation CODFindDecorateViewController
@@ -80,6 +91,12 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     
     [self configureNavgationView];
     [self configureView];
+    
+    self.choseArr = [[NSMutableArray alloc]initWithObjects:
+                     @[@"综合",@"案例"],
+                     @[],
+                     @[],
+                     nil];
     
     [self loadData];
     
@@ -239,6 +256,25 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     return _bannerView;
 }
 
+-(ConditionPopView *)popVW
+{
+    if (!_popVW) {
+        _popVW = [[ConditionPopView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(self.conditionTitleView.frame), SCREENWIDTH, SCREENHEIGHT - CGRectGetHeight(self.conditionTitleView.frame)) supView:self.view];
+        kWeakSelf(self)
+        [_popVW setSelectBlock:^(NSString *key, NSInteger idx,NSString *tle) {
+            [weakself.popVW dismiss];
+            //            UIButton *btn = weakself.conditionTitleView.recodeChoseDic[@"select"];
+            UIButton *btn = weakself.conditionTitleView.itmeBtnOne;
+            
+            [btn setTitle:tle forState:0];
+            
+//            weakself.parDic[@"cat_id"] = weakself.FenLeiIdArr[idx];
+            [weakself loadData];
+        }];
+        
+    }return _popVW;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -303,24 +339,6 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    if (section == 1) {
-//        UIView *sectionHeaderview = ({
-//            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 80)];
-//            view;
-//        });
-//
-//        self.moreBtnView = [[HJMoreBtnView alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 50)];
-//
-//        [self.moreBtnView setBtnSelectItemBlock:^(NSString *itemStr) {
-//
-//        }];
-//
-//        [sectionHeaderview addSubview:self.moreBtnView];
-//
-//
-//        return sectionHeaderview;
-//    }
-//    return nil;
     
     UIView *sectionHeaderview = ({
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 60)];
@@ -328,20 +346,35 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
         view;
     });
     
-    self.conditionTitleView = [[DecorateConditionView alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 50)];
-    
-//    [self.moreBtnView setBtnSelectItemBlock:^(NSString *itemStr) {
-//
-//    }];
+    self.conditionTitleView = [[DecorateConditionView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 50)];
+    [self.view addSubview:self.conditionTitleView];
+    kWeakSelf(self)
+    [self.conditionTitleView setBtnSelectItemBlock:^(ConditionType condition) {
+        // 综合
+        if (condition == ConditionTypeNormal) {
+            if (self.popVW.isShow == YES) {
+                [weakself.popVW dismiss];
+            } else {
+                [weakself.popVW showWithData:weakself.choseArr[0] opitionKey:@"分类"];
+            }
+        } else if (condition == ConditionTypePraise) {
+            if (self.popVW.isShow == YES) [weakself.popVW dismiss];
+            weakself.parDic[@"cat_id"] = @"";
+            [weakself loadData];
+        } else {
+            if (self.popVW.isShow == YES) [weakself.popVW dismiss];
+            weakself.parDic[@"cat_id"] = @"";
+            [weakself loadData];
+        }
+    }];
     
     [sectionHeaderview addSubview:self.conditionTitleView];
-//    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 1)];
-//    lineView.backgroundColor = [UIColor redColor];
-//    [sectionHeaderview addSubview:lineView];
+
 
     return sectionHeaderview;
     
 }
+
 
 #pragma mark - Action
 - (void)searchAction {

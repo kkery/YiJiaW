@@ -14,32 +14,22 @@
 #import "CODCompanyDetailViewController.h"
 #import "ImageBrowserViewController.h"
 #import "XWXStoreDetailsItemVw.h"  // 条件选择框
-#import "StoreConditionPopVW.h"
+#import "ConditionPopView.h"
 
 static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 
 @interface CODAllDecorateViewController () <UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
-@property (nonatomic, strong) DecorateConditionView *conditionTitleView;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataArray;
 
-
-@property(nonatomic,strong) UIButton *selecBtn;
-
-
-@property(nonatomic,strong) UIView *ItemBtnVew;
-
-/** 按钮视图 */
-@property (nonatomic,strong)XWXStoreDetailsItemVw *btnVW;
+/** 条件帅选框*/
+@property (nonatomic, strong) DecorateConditionView *conditionTitleView;
 /** 下拉视图 */
-@property (nonatomic,strong)StoreConditionPopVW *popVW;
-@property(nonatomic, assign) BOOL isOn;
+@property (nonatomic,strong) ConditionPopView *popVW;
 /** 下拉选项数据*/
-@property (nonatomic,strong)NSMutableArray *choseArr;
-@property(nonatomic,strong) TWHImgTitleBtn *oneBtn;
-@property(nonatomic,strong) TWHImgTitleBtn *TwoBtn;
-@property(nonatomic,strong) TWHImgTitleBtn *ThreeBtn;
+@property (nonatomic,strong) NSMutableArray *choseArr;
+
 
 /** 个人信息数据 */
 @property (nonatomic, copy) NSDictionary *imfoDic;
@@ -116,10 +106,10 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 }
 
 #pragma mark - Lazy load
--(StoreConditionPopVW *)popVW
+-(ConditionPopView *)popVW
 {
     if (!_popVW) {
-        _popVW = [[StoreConditionPopVW alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(self.conditionTitleView.frame), SCREENWIDTH, SCREENHEIGHT - CGRectGetHeight(self.conditionTitleView.frame)) supView:self.view];
+        _popVW = [[ConditionPopView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(self.conditionTitleView.frame), SCREENWIDTH, SCREENHEIGHT - CGRectGetHeight(self.conditionTitleView.frame)) supView:self.view];
         kWeakSelf(self)
         [_popVW setSelectBlock:^(NSString *key, NSInteger idx,NSString *tle) {
             [weakself.popVW dismiss];
@@ -127,7 +117,7 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
             UIButton *btn = weakself.conditionTitleView.itmeBtnOne;
 
             [btn setTitle:tle forState:0];
-            weakself.oneBtn.titleLabel.text = tle;
+           
             weakself.parDic[@"cat_id"] = weakself.FenLeiIdArr[idx];
             [weakself loadData];
         }];

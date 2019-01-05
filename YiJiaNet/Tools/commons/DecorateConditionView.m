@@ -67,7 +67,6 @@
     self.itmeBtnThree.titleLabel.font = [UIFont systemFontOfSize:15];
     self.itmeBtnThree.tag = 3;
     [self.itmeBtnThree addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.itmeBtnThree setImage:kGetImage(@"merchants_default") forState:UIControlStateNormal];
     [self.itmeBtnThree setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.itmeBtnThree setTitleColor:CODColorTheme forState:UIControlStateSelected];
     self.itmeBtnThree.BtnStyle = BtnStyleImageRight;

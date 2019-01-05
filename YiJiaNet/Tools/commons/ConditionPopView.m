@@ -1,14 +1,14 @@
 //
-//  StoreConditionPopVW.m
-//  WGC
+//  ConditionPopView.m
+//  YiJiaNet
 //
-//  Created by Tang on 2018/4/11.
-//  Copyright © 2018年 EndureTang. All rights reserved.
+//  Created by KUANG on 2019/1/3.
+//  Copyright © 2019年 JIARUI. All rights reserved.
 //
 
-#import "StoreConditionPopVW.h"
+#import "ConditionPopView.h"
 
-@interface StoreConditionPopVW()<UITableViewDelegate,UITableViewDataSource>
+@interface ConditionPopView()<UITableViewDelegate,UITableViewDataSource>
 
 /** 选项列表*/
 @property (nonatomic,strong)UITableView *opitionTable;
@@ -28,7 +28,7 @@
 
 @end
 
-@implementation StoreConditionPopVW
+@implementation ConditionPopView
 
 
 -(instancetype)initWithFrame:(CGRect)frame supView:(UIView *)vw{
