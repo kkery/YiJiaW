@@ -94,6 +94,13 @@
         self.itmeBtnTwo.selected = NO;
         self.itmeBtnThree.selected = NO;
         self.type = ConditionTypeNormal;
+//        if (self.isOn) {
+//            [self.itmeBtnOne setImage:kGetImage(@"shop_up_sel") forState:UIControlStateSelected];
+//            self.isOn = NO;
+//        } else {
+//            [self.itmeBtnOne setImage:kGetImage(@"top_sel") forState:UIControlStateSelected];
+//            self.isOn = YES;
+//        }
     } else if (sender.tag == 2) {
         self.itmeBtnOne.selected = NO;
         self.itmeBtnTwo.selected = YES;

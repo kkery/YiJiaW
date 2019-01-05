@@ -77,6 +77,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self wr_setNavBarShadowImageHidden:NO];
     if (self.status == 2) {
         self.title = @"修改登录密码";
     } else {

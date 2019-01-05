@@ -8,6 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		384585868D1759D641132291 /* libPods-YiJiaNet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E72B99BB0C9F2C2CD1E0853F /* libPods-YiJiaNet.a */; };
+		6E07137921E0995B00E9C8F3 /* CODPersonInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E07137821E0995B00E9C8F3 /* CODPersonInfoViewController.m */; };
+		6E07137C21E09D6800E9C8F3 /* SetNickNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E07137A21E09D6800E9C8F3 /* SetNickNameViewController.m */; };
+		6E0713AC21E0A6EA00E9C8F3 /* BRStringPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E07139B21E0A6EA00E9C8F3 /* BRStringPickerView.m */; };
+		6E0713AD21E0A6EA00E9C8F3 /* NSDate+BRPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E0713A021E0A6EA00E9C8F3 /* NSDate+BRPickerView.m */; };
+		6E0713AE21E0A6EA00E9C8F3 /* BRDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E0713A121E0A6EA00E9C8F3 /* BRDatePickerView.m */; };
+		6E0713AF21E0A6EA00E9C8F3 /* BRBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E0713A421E0A6EA00E9C8F3 /* BRBaseView.m */; };
+		6E0713B021E0A6EA00E9C8F3 /* BRAddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E0713A721E0A6EA00E9C8F3 /* BRAddressModel.m */; };
+		6E0713B121E0A6EA00E9C8F3 /* BRPickerView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6E0713A921E0A6EA00E9C8F3 /* BRPickerView.bundle */; };
+		6E0713B221E0A6EA00E9C8F3 /* BRAddressPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E0713AB21E0A6EA00E9C8F3 /* BRAddressPickerView.m */; };
 		6E12503521D4A96C00202FAE /* CODHotTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E12503421D4A96C00202FAE /* CODHotTableViewCell.m */; };
 		6E12503C21D4B0DA00202FAE /* CODMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E12503B21D4B0DA00202FAE /* CODMessageViewController.m */; };
 		6E12503F21D4B4F300202FAE /* MessageTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E12503E21D4B4F300202FAE /* MessageTypeTableViewCell.m */; };
@@ -126,11 +135,27 @@
 		6EEEA06F21DEF455004EA7F0 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA05E21DEF455004EA7F0 /* AFNetworkReachabilityManager.m */; };
 		6EEEA07021DEF455004EA7F0 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA05F21DEF455004EA7F0 /* AFSecurityPolicy.m */; };
 		6EEEA07321DEFAD9004EA7F0 /* CODAuthenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA07221DEFAD9004EA7F0 /* CODAuthenViewController.m */; };
-		6EEEA08621DF100B004EA7F0 /* GetImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA08421DF1009004EA7F0 /* GetImage.m */; };
 		6EEEA08921DF3CD8004EA7F0 /* CODAuthenStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA08821DF3CD8004EA7F0 /* CODAuthenStatusViewController.m */; };
 		6EEEA08D21DF4A5D004EA7F0 /* JSWave.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA08C21DF4A5D004EA7F0 /* JSWave.m */; };
 		6EEEA09321DF5101004EA7F0 /* CODSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA09221DF5101004EA7F0 /* CODSettingViewController.m */; };
 		6EEEA09621DF5DEC004EA7F0 /* CODSetPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEA09521DF5DEC004EA7F0 /* CODSetPwdViewController.m */; };
+		6EF104C921E03CF200CF673B /* GetImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104C821E03CF200CF673B /* GetImage.m */; };
+		6EF104CD21E04FD500CF673B /* CODCollectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104CC21E04FD500CF673B /* CODCollectViewController.m */; };
+		6EF104E121E0511B00CF673B /* WMPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104CF21E0511B00CF673B /* WMPageController.m */; };
+		6EF104E221E0511B00CF673B /* UIViewController+WMPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104D021E0511B00CF673B /* UIViewController+WMPageController.m */; };
+		6EF104E321E0511B00CF673B /* WMMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104D621E0511B00CF673B /* WMMenuItem.m */; };
+		6EF104E421E0511B00CF673B /* WMScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104D721E0511B00CF673B /* WMScrollView.m */; };
+		6EF104E521E0511B00CF673B /* WMMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104D821E0511B00CF673B /* WMMenuView.m */; };
+		6EF104E621E0511B00CF673B /* WMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104D921E0511B00CF673B /* WMProgressView.m */; };
+		6EF104E721E0511B00CF673B /* WMMagicScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104DD21E0511B00CF673B /* WMMagicScrollView.m */; };
+		6EF104E821E0511B00CF673B /* WMStickyPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104DE21E0511B00CF673B /* WMStickyPageController.m */; };
+		6EF104EB21E0534000CF673B /* CODCompanyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104EA21E0534000CF673B /* CODCompanyListViewController.m */; };
+		6EF104EE21E054BE00CF673B /* CODHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104ED21E054BE00CF673B /* CODHistoryViewController.m */; };
+		6EF104F121E0615D00CF673B /* CODMineOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104F021E0615D00CF673B /* CODMineOrderViewController.m */; };
+		6EF104F421E061D900CF673B /* CODMineMeasureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104F321E061D900CF673B /* CODMineMeasureViewController.m */; };
+		6EF104F721E061F900CF673B /* CODOwnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104F621E061F800CF673B /* CODOwnerViewController.m */; };
+		6EF104FA21E0821600CF673B /* CODFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104F921E0821600CF673B /* CODFeedViewController.m */; };
+		6EF1050021E084F700CF673B /* CODTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF104FF21E084F700CF673B /* CODTextView.m */; };
 		6EF4F6AC21D1BC0F00BCE41D /* SGAdvertScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF4F6AB21D1BC0F00BCE41D /* SGAdvertScrollView.m */; };
 		6EF4F6AF21D1BC8100BCE41D /* CODAnnouncementCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF4F6AD21D1BC8100BCE41D /* CODAnnouncementCell.m */; };
 		6EF4F6B221D1D10A00BCE41D /* CODExampleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF4F6B121D1D10A00BCE41D /* CODExampleTableViewCell.m */; };
@@ -162,6 +187,25 @@
 /* Begin PBXFileReference section */
 		10791752460A5A310F63068A /* Pods-YiJiaNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YiJiaNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-YiJiaNet/Pods-YiJiaNet.release.xcconfig"; sourceTree = "<group>"; };
 		32DD99957E98EE8C98DE9198 /* libPods-YiJiaNetTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YiJiaNetTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E07137721E0995B00E9C8F3 /* CODPersonInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODPersonInfoViewController.h; sourceTree = "<group>"; };
+		6E07137821E0995B00E9C8F3 /* CODPersonInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODPersonInfoViewController.m; sourceTree = "<group>"; };
+		6E07137A21E09D6800E9C8F3 /* SetNickNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetNickNameViewController.m; sourceTree = "<group>"; };
+		6E07137B21E09D6800E9C8F3 /* SetNickNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetNickNameViewController.h; sourceTree = "<group>"; };
+		6E07139A21E0A6EA00E9C8F3 /* BRStringPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRStringPickerView.h; sourceTree = "<group>"; };
+		6E07139B21E0A6EA00E9C8F3 /* BRStringPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRStringPickerView.m; sourceTree = "<group>"; };
+		6E07139C21E0A6EA00E9C8F3 /* BRPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRPickerView.h; sourceTree = "<group>"; };
+		6E07139D21E0A6EA00E9C8F3 /* BRPickerViewMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRPickerViewMacro.h; sourceTree = "<group>"; };
+		6E07139F21E0A6EA00E9C8F3 /* BRDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDatePickerView.h; sourceTree = "<group>"; };
+		6E0713A021E0A6EA00E9C8F3 /* NSDate+BRPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+BRPickerView.m"; sourceTree = "<group>"; };
+		6E0713A121E0A6EA00E9C8F3 /* BRDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRDatePickerView.m; sourceTree = "<group>"; };
+		6E0713A221E0A6EA00E9C8F3 /* NSDate+BRPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+BRPickerView.h"; sourceTree = "<group>"; };
+		6E0713A421E0A6EA00E9C8F3 /* BRBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRBaseView.m; sourceTree = "<group>"; };
+		6E0713A521E0A6EA00E9C8F3 /* BRBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRBaseView.h; sourceTree = "<group>"; };
+		6E0713A721E0A6EA00E9C8F3 /* BRAddressModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRAddressModel.m; sourceTree = "<group>"; };
+		6E0713A821E0A6EA00E9C8F3 /* BRAddressPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRAddressPickerView.h; sourceTree = "<group>"; };
+		6E0713A921E0A6EA00E9C8F3 /* BRPickerView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BRPickerView.bundle; sourceTree = "<group>"; };
+		6E0713AA21E0A6EA00E9C8F3 /* BRAddressModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRAddressModel.h; sourceTree = "<group>"; };
+		6E0713AB21E0A6EA00E9C8F3 /* BRAddressPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRAddressPickerView.m; sourceTree = "<group>"; };
 		6E12503321D4A96C00202FAE /* CODHotTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODHotTableViewCell.h; sourceTree = "<group>"; };
 		6E12503421D4A96C00202FAE /* CODHotTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODHotTableViewCell.m; sourceTree = "<group>"; };
 		6E12503A21D4B0DA00202FAE /* CODMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODMessageViewController.h; sourceTree = "<group>"; };
@@ -406,8 +450,6 @@
 		6EEEA06121DEF455004EA7F0 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		6EEEA07121DEFAD9004EA7F0 /* CODAuthenViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODAuthenViewController.h; sourceTree = "<group>"; };
 		6EEEA07221DEFAD9004EA7F0 /* CODAuthenViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODAuthenViewController.m; sourceTree = "<group>"; };
-		6EEEA08421DF1009004EA7F0 /* GetImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetImage.m; sourceTree = "<group>"; };
-		6EEEA08521DF100A004EA7F0 /* GetImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetImage.h; sourceTree = "<group>"; };
 		6EEEA08721DF3CD8004EA7F0 /* CODAuthenStatusViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODAuthenStatusViewController.h; sourceTree = "<group>"; };
 		6EEEA08821DF3CD8004EA7F0 /* CODAuthenStatusViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODAuthenStatusViewController.m; sourceTree = "<group>"; };
 		6EEEA08B21DF4A5D004EA7F0 /* JSWave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSWave.h; sourceTree = "<group>"; };
@@ -416,6 +458,40 @@
 		6EEEA09221DF5101004EA7F0 /* CODSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSettingViewController.m; sourceTree = "<group>"; };
 		6EEEA09421DF5DEC004EA7F0 /* CODSetPwdViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODSetPwdViewController.h; sourceTree = "<group>"; };
 		6EEEA09521DF5DEC004EA7F0 /* CODSetPwdViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSetPwdViewController.m; sourceTree = "<group>"; };
+		6EF104C721E03CF200CF673B /* GetImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetImage.h; sourceTree = "<group>"; };
+		6EF104C821E03CF200CF673B /* GetImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetImage.m; sourceTree = "<group>"; };
+		6EF104CB21E04FD500CF673B /* CODCollectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODCollectViewController.h; sourceTree = "<group>"; };
+		6EF104CC21E04FD500CF673B /* CODCollectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODCollectViewController.m; sourceTree = "<group>"; };
+		6EF104CF21E0511B00CF673B /* WMPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMPageController.m; sourceTree = "<group>"; };
+		6EF104D021E0511B00CF673B /* UIViewController+WMPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+WMPageController.m"; sourceTree = "<group>"; };
+		6EF104D221E0511B00CF673B /* WMScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMScrollView.h; sourceTree = "<group>"; };
+		6EF104D321E0511B00CF673B /* WMMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMMenuItem.h; sourceTree = "<group>"; };
+		6EF104D421E0511B00CF673B /* WMMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMMenuView.h; sourceTree = "<group>"; };
+		6EF104D521E0511B00CF673B /* WMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMProgressView.h; sourceTree = "<group>"; };
+		6EF104D621E0511B00CF673B /* WMMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMMenuItem.m; sourceTree = "<group>"; };
+		6EF104D721E0511B00CF673B /* WMScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMScrollView.m; sourceTree = "<group>"; };
+		6EF104D821E0511B00CF673B /* WMMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMMenuView.m; sourceTree = "<group>"; };
+		6EF104D921E0511B00CF673B /* WMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMProgressView.m; sourceTree = "<group>"; };
+		6EF104DA21E0511B00CF673B /* WMPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMPageController.h; sourceTree = "<group>"; };
+		6EF104DC21E0511B00CF673B /* WMStickyPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMStickyPageController.h; sourceTree = "<group>"; };
+		6EF104DD21E0511B00CF673B /* WMMagicScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMMagicScrollView.m; sourceTree = "<group>"; };
+		6EF104DE21E0511B00CF673B /* WMStickyPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMStickyPageController.m; sourceTree = "<group>"; };
+		6EF104DF21E0511B00CF673B /* WMMagicScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMMagicScrollView.h; sourceTree = "<group>"; };
+		6EF104E021E0511B00CF673B /* UIViewController+WMPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+WMPageController.h"; sourceTree = "<group>"; };
+		6EF104E921E0534000CF673B /* CODCompanyListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODCompanyListViewController.h; sourceTree = "<group>"; };
+		6EF104EA21E0534000CF673B /* CODCompanyListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODCompanyListViewController.m; sourceTree = "<group>"; };
+		6EF104EC21E054BE00CF673B /* CODHistoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODHistoryViewController.h; sourceTree = "<group>"; };
+		6EF104ED21E054BE00CF673B /* CODHistoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODHistoryViewController.m; sourceTree = "<group>"; };
+		6EF104EF21E0615D00CF673B /* CODMineOrderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODMineOrderViewController.h; sourceTree = "<group>"; };
+		6EF104F021E0615D00CF673B /* CODMineOrderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODMineOrderViewController.m; sourceTree = "<group>"; };
+		6EF104F221E061D900CF673B /* CODMineMeasureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODMineMeasureViewController.h; sourceTree = "<group>"; };
+		6EF104F321E061D900CF673B /* CODMineMeasureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODMineMeasureViewController.m; sourceTree = "<group>"; };
+		6EF104F521E061F800CF673B /* CODOwnerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODOwnerViewController.h; sourceTree = "<group>"; };
+		6EF104F621E061F800CF673B /* CODOwnerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODOwnerViewController.m; sourceTree = "<group>"; };
+		6EF104F821E0821600CF673B /* CODFeedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODFeedViewController.h; sourceTree = "<group>"; };
+		6EF104F921E0821600CF673B /* CODFeedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODFeedViewController.m; sourceTree = "<group>"; };
+		6EF104FE21E084F700CF673B /* CODTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODTextView.h; sourceTree = "<group>"; };
+		6EF104FF21E084F700CF673B /* CODTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODTextView.m; sourceTree = "<group>"; };
 		6EF4F6AA21D1BC0F00BCE41D /* SGAdvertScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAdvertScrollView.h; sourceTree = "<group>"; };
 		6EF4F6AB21D1BC0F00BCE41D /* SGAdvertScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGAdvertScrollView.m; sourceTree = "<group>"; };
 		6EF4F6AD21D1BC8100BCE41D /* CODAnnouncementCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CODAnnouncementCell.m; sourceTree = "<group>"; };
@@ -465,6 +541,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E07139821E0A6EA00E9C8F3 /* BRPickerView */ = {
+			isa = PBXGroup;
+			children = (
+				6E07139921E0A6EA00E9C8F3 /* StringPickerView */,
+				6E07139C21E0A6EA00E9C8F3 /* BRPickerView.h */,
+				6E07139D21E0A6EA00E9C8F3 /* BRPickerViewMacro.h */,
+				6E07139E21E0A6EA00E9C8F3 /* DatePickerView */,
+				6E0713A321E0A6EA00E9C8F3 /* Base */,
+				6E0713A621E0A6EA00E9C8F3 /* AddressPickerView */,
+			);
+			path = BRPickerView;
+			sourceTree = "<group>";
+		};
+		6E07139921E0A6EA00E9C8F3 /* StringPickerView */ = {
+			isa = PBXGroup;
+			children = (
+				6E07139A21E0A6EA00E9C8F3 /* BRStringPickerView.h */,
+				6E07139B21E0A6EA00E9C8F3 /* BRStringPickerView.m */,
+			);
+			path = StringPickerView;
+			sourceTree = "<group>";
+		};
+		6E07139E21E0A6EA00E9C8F3 /* DatePickerView */ = {
+			isa = PBXGroup;
+			children = (
+				6E07139F21E0A6EA00E9C8F3 /* BRDatePickerView.h */,
+				6E0713A021E0A6EA00E9C8F3 /* NSDate+BRPickerView.m */,
+				6E0713A121E0A6EA00E9C8F3 /* BRDatePickerView.m */,
+				6E0713A221E0A6EA00E9C8F3 /* NSDate+BRPickerView.h */,
+			);
+			path = DatePickerView;
+			sourceTree = "<group>";
+		};
+		6E0713A321E0A6EA00E9C8F3 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				6E0713A421E0A6EA00E9C8F3 /* BRBaseView.m */,
+				6E0713A521E0A6EA00E9C8F3 /* BRBaseView.h */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		6E0713A621E0A6EA00E9C8F3 /* AddressPickerView */ = {
+			isa = PBXGroup;
+			children = (
+				6E0713A721E0A6EA00E9C8F3 /* BRAddressModel.m */,
+				6E0713A821E0A6EA00E9C8F3 /* BRAddressPickerView.h */,
+				6E0713A921E0A6EA00E9C8F3 /* BRPickerView.bundle */,
+				6E0713AA21E0A6EA00E9C8F3 /* BRAddressModel.h */,
+				6E0713AB21E0A6EA00E9C8F3 /* BRAddressPickerView.m */,
+			);
+			path = AddressPickerView;
+			sourceTree = "<group>";
+		};
 		6E12503121D4A82800202FAE /* quote */ = {
 			isa = PBXGroup;
 			children = (
@@ -850,6 +980,8 @@
 		6EE5F89021CB85D200630E68 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				6E07139821E0A6EA00E9C8F3 /* BRPickerView */,
+				6EF104CE21E0511B00CF673B /* WMPageController */,
 				6EEEA03D21DEF455004EA7F0 /* AFNetworking */,
 				6E5252E821D62B0300857773 /* TMCache */,
 				6EBF871E21CCE454003E7E25 /* SVProgressHUD */,
@@ -974,8 +1106,8 @@
 		6EE5F89921CB881600630E68 /* commons */ = {
 			isa = PBXGroup;
 			children = (
+				6EF104CA21E03D4500CF673B /* comonsView */,
 				6EEEA08A21DF4A47004EA7F0 /* 波浪效果 */,
-				6EEEA07421DF0E30004EA7F0 /* 取图片 */,
 				6E2A3ACB21DE1125002BE8A0 /* 分享视图 */,
 				6E2A3ABB21DDFAF1002BE8A0 /* 条件筛选框 */,
 				6EA7203D21DCC9E700629A1B /* WRNavigationBar */,
@@ -986,20 +1118,8 @@
 				6E13FC7F21D36099008318F3 /* 占位图 */,
 				6EF4F6A921D1BBCF00BCE41D /* 文字轮播 */,
 				6E1A7CA221D08213002FCAC6 /* 跑马灯 */,
-				6E12504621D4C33E00202FAE /* UIBadgeView.h */,
-				6E12504721D4C33F00202FAE /* UIBadgeView.m */,
-				6EDB3E3D21CC9967006F2208 /* CODLayoutButton.h */,
-				6EDB3E3E21CC9967006F2208 /* CODLayoutButton.m */,
-				6E5252D621D611B800857773 /* CODImageLineView.h */,
-				6E5252D521D611B700857773 /* CODImageLineView.m */,
-				6EF4F6D121D2392000BCE41D /* CODIntrinsicTitleView.h */,
-				6EF4F6D221D2392000BCE41D /* CODIntrinsicTitleView.m */,
-				6E13FC7421D31934008318F3 /* StoreSearchCollectLayout.h */,
-				6E13FC7321D31934008318F3 /* StoreSearchCollectLayout.m */,
-				6EC264EE21D4662B00C3EA57 /* CODModifyQuantityView.h */,
-				6EC264ED21D4662A00C3EA57 /* CODModifyQuantityView.m */,
-				6E2A3AB921DDB09A002BE8A0 /* CustomIOSAlertView.h */,
-				6E2A3AB821DDB099002BE8A0 /* CustomIOSAlertView.m */,
+				6EF104C721E03CF200CF673B /* GetImage.h */,
+				6EF104C821E03CF200CF673B /* GetImage.m */,
 			);
 			path = commons;
 			sourceTree = "<group>";
@@ -1041,6 +1161,18 @@
 			children = (
 				6EE5F8D321CBA14C00630E68 /* CODMineViewController.h */,
 				6EE5F8D421CBA14C00630E68 /* CODMineViewController.m */,
+				6EF104EF21E0615D00CF673B /* CODMineOrderViewController.h */,
+				6EF104F021E0615D00CF673B /* CODMineOrderViewController.m */,
+				6EF104F221E061D900CF673B /* CODMineMeasureViewController.h */,
+				6EF104F321E061D900CF673B /* CODMineMeasureViewController.m */,
+				6EF104F521E061F800CF673B /* CODOwnerViewController.h */,
+				6EF104F621E061F800CF673B /* CODOwnerViewController.m */,
+				6EF104CB21E04FD500CF673B /* CODCollectViewController.h */,
+				6EF104CC21E04FD500CF673B /* CODCollectViewController.m */,
+				6EF104EC21E054BE00CF673B /* CODHistoryViewController.h */,
+				6EF104ED21E054BE00CF673B /* CODHistoryViewController.m */,
+				6EF104E921E0534000CF673B /* CODCompanyListViewController.h */,
+				6EF104EA21E0534000CF673B /* CODCompanyListViewController.m */,
 				6EEEA07121DEFAD9004EA7F0 /* CODAuthenViewController.h */,
 				6EEEA07221DEFAD9004EA7F0 /* CODAuthenViewController.m */,
 				6EEEA08721DF3CD8004EA7F0 /* CODAuthenStatusViewController.h */,
@@ -1049,6 +1181,12 @@
 				6EEEA09221DF5101004EA7F0 /* CODSettingViewController.m */,
 				6EEEA09421DF5DEC004EA7F0 /* CODSetPwdViewController.h */,
 				6EEEA09521DF5DEC004EA7F0 /* CODSetPwdViewController.m */,
+				6EF104F821E0821600CF673B /* CODFeedViewController.h */,
+				6EF104F921E0821600CF673B /* CODFeedViewController.m */,
+				6E07137721E0995B00E9C8F3 /* CODPersonInfoViewController.h */,
+				6E07137821E0995B00E9C8F3 /* CODPersonInfoViewController.m */,
+				6E07137B21E09D6800E9C8F3 /* SetNickNameViewController.h */,
+				6E07137A21E09D6800E9C8F3 /* SetNickNameViewController.m */,
 			);
 			path = Mine;
 			sourceTree = "<group>";
@@ -1110,16 +1248,6 @@
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
-		6EEEA07421DF0E30004EA7F0 /* 取图片 */ = {
-			isa = PBXGroup;
-			children = (
-				6EEEA08521DF100A004EA7F0 /* GetImage.h */,
-				6EEEA08421DF1009004EA7F0 /* GetImage.m */,
-			);
-			name = "取图片";
-			path = "../../../../../金丰购/金丰购-ZzQ/Project/JinFengGou/JinFengGou/JinFengGou/Tool/取图片";
-			sourceTree = "<group>";
-		};
 		6EEEA08A21DF4A47004EA7F0 /* 波浪效果 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1127,6 +1255,68 @@
 				6EEEA08C21DF4A5D004EA7F0 /* JSWave.m */,
 			);
 			name = "波浪效果";
+			sourceTree = "<group>";
+		};
+		6EF104CA21E03D4500CF673B /* comonsView */ = {
+			isa = PBXGroup;
+			children = (
+				6E12504621D4C33E00202FAE /* UIBadgeView.h */,
+				6E12504721D4C33F00202FAE /* UIBadgeView.m */,
+				6EDB3E3D21CC9967006F2208 /* CODLayoutButton.h */,
+				6EDB3E3E21CC9967006F2208 /* CODLayoutButton.m */,
+				6E5252D621D611B800857773 /* CODImageLineView.h */,
+				6E5252D521D611B700857773 /* CODImageLineView.m */,
+				6EF4F6D121D2392000BCE41D /* CODIntrinsicTitleView.h */,
+				6EF4F6D221D2392000BCE41D /* CODIntrinsicTitleView.m */,
+				6E13FC7421D31934008318F3 /* StoreSearchCollectLayout.h */,
+				6E13FC7321D31934008318F3 /* StoreSearchCollectLayout.m */,
+				6EC264EE21D4662B00C3EA57 /* CODModifyQuantityView.h */,
+				6EC264ED21D4662A00C3EA57 /* CODModifyQuantityView.m */,
+				6E2A3AB921DDB09A002BE8A0 /* CustomIOSAlertView.h */,
+				6E2A3AB821DDB099002BE8A0 /* CustomIOSAlertView.m */,
+				6EF104FE21E084F700CF673B /* CODTextView.h */,
+				6EF104FF21E084F700CF673B /* CODTextView.m */,
+			);
+			name = comonsView;
+			sourceTree = "<group>";
+		};
+		6EF104CE21E0511B00CF673B /* WMPageController */ = {
+			isa = PBXGroup;
+			children = (
+				6EF104E021E0511B00CF673B /* UIViewController+WMPageController.h */,
+				6EF104D021E0511B00CF673B /* UIViewController+WMPageController.m */,
+				6EF104D121E0511B00CF673B /* WMMenuView */,
+				6EF104DA21E0511B00CF673B /* WMPageController.h */,
+				6EF104CF21E0511B00CF673B /* WMPageController.m */,
+				6EF104DB21E0511B00CF673B /* WMStickyPageController */,
+			);
+			path = WMPageController;
+			sourceTree = "<group>";
+		};
+		6EF104D121E0511B00CF673B /* WMMenuView */ = {
+			isa = PBXGroup;
+			children = (
+				6EF104D221E0511B00CF673B /* WMScrollView.h */,
+				6EF104D321E0511B00CF673B /* WMMenuItem.h */,
+				6EF104D421E0511B00CF673B /* WMMenuView.h */,
+				6EF104D521E0511B00CF673B /* WMProgressView.h */,
+				6EF104D621E0511B00CF673B /* WMMenuItem.m */,
+				6EF104D721E0511B00CF673B /* WMScrollView.m */,
+				6EF104D821E0511B00CF673B /* WMMenuView.m */,
+				6EF104D921E0511B00CF673B /* WMProgressView.m */,
+			);
+			path = WMMenuView;
+			sourceTree = "<group>";
+		};
+		6EF104DB21E0511B00CF673B /* WMStickyPageController */ = {
+			isa = PBXGroup;
+			children = (
+				6EF104DC21E0511B00CF673B /* WMStickyPageController.h */,
+				6EF104DD21E0511B00CF673B /* WMMagicScrollView.m */,
+				6EF104DE21E0511B00CF673B /* WMStickyPageController.m */,
+				6EF104DF21E0511B00CF673B /* WMMagicScrollView.h */,
+			);
+			path = WMStickyPageController;
 			sourceTree = "<group>";
 		};
 		6EF4F6A921D1BBCF00BCE41D /* 文字轮播 */ = {
@@ -1264,6 +1454,7 @@
 			files = (
 				6EE5F86A21CB808B00630E68 /* LaunchScreen.storyboard in Resources */,
 				6EE5F86721CB808B00630E68 /* Assets.xcassets in Resources */,
+				6E0713B121E0A6EA00E9C8F3 /* BRPickerView.bundle in Resources */,
 				6EE5F86521CB808B00630E68 /* Main.storyboard in Resources */,
 				6EBF872C21CCE454003E7E25 /* SVProgressHUD.bundle in Resources */,
 			);
@@ -1311,13 +1502,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-YiJiaNet/Pods-YiJiaNet-resources.sh",
-				"${PODS_ROOT}/BRPickerView/BRPickerView/AddressPickerView/BRPickerView.bundle",
 				"${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BRPickerView.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IQKeyboardManager.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 			);
@@ -1334,14 +1523,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E5252F121D62B0300857773 /* TMMemoryCache.m in Sources */,
+				6EF104E321E0511B00CF673B /* WMMenuItem.m in Sources */,
+				6EF1050021E084F700CF673B /* CODTextView.m in Sources */,
+				6E0713B021E0A6EA00E9C8F3 /* BRAddressModel.m in Sources */,
 				6EEEA06521DEF455004EA7F0 /* UIImageView+AFNetworking.m in Sources */,
 				6EA7204221DCC9E700629A1B /* WRNavigationBar.m in Sources */,
 				6EA7201021DC52F800629A1B /* CommonImageCollectVW.m in Sources */,
 				6E13FC7B21D31A75008318F3 /* CODBaseTableViewController.m in Sources */,
+				6E0713AD21E0A6EA00E9C8F3 /* NSDate+BRPickerView.m in Sources */,
 				6EDB3E3C21CC96A4006F2208 /* UIButton+COD.m in Sources */,
 				6EEEA08921DF3CD8004EA7F0 /* CODAuthenStatusViewController.m in Sources */,
 				6E5252FC21D62F5E00857773 /* CODSearchResultViewController.m in Sources */,
+				6EF104F121E0615D00CF673B /* CODMineOrderViewController.m in Sources */,
 				6EE5F8CF21CBA12B00630E68 /* CODHomeViewController.m in Sources */,
+				6EF104E421E0511B00CF673B /* WMScrollView.m in Sources */,
 				6EBF871D21CCDE66003E7E25 /* CODRegistViewController.m in Sources */,
 				6EEEA06421DEF455004EA7F0 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				6EF4F6D321D2392000BCE41D /* CODIntrinsicTitleView.m in Sources */,
@@ -1352,12 +1547,15 @@
 				6E2A3AD121DE15BE002BE8A0 /* XWXShareView.m in Sources */,
 				6EEEA06621DEF455004EA7F0 /* UIButton+AFNetworking.m in Sources */,
 				6E12504221D4BB8400202FAE /* MessageSysViewController.m in Sources */,
+				6E07137C21E09D6800E9C8F3 /* SetNickNameViewController.m in Sources */,
 				6ECA550021D710D000F6C7AB /* CODCompanyDetailViewController.m in Sources */,
+				6EF104F721E061F900CF673B /* CODOwnerViewController.m in Sources */,
 				6EDB3E3F21CC9967006F2208 /* CODLayoutButton.m in Sources */,
 				6E1A7C9E21D07BE9002FCAC6 /* TWHImgTitleBtn.m in Sources */,
 				6EE5F86D21CB808B00630E68 /* main.m in Sources */,
 				6EC264EF21D4662B00C3EA57 /* CODModifyQuantityView.m in Sources */,
 				6E12503C21D4B0DA00202FAE /* CODMessageViewController.m in Sources */,
+				6E0713B221E0A6EA00E9C8F3 /* BRAddressPickerView.m in Sources */,
 				6EA7203321DCA07100629A1B /* CODExampleListViewController.m in Sources */,
 				6E12503F21D4B4F300202FAE /* MessageTypeTableViewCell.m in Sources */,
 				6EE5F8C021CB9CC200630E68 /* UIImage+COD.m in Sources */,
@@ -1369,7 +1567,9 @@
 				6E5252E721D6243700857773 /* HPSearchCollectionReusableView.m in Sources */,
 				6EE5F8A321CB9B8900630E68 /* CODGlobal.m in Sources */,
 				6ECA551321D752BA00F6C7AB /* JXMapNavigationView.m in Sources */,
+				6EF104C921E03CF200CF673B /* GetImage.m in Sources */,
 				6E5252E521D6243700857773 /* HPSearchCollectionViewCell.m in Sources */,
+				6EF104E221E0511B00CF673B /* UIViewController+WMPageController.m in Sources */,
 				6EEEA06C21DEF455004EA7F0 /* AFHTTPSessionManager.m in Sources */,
 				6EF4F6BE21D221C400BCE41D /* CODEffectPicViewController.m in Sources */,
 				6E2A3ABA21DDB09A002BE8A0 /* CustomIOSAlertView.m in Sources */,
@@ -1378,6 +1578,7 @@
 				6E1A7CB221D0D6F7002FCAC6 /* CODFindDecorateViewController.m in Sources */,
 				6EDB3DFB21CC7E9E006F2208 /* CODLoginViewController.m in Sources */,
 				6EBF868121CCB9E2003E7E25 /* UIButton+ButtonQuickInit.m in Sources */,
+				6EF104CD21E04FD500CF673B /* CODCollectViewController.m in Sources */,
 				6EA7201721DC532A00629A1B /* PhotoView.m in Sources */,
 				6EEEA09321DF5101004EA7F0 /* CODSettingViewController.m in Sources */,
 				6E13FC7521D31934008318F3 /* StoreSearchCollectLayout.m in Sources */,
@@ -1385,13 +1586,16 @@
 				6EC264F321D484AC00C3EA57 /* TWHRichTextTool.m in Sources */,
 				6E5252F921D62B4800857773 /* CODSearchModel.m in Sources */,
 				6E12504B21D4C9E200202FAE /* MessageOrderViewController.m in Sources */,
+				6EF104EB21E0534000CF673B /* CODCompanyListViewController.m in Sources */,
 				6E13FC7E21D35BA8008318F3 /* LocationCityCollectionViewCell.m in Sources */,
 				6EEEA06721DEF455004EA7F0 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				6E13FC6B21D3173F008318F3 /* SwitchCityCollecHeadView.m in Sources */,
 				6EA7204321DCC9E700629A1B /* WRCustomNavigationBar.m in Sources */,
 				6E2A3AC421DDFDC9002BE8A0 /* XWXStoreDetailsItemVw.m in Sources */,
 				6EEEA06821DEF455004EA7F0 /* UIWebView+AFNetworking.m in Sources */,
+				6E0713AF21E0A6EA00E9C8F3 /* BRBaseView.m in Sources */,
 				6E5252F021D62B0300857773 /* TMDiskCache.m in Sources */,
+				6EF104FA21E0821600CF673B /* CODFeedViewController.m in Sources */,
 				6EE5F8C121CB9CC200630E68 /* NSString+COD.m in Sources */,
 				6EA7201D21DC54EC00629A1B /* NSObject+Method.m in Sources */,
 				6EBF873821CCFBD9003E7E25 /* CODBaseWebViewController.m in Sources */,
@@ -1399,6 +1603,7 @@
 				6E1A7CA121D07C74002FCAC6 /* UIView+BlockGesture.m in Sources */,
 				6EBF872821CCE454003E7E25 /* SVRadialGradientLayer.m in Sources */,
 				6E92815A21D4DAE2006CC8B8 /* UINavigationBar+COD.m in Sources */,
+				6EF104F421E061D900CF673B /* CODMineMeasureViewController.m in Sources */,
 				6EA7202A21DC6EA100629A1B /* GoodsDetailCommentGradeVW.m in Sources */,
 				6EEEA06D21DEF455004EA7F0 /* AFURLSessionManager.m in Sources */,
 				6EE5F8D521CBA14C00630E68 /* CODMineViewController.m in Sources */,
@@ -1410,11 +1615,16 @@
 				6EE5F8B521CB9BA200630E68 /* CODBaseViewController.m in Sources */,
 				6EF4F6CD21D224B500BCE41D /* UIViewController+COD.m in Sources */,
 				6EEEA06921DEF455004EA7F0 /* AFAutoPurgingImageCache.m in Sources */,
+				6EF104E621E0511B00CF673B /* WMProgressView.m in Sources */,
 				6E5252D421D6112A00857773 /* CODDecorateTableViewCell.m in Sources */,
 				6EA7200D21DC52CC00629A1B /* StarEvaluationView.m in Sources */,
+				6E0713AE21E0A6EA00E9C8F3 /* BRDatePickerView.m in Sources */,
 				6EEEA07021DEF455004EA7F0 /* AFSecurityPolicy.m in Sources */,
+				6E07137921E0995B00E9C8F3 /* CODPersonInfoViewController.m in Sources */,
 				6EF4F6B221D1D10A00BCE41D /* CODExampleTableViewCell.m in Sources */,
+				6EF104E721E0511B00CF673B /* WMMagicScrollView.m in Sources */,
 				6E2A3AB721DDAB36002BE8A0 /* CODOrderPopView.m in Sources */,
+				6E0713AC21E0A6EA00E9C8F3 /* BRStringPickerView.m in Sources */,
 				6EE5F8B321CB9BA200630E68 /* CODBaseCollectionViewCell.m in Sources */,
 				6EF4F6AF21D1BC8100BCE41D /* CODAnnouncementCell.m in Sources */,
 				6EE5F8C821CB9EFC00630E68 /* CODMainNavController.m in Sources */,
@@ -1432,9 +1642,9 @@
 				6EEEA06E21DEF455004EA7F0 /* AFURLRequestSerialization.m in Sources */,
 				6E5252DA21D6230A00857773 /* CODSearchViewController.m in Sources */,
 				6ECA551421D752BA00F6C7AB /* CLLocation+YCLocation.m in Sources */,
+				6EF104EE21E054BE00CF673B /* CODHistoryViewController.m in Sources */,
 				6EE5F8B121CB9BA200630E68 /* CODBaseBlankView.m in Sources */,
 				6EEEA08D21DF4A5D004EA7F0 /* JSWave.m in Sources */,
-				6EEEA08621DF100B004EA7F0 /* GetImage.m in Sources */,
 				6E1A7CAB21D0CC0C002FCAC6 /* HomeFourItemView.m in Sources */,
 				6EBF872921CCE454003E7E25 /* SVProgressAnimatedView.m in Sources */,
 				6E5252F221D62B0300857773 /* TMCache.m in Sources */,
@@ -1443,9 +1653,11 @@
 				6EDB3E0321CC8B62006F2208 /* CODNetWorkManager.m in Sources */,
 				6E13FC6C21D3173F008318F3 /* SwitchCityCollectionViewCell.m in Sources */,
 				6ECA550D21D726D000F6C7AB /* CODDecoExamCollectionViewCell.m in Sources */,
+				6EF104E821E0511B00CF673B /* WMStickyPageController.m in Sources */,
 				6EBF872B21CCE454003E7E25 /* SVIndefiniteAnimatedView.m in Sources */,
 				6EA7203621DCA5E800629A1B /* CODAllDecorateViewController.m in Sources */,
 				6E2A3ACA21DE0F8B002BE8A0 /* DecorateConditionView.m in Sources */,
+				6EF104E121E0511B00CF673B /* WMPageController.m in Sources */,
 				6ECA551721D75A2600F6C7AB /* CODSpecialPopView.m in Sources */,
 				6EF4F6AC21D1BC0F00BCE41D /* SGAdvertScrollView.m in Sources */,
 				6EF4F6B821D220FA00BCE41D /* CODCalcuQuoteViewController.m in Sources */,
@@ -1455,6 +1667,7 @@
 				6E12504521D4BC4D00202FAE /* SysMessageTableViewCell.m in Sources */,
 				6E5252D721D611B800857773 /* CODImageLineView.m in Sources */,
 				6EE5F8C221CB9CC200630E68 /* UILabel+COD.m in Sources */,
+				6EF104E521E0511B00CF673B /* WMMenuView.m in Sources */,
 				6E1A7C9B21D07BE0002FCAC6 /* UIView+UIMethod.m in Sources */,
 				6E13FC8421D36099008318F3 /* CQPlaceholderView.m in Sources */,
 				6EEEA09621DF5DEC004EA7F0 /* CODSetPwdViewController.m in Sources */,

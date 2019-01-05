@@ -196,7 +196,7 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 
 - (void)configureView {
     self.tableView = ({
-        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero];
+        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         tableView.dataSource = self;
         tableView.delegate = self;
         tableView.backgroundColor = CODColorBackground;
@@ -340,23 +340,42 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    UIView *sectionHeaderview = ({
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 60)];
-        view.backgroundColor = [UIColor whiteColor];
-        view;
-    });
+    UIView *sectionHeaderview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 60)];
+    sectionHeaderview.backgroundColor = [UIColor whiteColor];
     
-    self.conditionTitleView = [[DecorateConditionView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 50)];
-    [self.view addSubview:self.conditionTitleView];
+    UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 9, SCREENWIDTH, 1)];
+    lineView1.backgroundColor = CODColorBackground;
+    [sectionHeaderview addSubview:lineView1];
+    
+    UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 60, SCREENWIDTH, 1)];
+    lineView2.backgroundColor = CODColorBackground;
+    [sectionHeaderview addSubview:lineView2];
+    
+    self.conditionTitleView = [[DecorateConditionView alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 50)];
+    [sectionHeaderview addSubview:self.conditionTitleView];
     kWeakSelf(self)
     [self.conditionTitleView setBtnSelectItemBlock:^(ConditionType condition) {
         // 综合
         if (condition == ConditionTypeNormal) {
-            if (self.popVW.isShow == YES) {
-                [weakself.popVW dismiss];
+            // 已置顶，直接弹出
+            if (tableView.contentOffset.y >= tableView.tableHeaderView.height) {
+                if (self.popVW.isShow == YES) {
+                    [weakself.popVW dismiss];
+                } else {
+                    [weakself.popVW showWithData:weakself.choseArr[0] opitionKey:@"分类"];
+                }
             } else {
-                [weakself.popVW showWithData:weakself.choseArr[0] opitionKey:@"分类"];
+                [tableView setContentOffset:CGPointMake(0,tableView.tableHeaderView.height) animated:YES];
+                // 先置顶在弹出
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (self.popVW.isShow == YES) {
+                        [weakself.popVW dismiss];
+                    } else {
+                        [weakself.popVW showWithData:weakself.choseArr[0] opitionKey:@"分类"];
+                    }
+                });
             }
+            
         } else if (condition == ConditionTypePraise) {
             if (self.popVW.isShow == YES) [weakself.popVW dismiss];
             weakself.parDic[@"cat_id"] = @"";
@@ -367,9 +386,6 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
             [weakself loadData];
         }
     }];
-    
-    [sectionHeaderview addSubview:self.conditionTitleView];
-
 
     return sectionHeaderview;
     

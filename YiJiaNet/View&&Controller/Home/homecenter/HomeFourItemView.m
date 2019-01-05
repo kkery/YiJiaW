@@ -27,7 +27,7 @@
                               @{@"title":@"找装修",@"icon":kGetImage(@"home_categorize1")},
                               @{@"title":@"新房购",@"icon":kGetImage(@"home_categorize2")},
                               @{@"title":@"二手房",@"icon":kGetImage(@"home_categorize3")},
-                              @{@"title":@"长期房",@"icon":kGetImage(@"home_categorize4")},
+                              @{@"title":@"长租房",@"icon":kGetImage(@"home_categorize4")},
                               ];
         float item_width = frame.size.width / 4;
         for (NSInteger i = 0; i<imfo_arr.count; i++) {

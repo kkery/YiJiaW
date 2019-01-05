@@ -8,8 +8,9 @@
 
 #import "AppDelegate.h"
 #import "CODMainTabBarController.h"
+#import <EAIntroView/EAIntroView.h>
 
-@interface AppDelegate ()
+@interface AppDelegate ()<EAIntroDelegate>
 
 @end
 
@@ -38,9 +39,48 @@
         [kUserCenter setObject:@"WeChat" forKey:klogin_WeChat];
     }
     
+    // guide
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:CODGuideKey]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:CODGuideKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self showGuide];
+    }
     return YES;
 }
 
+#pragma mark - Guide
+- (void)showGuide {
+    EAIntroPage *page1 = [EAIntroPage page];
+    page1.bgImage = [UIImage imageNamed:@"app_guide1"];
+    
+    EAIntroPage *page2 = [EAIntroPage page];
+    page2.bgImage = [UIImage imageNamed:@"app_guide2"];
+    
+    EAIntroPage *page3 = [EAIntroPage page];
+    page3.bgImage = [UIImage imageNamed:@"app_guide3"];
+    
+    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:[UIApplication sharedApplication].keyWindow.bounds andPages:@[page1,page2,page3]];
+    
+    UIButton *skipButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setTitleColor:CODColorButtonNormal forState:UIControlStateNormal];
+        [button setTitleColor:CODColorButtonHighlighted forState:UIControlStateHighlighted];
+        [button setTitle:@"立即体验" forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont systemFontOfSize:15];
+        button.layer.borderColor = CODColorButtonNormal.CGColor;
+        button.layer.borderWidth = 1;
+        button.layer.cornerRadius = 40*0.5;
+        button.frame = CGRectMake(([UIApplication sharedApplication].keyWindow.bounds.size.width-220)*0.5, [UIApplication sharedApplication].keyWindow.bounds.size.height-75, 220, 40);
+        button;
+    });
+    intro.skipButton = skipButton;
+    intro.showSkipButtonOnlyOnLastPage = YES;
+    intro.swipeToExit = NO;
+    intro.pageControlY = 0;
+    intro.tapToNext = YES;
+    intro.bgViewContentMode = UIViewContentModeScaleToFill;
+    [intro showInView:[UIApplication sharedApplication].keyWindow animateDuration:0];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

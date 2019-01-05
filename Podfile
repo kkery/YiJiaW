@@ -13,6 +13,7 @@ target 'YiJiaNet' do
     pod 'MBProgressHUD'
     pod 'NJKWebViewProgress'
     pod 'SDCycleScrollView','~> 1.75'
-    pod 'BRPickerView'
+    #pod 'BRPickerView'
+    pod 'EAIntroView', '2.6.4'#新版有大问题，不能升级
 end
 

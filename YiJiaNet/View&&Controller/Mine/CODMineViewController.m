@@ -12,18 +12,25 @@
 #import "UINavigationBar+COD.h"
 #import "UIButton+COD.h"
 #import "UIView+BlockGesture.h"
+#import "UIViewController+COD.h"
 #import "XWXShareView.h"
 #import "CODMessageViewController.h"
-#import "UIViewController+COD.h"
+#import "CODMineOrderViewController.h"
+#import "CODMineMeasureViewController.h"
+#import "CODOwnerViewController.h"
 #import "CODAuthenViewController.h"
 #import "CODAuthenStatusViewController.h"
 #import "CODSettingViewController.h"
+#import "CODHistoryViewController.h"
+#import "CODCollectViewController.h"
+#import "CODFeedViewController.h"
+#import "CODPersonInfoViewController.h"
 
 static NSString * const kMineTicketCell = @"MineTicketCell";
 static NSString * const kBaseCell = @"BaseCell";
 
 static CGFloat const kCoverHeaderViewHeight = 208;
-static CGFloat const kItmeHeaderViewHeight = 124;
+static CGFloat const kWhiteBackViewHeight = 124;
 
 @interface CODMineViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -53,10 +60,8 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"我的";
+//    self.title = @"我的";
     self.navigationItem.leftBarButtonItem = nil;
-    
-    
     
     // configure view
     [self configureView];
@@ -131,7 +136,7 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 
 - (void)configureHeaderView {
     self.topView = ({
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, kCoverHeaderViewHeight+kItmeHeaderViewHeight-30)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, kCoverHeaderViewHeight+kWhiteBackViewHeight-30)];
         view;
     });
     self.backHeaderImgaeView = ({
@@ -140,8 +145,7 @@ static CGFloat const kItmeHeaderViewHeight = 124;
         imageView.frame = CGRectMake(0, 0, SCREENWIDTH, kCoverHeaderViewHeight);
         imageView.userInteractionEnabled = YES;
         [imageView addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-            CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
-            [self.navigationController pushViewController:loginViewController animated:YES];
+            [self gotoPersonInfo];
         }];
         imageView;
     });
@@ -247,15 +251,15 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 }
 
 - (void)configureThreeItemView {
-    UIImageView *backImgaeView = [[UIImageView alloc] init];
-    backImgaeView.userInteractionEnabled = YES;
-    backImgaeView.image = kGetImage(@"my_projection_bg");
-    [self.topView addSubview:backImgaeView];
-    [backImgaeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.offset(5);
-        make.right.offset(-5);
+    UIImageView *whiteBackImgaeView = [[UIImageView alloc] init];
+    whiteBackImgaeView.userInteractionEnabled = YES;
+    whiteBackImgaeView.image = kGetImage(@"my_projection_bg");
+    [self.topView addSubview:whiteBackImgaeView];
+    [whiteBackImgaeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(5);
+        make.right.equalTo(self.view.mas_right).offset(-5);
         make.top.equalTo(self.backHeaderImgaeView.mas_bottom).offset(-30);
-        make.height.equalTo(@(kItmeHeaderViewHeight));
+        make.height.equalTo(@(kWhiteBackViewHeight));
     }];
     NSArray *items = @[@{@"title":@"我的预约",@"icon":@"my_amount"}, @{@"title":@"我的量房",@"icon":@"my_appointment"},@{@"title":@"我是业主",@"icon":@"my_owner-1"}];
     CGFloat item_width = (SCREENWIDTH-24) / items.count;
@@ -263,11 +267,11 @@ static CGFloat const kItmeHeaderViewHeight = 124;
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [btn SetBtnTitle:items[i][@"title"] andTitleColor:CODColor333333 andFont:kFont(14) andBgColor:nil andBgImg:nil andImg:kGetImage(items[i][@"icon"]) andClickEvent:@selector(itemBtnAction:) andAddVC:self];
         btn.tag = i+100;
-        [backImgaeView addSubview:btn];
+        [whiteBackImgaeView addSubview:btn];
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(backImgaeView.mas_left).offset(i * item_width);
+            make.left.equalTo(whiteBackImgaeView.mas_left).offset(i * item_width);
             make.width.mas_equalTo(item_width);
-            make.centerY.equalTo(backImgaeView.mas_centerY);
+            make.centerY.equalTo(whiteBackImgaeView.mas_centerY);
         }];
         [btn cod_alignImageUpAndTitleDownWithPadding:25];
     }
@@ -275,11 +279,14 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 
 - (void)itemBtnAction:(UIButton *)btn {
     if (btn.tag == 100) {
-        [SVProgressHUD cod_showWithSuccessInfo:@"我的预约"];
+        CODMineOrderViewController *VC = [[CODMineOrderViewController alloc] init];
+        [self.navigationController pushViewController:VC animated:YES];
     } else if (btn.tag == 101) {
-        [SVProgressHUD cod_showWithSuccessInfo:@"我的量房"];
+        CODMineMeasureViewController *VC = [[CODMineMeasureViewController alloc] init];
+        [self.navigationController pushViewController:VC animated:YES];
     } else if (btn.tag == 102) {
-        [SVProgressHUD cod_showWithSuccessInfo:@"我是业主"];
+        CODOwnerViewController *VC = [[CODOwnerViewController alloc] init];
+        [self.navigationController pushViewController:VC animated:YES];
     }
 }
 #pragma mark - Update
@@ -340,17 +347,17 @@ static CGFloat const kItmeHeaderViewHeight = 124;
 //    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的收藏"]) {
-        XWXShareView *ShareView = [[XWXShareView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
-        [ShareView show];
+        CODCollectViewController *collectVC = [[CODCollectViewController alloc] init];
+        [self.navigationController pushViewController:collectVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"消息中心"]) {
         CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的足迹"]) {
-        CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
-        [self.navigationController pushViewController:messageVC animated:YES];
+        CODHistoryViewController *historyVC = [[CODHistoryViewController alloc] init];
+        [self.navigationController pushViewController:historyVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"意见反馈"]) {
-        CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
-        [self.navigationController pushViewController:messageVC animated:YES];
+        CODFeedViewController *feedVC = [[CODFeedViewController alloc] init];
+        [self.navigationController pushViewController:feedVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"客服中心"]) {
         [self alertVcTitle:nil message:@"拨打10086" leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
         } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
@@ -384,7 +391,10 @@ static CGFloat const kItmeHeaderViewHeight = 124;
     CODSettingViewController *setVC = [[CODSettingViewController alloc] init];
     [self.navigationController pushViewController:setVC animated:YES];
 }
-
+- (void)gotoPersonInfo {
+    CODPersonInfoViewController *infoVC = [[CODPersonInfoViewController alloc] init];
+    [self.navigationController pushViewController:infoVC animated:YES];
+}
 - (void)authenAction {
     //（1审核中、2审核失败、3审核成功、4未认证）
     NSInteger status = 4;
