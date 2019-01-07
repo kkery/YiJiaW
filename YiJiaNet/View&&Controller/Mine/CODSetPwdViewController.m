@@ -20,6 +20,8 @@
 @property(nonatomic,strong) UITextField *newPwdField;
 @property(nonatomic,strong) UITextField *confirmNewPwdField;
 
+@property (nonatomic, assign) NSInteger status;// 0设置密码 1、修改密码
+
 @end
 
 @implementation CODSetPwdViewController
@@ -78,7 +80,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self wr_setNavBarShadowImageHidden:NO];
-    if (self.status == 2) {
+   
+    self.status = [get(CODUserInfoKey)[@"pass_status"] integerValue];
+    if (self.status == 1) {
         self.title = @"修改登录密码";
     } else {
         self.title = @"设置登录密码";
@@ -128,7 +132,7 @@
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (self.status == 2) ? 3 : 2;
+    return (self.status == 1) ? 3 : 2;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -140,7 +144,7 @@
         cell.textLabel.font = XFONT_SIZE(15);
         cell.textLabel.textColor = CODColor333333;
     }
-    if (self.status == 2) {
+    if (self.status == 1) {
         if (indexPath.row == 0) {
             [cell.contentView addSubview:self.oldField];
             [self.oldField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -183,7 +187,7 @@
                 }];
                 
             } else if(indexPath.row == 1) {
-                [cell.contentView addSubview:self.newPwdField];
+                [cell.contentView addSubview:self.confirmPwdField];
                 [self.confirmPwdField mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.height.offset(50 );
                     make.centerY.equalTo(cell.contentView);
@@ -208,21 +212,72 @@
     
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    return 10;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-//    return 0.01;
-//}
-
 #pragma mark - Action
 - (void)confirmAction {
-    
-
-    [SVProgressHUD cod_showWithSuccessInfo:@"设置密码成功"];
-    
-    [self cod_returnAction];
+    if (self.status == 1) {// 修改密码
+        if (self.oldField.text.length == 0) {
+            [SVProgressHUD cod_showWithErrorInfo:@"请输入旧密码"];
+            return;
+        }
+        if (self.newPwdField.text.length == 0) {
+            [SVProgressHUD cod_showWithErrorInfo:@"请输入新密码"];
+            return;
+        }
+        if (![self.confirmNewPwdField.text isEqualToString:self.newPwdField.text]) {
+            [SVProgressHUD cod_showWithErrorInfo:@"确认密码不一致,请核对后提交"];
+            return;
+        }
+        //    user_id    string    是    用户的id
+        //    old_pwd    string    是    老密码（修改密码时使用）
+        //    new_pwd    string    是    新密码
+        //    new_again_pwd    string    是    确认密码
+        //    type    string    是    2（1：设置登录密码 2：修改）
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"user_id"] = get(CODLoginTokenKey);
+        params[@"old_pwd"] = self.oldField.text;
+        params[@"new_pwd"] = self.newPwdField.text;
+        params[@"new_again_pwd"] = self.confirmNewPwdField.text;
+        params[@"type"] = @"2";
+        
+        [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=Setting&a=setLoginPwd" andParameters:params Sucess:^(id object) {
+            if ([object[@"code"] integerValue] == 200) {
+                [SVProgressHUD cod_showWithSuccessInfo:@"修改密码成功"];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            } else {
+                [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            }
+        } failed:^(NSError *error) {
+            [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+        }];
+    }
+    else {// 设置密码
+        if (self.pwdField.text.length == 0) {
+            [SVProgressHUD cod_showWithErrorInfo:@"请输入密码"];
+            return;
+        }
+        if (![self.confirmPwdField.text isEqualToString:self.pwdField.text]) {
+            [SVProgressHUD cod_showWithErrorInfo:@"确认密码不一致,请核对后提交"];
+            return;
+        }
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"user_id"] = get(CODLoginTokenKey);
+        params[@"new_pwd"] = self.pwdField.text;
+        params[@"new_again_pwd"] = self.confirmPwdField.text;
+        params[@"type"] = @"1";
+        
+        [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=Setting&a=setLoginPwd" andParameters:params Sucess:^(id object) {
+            if ([object[@"code"] integerValue] == 200) {
+                [SVProgressHUD cod_showWithSuccessInfo:@"设置密码成功"];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            } else {
+                [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            }
+        } failed:^(NSError *error) {
+            [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+        }];
+    }
 }
 
 @end

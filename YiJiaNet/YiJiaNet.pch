@@ -18,6 +18,7 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoa/RACEXTScope.h>
 #import <Masonry/Masonry.h>
+#import <YYKit/YYKit.h>
 #import "UIImageView+WebCache.h"
 #import "SVProgressHUD+COD.h"
 //base类
@@ -39,5 +40,8 @@
 #import "UIView+UIMethod.h"
 #import "NSObject+Method.h"
 #import "UIView+BlockGesture.h"
+
+
+
 //  SVProgressHUD+COD.h
 #endif /* YiJiaNet_pch */

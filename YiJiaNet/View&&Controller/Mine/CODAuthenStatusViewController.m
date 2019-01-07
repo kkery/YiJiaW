@@ -104,26 +104,22 @@
     UIImage *statusImage;
     NSString *describe;
     UIColor *color = CODColorTheme;
-    // 1未审核，2审核中，3审核成功，4审核失败
-    if (self.status == 2) {
+    // 0认证中 1成功 2失败 3未认证
+    if (self.status == 0) {
         headImage = kGetImage(@"apply_merchants_review_bg");
         statusImage = kGetImage(@"apply_merchants_review_icon");
         describe = @"提交审核中，请等待管理员审核\n预计1-3个工作日内审核完毕\n请随时关注本页面";
-    } else if (self.status == 3) {
-        headImage = kGetImage(@"apply_merchants_failure_bg");
-        statusImage = kGetImage(@"apply_merchants_failure_icon");
-        describe = @"很抱歉，你的审核未通过\n抱歉，您的资料信息存在不符\n请重新核实后再申请";
-        color = CODHexColor(0xF96812);
-    } else if (self.status == 4) {
+    } else if (self.status == 1) {
         headImage = kGetImage(@"apply_merchants_review_bg");
         statusImage = kGetImage(@"apply_merchants_success_icon");
         describe = @"恭喜您!实名认证成功\n经核实您提交的资料已通过";
         color = CODHexColor(0xF96812);
-    } else {
-        headImage = kGetImage(@"apply_merchants_review_bg");
-        statusImage = kGetImage(@"apply_merchants_success_icon");
-        describe = @"提交审核中，请等待管理员审核\n预计1-3个工作日内审核完毕\n请随时关注本页面";
-    }
+    } else if (self.status == 2) {
+        headImage = kGetImage(@"apply_merchants_failure_bg");
+        statusImage = kGetImage(@"apply_merchants_failure_icon");
+        describe = @"很抱歉，你的审核未通过\n抱歉，您的资料信息存在不符\n请重新核实后再申请";
+        color = CODHexColor(0xF96812);
+    } 
     
     self.headerImageView.image = headImage;
     self.statusImageView.image = statusImage;

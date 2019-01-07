@@ -165,6 +165,7 @@
 		6EF4F6C721D2228500BCE41D /* CODExamDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF4F6C621D2228500BCE41D /* CODExamDetailViewController.m */; };
 		6EF4F6CD21D224B500BCE41D /* UIViewController+COD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF4F6CC21D224B500BCE41D /* UIViewController+COD.m */; };
 		6EF4F6D321D2392000BCE41D /* CODIntrinsicTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF4F6D221D2392000BCE41D /* CODIntrinsicTitleView.m */; };
+		6EF73CB621E324C700ECFB4C /* CODUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF73CB421E324C700ECFB4C /* CODUserModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -510,6 +511,8 @@
 		6EF4F6CC21D224B500BCE41D /* UIViewController+COD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+COD.m"; sourceTree = "<group>"; };
 		6EF4F6D121D2392000BCE41D /* CODIntrinsicTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODIntrinsicTitleView.h; sourceTree = "<group>"; };
 		6EF4F6D221D2392000BCE41D /* CODIntrinsicTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODIntrinsicTitleView.m; sourceTree = "<group>"; };
+		6EF73CB421E324C700ECFB4C /* CODUserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CODUserModel.m; sourceTree = "<group>"; };
+		6EF73CB521E324C700ECFB4C /* CODUserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CODUserModel.h; sourceTree = "<group>"; };
 		7ADAE3FF08089CCA563803E2 /* libPods-YiJiaNetUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YiJiaNetUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98134621F9951DED1160F7D0 /* Pods-YiJiaNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YiJiaNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YiJiaNet/Pods-YiJiaNet.debug.xcconfig"; sourceTree = "<group>"; };
 		E72B99BB0C9F2C2CD1E0853F /* libPods-YiJiaNet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YiJiaNet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1015,6 +1018,7 @@
 		6EE5F89221CB85F600630E68 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6EF73CB321E324B800ECFB4C /* user */,
 				6EA7200321DC526800629A1B /* comment */,
 				6ECA550721D721E300F6C7AB /* decrate example */,
 				6E5252F321D62B0900857773 /* search */,
@@ -1326,6 +1330,15 @@
 				6EF4F6AB21D1BC0F00BCE41D /* SGAdvertScrollView.m */,
 			);
 			path = "文字轮播";
+			sourceTree = "<group>";
+		};
+		6EF73CB321E324B800ECFB4C /* user */ = {
+			isa = PBXGroup;
+			children = (
+				6EF73CB521E324C700ECFB4C /* CODUserModel.h */,
+				6EF73CB421E324C700ECFB4C /* CODUserModel.m */,
+			);
+			name = user;
 			sourceTree = "<group>";
 		};
 		C3FB235BC15BEBE6EB92CCA1 /* Pods */ = {
@@ -1670,6 +1683,7 @@
 				6EF104E521E0511B00CF673B /* WMMenuView.m in Sources */,
 				6E1A7C9B21D07BE0002FCAC6 /* UIView+UIMethod.m in Sources */,
 				6E13FC8421D36099008318F3 /* CQPlaceholderView.m in Sources */,
+				6EF73CB621E324C700ECFB4C /* CODUserModel.m in Sources */,
 				6EEEA09621DF5DEC004EA7F0 /* CODSetPwdViewController.m in Sources */,
 				6EEEA06B21DEF455004EA7F0 /* AFURLResponseSerialization.m in Sources */,
 			);

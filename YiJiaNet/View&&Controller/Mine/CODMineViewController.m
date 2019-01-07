@@ -25,6 +25,7 @@
 #import "CODCollectViewController.h"
 #import "CODFeedViewController.h"
 #import "CODPersonInfoViewController.h"
+#import "CODUserModel.h"
 
 static NSString * const kMineTicketCell = @"MineTicketCell";
 static NSString * const kBaseCell = @"BaseCell";
@@ -77,6 +78,10 @@ static CGFloat const kWhiteBackViewHeight = 124;
                       @{@"title":@"客服中心",@"icon":@"my_service"},
                       @{@"title":@"推荐给好友",@"icon":@"my_reference"},
                       ];
+    
+//    if (COD_LOGGED) {
+//        [self loadUserInfo];
+//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,26 +91,16 @@ static CGFloat const kWhiteBackViewHeight = 124;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    self.edgesForExtendedLayout = UIRectEdgeAll;
-//    [self wr_setNavBarShadowImageHidden:YES];
-//    [self wr_setNavBarBackgroundAlpha:0.0];
-//    if (@available(iOS 11.0, *)) {
-//        // tableView 偏移20/64适配
-//        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;//UIScrollView也适用
-//    } else {
-//        self.automaticallyAdjustsScrollViewInsets = NO;
-//    }
-//    self.navigationController.navigationBar.translucent = YES;
-//
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-
-    [self configureView];
+    
+    if (COD_LOGGED) {
+        [self loadUserInfo];
+    }
+    [self updateTableHeaderViewInfo];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-//    self.edgesForExtendedLayout = UIRectEdgeNone;
-//    self.navigationController.navigationBar.translucent = NO;
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 
 }
@@ -145,7 +140,7 @@ static CGFloat const kWhiteBackViewHeight = 124;
         imageView.frame = CGRectMake(0, 0, SCREENWIDTH, kCoverHeaderViewHeight);
         imageView.userInteractionEnabled = YES;
         [imageView addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-            [self gotoPersonInfo];
+            [self gotoLogin];
         }];
         imageView;
     });
@@ -165,7 +160,6 @@ static CGFloat const kWhiteBackViewHeight = 124;
 
     self.messageButton = ({
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(0, 0, 20, 20);
         [button setImage:[UIImage imageNamed:@"my_owner"] forState:UIControlStateNormal];
         @weakify(self);
         [[button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
@@ -246,8 +240,6 @@ static CGFloat const kWhiteBackViewHeight = 124;
         make.right.equalTo(self.backHeaderImgaeView.mas_right).offset(-20);
         make.centerY.equalTo(self.backHeaderImgaeView.mas_centerY);
     }];
-    
-    [self updateTableHeaderViewInfo];
 }
 
 - (void)configureThreeItemView {
@@ -289,20 +281,39 @@ static CGFloat const kWhiteBackViewHeight = 124;
         [self.navigationController pushViewController:VC animated:YES];
     }
 }
-#pragma mark - Update
+
+#pragma mark - Data
+- (void)loadUserInfo {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = get(CODLoginTokenKey);
+    
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=user_info" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            
+            save(object[@"data"][@"info"], CODUserInfoKey);
+            [self updateTableHeaderViewInfo];
+            
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
+}
+
+#pragma mark - Update Data
 - (void)updateTableHeaderViewInfo {
-//    if (COD_LOGGED) {
-//        [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[CODUserModel unarchive].logo] placeholderImage:[UIImage imageNamed:@"moren_touxiang"]];
-//        self.nicknameLabel.text = [CODUserModel unarchive].name ?: @"还没有昵称哦";
-//        self.authenLabel.text = [NSString stringWithFormat:@"积分: %@", @([CODUserModel unarchive].integral)];
-//    } else {
-//        self.avatarImageView.image = [UIImage imageNamed:@"moren_touxiang"];
-//        self.nicknameLabel.text = @"您还没有登录哦";
-//        self.authenLabel.text = @"立即登录";
-//    }
-    self.avatarImageView.image = [UIImage imageNamed:@"place_default_avatar"];
-    self.nicknameLabel.text = @"您还没有登录哦";
-    self.authenLabel.text = @"未实名认证>";
+    NSDictionary *user = get(CODUserInfoKey);
+    if (COD_LOGGED) {
+        [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:user[@"avatar"]] placeholderImage:[UIImage imageNamed:@"place_default_avatar"]];
+        self.nicknameLabel.text = user[@"nickname"] ?: @"还没有昵称哦";
+        self.authenLabel.text = ([user[@"approve_status"] integerValue] == 1) ? @"已实名认证" : @"未实名认证";
+
+    } else {
+        self.avatarImageView.image = [UIImage imageNamed:@"place_default_avatar"];
+        self.nicknameLabel.text = @"您还没有登录哦";
+        self.authenLabel.text = @"未实名认证>";
+    }
 }
 
 #pragma mark - Accessors
@@ -374,42 +385,47 @@ static CGFloat const kWhiteBackViewHeight = 124;
 
 #pragma mark - Action
 - (void)gotoLogin {
-    CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
-    UINavigationController *navigationController = [[CODMainNavController alloc] initWithRootViewController:loginViewController];
-//    loginViewController.loginBlock = ^(void) {
-//        if (COD_LOGGED) {
-//            NSLog(@"login success");
-//        } else {
-//            NSLog(@"login fail");
-//        }
-//        [self updateTableHeaderViewInfo];
-//        [self fetchMessageUnreadCount];
-//    };
-    [self presentViewController:navigationController animated:YES completion:nil];
+    if (COD_LOGGED) {
+        [self gotoPersonInfo];
+    } else {
+        CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
+        loginViewController.loginBlock = ^(void) {
+            if (COD_LOGGED) {
+                NSLog(@"login success");
+            } else {
+                NSLog(@"login fail");
+            }
+//            [self loadUserInfo];
+        };
+        [self.navigationController pushViewController:loginViewController animated:YES];
+    }
 }
 - (void)gotoSetting {
-    CODSettingViewController *setVC = [[CODSettingViewController alloc] init];
-    [self.navigationController pushViewController:setVC animated:YES];
+    if (COD_LOGGED) {
+        CODSettingViewController *setVC = [[CODSettingViewController alloc] init];
+        [self.navigationController pushViewController:setVC animated:YES];
+    } else {
+        [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+    }
 }
 - (void)gotoPersonInfo {
     CODPersonInfoViewController *infoVC = [[CODPersonInfoViewController alloc] init];
     [self.navigationController pushViewController:infoVC animated:YES];
 }
 - (void)authenAction {
-    //（1审核中、2审核失败、3审核成功、4未认证）
-    NSInteger status = 4;
-    if (status == 4) {
+    //0认证中 1成功 2失败 3未认证
+    NSInteger AuthenStatus = [get(CODUserInfoKey)[@"approve_status"] integerValue];
+    if (AuthenStatus == 3) {
         CODAuthenViewController *authenVC = [[CODAuthenViewController alloc] init];
         [self.navigationController pushViewController:authenVC animated:YES];
-    } else if (status == 3) {
-        CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
-        authenVC.status = status;
-        [self.navigationController pushViewController:authenVC animated:YES];
-    } else {
+    } else if (AuthenStatus == 1) {
         CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
         webView.webTitleString = @"实名认证";
         [self.navigationController pushViewController:webView animated:YES];
-
+    } else {
+        CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
+        authenVC.status = AuthenStatus;
+        [self.navigationController pushViewController:authenVC animated:YES];
     }
 }
 

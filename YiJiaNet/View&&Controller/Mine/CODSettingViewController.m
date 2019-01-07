@@ -109,7 +109,6 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
         CODSetPwdViewController *VC = [[CODSetPwdViewController alloc] init];
-        VC.status = 2;
         [self.navigationController pushViewController:VC animated:YES];
     } else if (indexPath.row == 1) {
         CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
@@ -133,7 +132,10 @@
 - (void)logout {
     [self showAlertWithTitle:@"确定退出登录吗" andMesage:nil andCancel:^(id cancel) {
     } Determine:^(id determine) {
-        
+        // 清除登录凭证
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:CODLoginTokenKey];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:CODUserInfoKey];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
 }
 

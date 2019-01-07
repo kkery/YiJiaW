@@ -149,9 +149,8 @@
         make.top.equalTo(self.againPassTextField.mas_bottom).offset(35*proportionW);
     }];
     
-    
     UIButton* loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [loginBtn SetBtnTitle:@"去登录" andTitleColor:CODColorTheme andFont:kFont(IS_IPHONE_5?11:13) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(backLoginAction) andAddVC:self];
+    [loginBtn SetBtnTitle:@"去登录" andTitleColor:CODColorTheme andFont:kFont(IS_IPHONE_5?11:13) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(cod_returnAction) andAddVC:self];
     [self.view addSubview:loginBtn];
     [loginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(registerBtn).offset(140*proportionW);
@@ -167,7 +166,7 @@
     }];
     
     UIButton* protocolBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [protocolBtn SetBtnTitle:@"《笔淘网用户协议》" andTitleColor:CODColorTheme andFont:kFont(IS_IPHONE_5?11:13) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(protocolBtnAction) andAddVC:self];
+    [protocolBtn SetBtnTitle:@"《益家网用户协议》" andTitleColor:CODColorTheme andFont:kFont(IS_IPHONE_5?11:13) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(protocolBtnAction) andAddVC:self];
     [self.view addSubview:protocolBtn];
     [protocolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_centerX);
@@ -181,8 +180,6 @@
         make.right.equalTo(self.view.mas_centerX);
         make.centerY.equalTo(protocolBtn);
     }];
-    
-    
 }
 
 - (UIButton *)GetYZMBtn
@@ -227,44 +224,44 @@
     params[@"code"] = self.verificationTextField.text;
     params[@"password"] = self.passwordTextField.text;
     params[@"password_confirm"] = self.againPassTextField.text;
-    [SVProgressHUD showWithStatus:@"注册中..."];
-//    [[CODNetWorkManager shareManger] AFrequestData:@"App,Member,reg" HttpMethod:@"POST" parames:params comPletionResult:^(id result) {
-//        if ([result[@"code"] integerValue] == 200) {
-//            [self showSuccessText:@"注册成功"];
-//            [self backLoginAction];
-//        } else {
-//            [self showErrorText:result[@"message"]];
-//        }
-//    } AndError:^(NSError *error) {
-//        [self showErrorText:@"网络异常，请重试!"];
-//    }];
+    
+    [SVProgressHUD cod_showWithStatu:@"注册中..."];
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=reg" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD dismiss];
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 //获取验证码
 -(void)GetYZMBtnClicked:(UIButton*)sender {
     
-    if (self.telNumTextField.text.length <= 0) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请输入手机号码"];
-    } else {
-        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        params[@"mobile"] = self.telNumTextField.text;
-//        [self showLoading];
-//        [[LXGNetWorkQuery shareManager] AFrequestData:@"10002" HttpMethod:@"POST" params:params completionHandle:^(id result) {
-//            NSLog(@"----10002: %@",result);
-//            [self dismissLoading];
-//
-//            if (kMessage(result)) {
-//                [sender startWithTime:60 title:@"重新获取验证码" countDownTitle:@"秒" mainColor:[UIColor clearColor] countColor:[UIColor clearColor]];
-//            }else
-//            {
-//                [self showErrorText:@"获取失败!"];
-//            }
-//        } errorHandle:^(NSError *result) {
-//            [self showErrorText:@"网络异常，请重试!"];
-//            NSLog(@"===Error: %@",result);
-//        }];
+    if (self.telNumTextField.text.length == 0) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请输入手机号"];
+        return;
+    }
+    if (![self.telNumTextField.text cod_isPhone]) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请输入正确格式的手机号"];
+        return;
     }
     
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"mobile"] = self.telNumTextField.text;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=get_code" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [sender startWithTime:60 title:@"重新获取验证码" countDownTitle:@"秒" mainColor:[UIColor clearColor] countColor:[UIColor clearColor]];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 #pragma mark - 输入框的代理实现 UITextFieldDelegate

@@ -10,4 +10,10 @@
 
 @interface CODBaseModel : NSObject
 
+#pragma mark - Singleton archive
+- (BOOL)archive;// 序列化
++ (instancetype)unarchive;// 反序列化
++ (BOOL)removeArchive;// 删除
++ (NSUInteger)archiveVersion;// 归档版本
+
 @end

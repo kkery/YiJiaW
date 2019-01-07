@@ -10,6 +10,9 @@
 #define CODMacros_h
 
 // User
+#define COD_LOGGED get(CODLoginTokenKey) != nil // 已登录
+
+
 // UI
 #define CODScreenBounds [UIScreen mainScreen].bounds
 #define SCREENWIDTH [UIScreen mainScreen].bounds.size.width
@@ -63,8 +66,10 @@ _Pragma("clang diagnostic pop")\
 // QQ WeChat
 #define klogin_QQ @"Login_QQ"
 #define klogin_WeChat @"Login_WeChat"
+
 //Usedefault
 #define kUserCenter [NSUserDefaults standardUserDefaults]
+#define kNotiCenter [NSNotificationCenter defaultCenter]
 
 // Log
 #ifdef DEBUG

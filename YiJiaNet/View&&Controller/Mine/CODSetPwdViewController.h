@@ -9,6 +9,5 @@
 #import "CODBaseViewController.h"
 
 @interface CODSetPwdViewController : CODBaseViewController
-@property (nonatomic, assign) NSInteger status;// 设置密码 2、修改密码
 
 @end

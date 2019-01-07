@@ -22,6 +22,7 @@ PODS:
   - SDWebImage (4.4.3):
     - SDWebImage/Core (= 4.4.3)
   - SDWebImage/Core (4.4.3)
+  - UICKeyChainStore (1.1.1)
   - YYKit (1.0.9):
     - YYKit/no-arc (= 1.0.9)
   - YYKit/no-arc (1.0.9)
@@ -37,6 +38,7 @@ DEPENDENCIES:
   - ReactiveCocoa (from `https://github.com/zhao0/ReactiveCocoa.git`, tag `2.5.2`)
   - SDCycleScrollView (~> 1.75)
   - SDWebImage (~> 4.0)
+  - UICKeyChainStore (~> 1.0)
   - YYKit
 
 SPEC REPOS:
@@ -50,6 +52,7 @@ SPEC REPOS:
     - NJKWebViewProgress
     - SDCycleScrollView
     - SDWebImage
+    - UICKeyChainStore
     - YYKit
 
 EXTERNAL SOURCES:
@@ -73,8 +76,9 @@ SPEC CHECKSUMS:
   ReactiveCocoa: 3ff25b1bd992ac79c5c79b26b6c0c1713b715bb2
   SDCycleScrollView: 884b88f0266dd4708a0e1934975c69cb971707b1
   SDWebImage: c5594f1a19c48d526d321e548902b56b479cd508
+  UICKeyChainStore: 891bcd2fe687c92db8e648cba035c4e662ffa43e
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 72e97bf05e1d7de338005bc25d0ad40f46d1bc9d
+PODFILE CHECKSUM: 4c20d546467ac5af34cb311bf5229cd6bf53951c
 
 COCOAPODS: 1.5.3

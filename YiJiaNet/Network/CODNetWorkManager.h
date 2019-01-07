@@ -10,6 +10,10 @@
 
 @interface CODNetWorkManager : NSObject
 
+void save(id value,NSString *key);
+
+id get(NSString *key);
+
 //请求失败
 typedef void(^NetWorkFailed)(NSError *error);
 //请求成功
@@ -17,7 +21,7 @@ typedef void(^NetWorkSucess)(id object);
 
 +(instancetype)shareManager;
 
-@property (nonatomic, strong) NSURLSessionDataTask *urlSessionDataTask;// 任务对象
+//@property (nonatomic, strong) NSURLSessionDataTask *urlSessionDataTask;// 任务对象
 
 -(void)AFRequestData:(NSString *)hexfApi andParameters:(NSMutableDictionary *)parameters Sucess:(NetWorkSucess)Sucess failed:(NetWorkFailed)failed;
 

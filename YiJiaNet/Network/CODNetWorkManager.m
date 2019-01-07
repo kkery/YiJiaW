@@ -12,7 +12,15 @@
 
 @implementation CODNetWorkManager
 
-+(instancetype)shareManager
+void save(id value,NSString *key){
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+id get(NSString *key){
+    return [[NSUserDefaults standardUserDefaults] valueForKey:key];
+}
+
++ (instancetype)shareManager
 {
     static CODNetWorkManager *manager = nil;
     static dispatch_once_t onceToken;
@@ -29,9 +37,10 @@
 {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-    NSLog(@"%@",[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi]);
-    [manager POST:[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi] parameters:[self GetDic:parameters] progress:^(NSProgress * _Nonnull uploadProgress) {
+    NSLog(@"BaseUrl = %@",[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi]);
+    [manager POST:[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi] parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        CODLogObject(responseObject);
         Sucess ? Sucess(responseObject) : nil;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         failed ? failed(error) : nil;

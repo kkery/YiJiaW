@@ -9,6 +9,7 @@
 #import "CODLoginViewController.h"
 #import "CODRegistViewController.h"
 #import "CODForgetPwdViewController.h"
+#import "NSString+COD.h"
 //#import "CYHForgetPassViewController.h"
 
 //#import "XWXBindingMobileViewController.h" // 去绑定手机号
@@ -392,29 +393,30 @@
     }];
 }
 
+
+#pragma mark - Action
 -(void)GetYZMBtnClicked:(UIButton*)sender
 {
-//    if (self.telNumTextField.text.length <= 0) {
-//        [self showErrorText:@"请输入手机号码"];
-//    } else {
-//        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//        params[@"mobile"] = self.telNumTextField.text;
-//        [self showLoading];
-//        [[LXGNetWorkQuery shareManager] AFrequestData:@"10002" HttpMethod:@"POST" params:params completionHandle:^(id result) {
-//            NSLog(@"----10002: %@",result);
-//            [self dismissLoading];
-//
-//            if (kMessage(result)) {
-//                [sender startWithTime:60 title:@"重新获取验证码" countDownTitle:@"秒" mainColor:[UIColor clearColor] countColor:[UIColor clearColor]];
-//            }else
-//            {
-//                [self showErrorText:@"获取失败!"];
-//            }
-//        } errorHandle:^(NSError *result) {
-//            [self showErrorText:@"网络异常，请重试!"];
-//            NSLog(@"===Error: %@",result);
-//        }];
-//    }
+    if (self.telNumTextField.text.length == 0) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请输入手机号"];
+        return;
+    }
+    if (![self.telNumTextField.text cod_isPhone]) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请输入正确格式的手机号"];
+        return;
+    }
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"mobile"] = self.telNumTextField.text;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=get_code" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [sender startWithTime:60 title:@"重新获取验证码" countDownTitle:@"秒" mainColor:[UIColor clearColor] countColor:[UIColor clearColor]];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 -(void)forgerBtnAction {
@@ -431,100 +433,101 @@
 }
 
 -(void)loginBtnAction:(UIButton*)sender {
-    //    mobile'=>'18970904745',
-    //    'password'=>'870604',
-    //    ‘type'=>1为密码登录，2为手机验证码登录
-    //    'code'=>验证码
+    if (self.telNumTextField.text.length == 0) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请输入手机号"];
+        return;
+    }
+    if (![self.telNumTextField.text cod_isPhone]) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请输入正确格式的手机号"];
+        return;
+    }
     
-//    if (sender.tag == 102) {
-//        if (self.telNumTextField.text.length > 0) {
-//            if (self.passwordTextField.text.length > 0) {
-//                NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//                params[@"mobile"] = self.telNumTextField.text;
-//                params[@"password"] = self.passwordTextField.text;
-//                params[@"type"] = @"1";
-//                [self showLoading];
-//                [[LXGNetWorkQuery shareManager] AFrequestData:@"10003" HttpMethod:@"POST" params:params completionHandle:^(id result) {
-//                    [self dismissLoading];
-//                    if (kMessage(result)) {
-//                        // 极光推送设置别名
-//                        [JPUSHService setAlias:kFORMAT(@"%@",result[@"data"][@"mobile"]) completion:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
-//                            NSLog(@"别名设置-------------%@",iAlias);
-//                        } seq:1];
-//
-//                        [[NSUserDefaults standardUserDefaults] setObject:result[@"data"][@"user_id"] forKey:@"login_credentials"];
-//                        [kNotiCenter postNotificationName:@"logoinRefresh" object:nil userInfo:nil];
-//                        [self loadDataSource];
-//                        [self.navigationController popViewControllerAnimated:YES];
-//                    } else {
-//                        [self showErrorText:result[@"status"][@"message"]];
-//                    }
-//                } errorHandle:^(NSError *result) {
-//                    [self showErrorText:@"网络异常，请重试!"];
-//                    NSLog(@"===Error: %@",result);
-//                }];
-//
-//            } else {
-//                [self showErrorText:@"请输入密码"];
-//            }
-//        } else {
-//            [self showErrorText:@"请输入手机号码"];
-//        }
-//    } else {
-//        if (self.telNumTextField.text.length > 0) {
-//            if (self.verificationTextField.text.length > 0) {
-//                NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//                params[@"mobile"] = self.telNumTextField.text;
-//                params[@"code"] = self.verificationTextField.text;
-//                params[@"type"] = @"2";
-//                [self showLoading];
-//                [[LXGNetWorkQuery shareManager] AFrequestData:@"10003" HttpMethod:@"POST" params:params completionHandle:^(id result) {
-//                    [self dismissLoading];
-//
-//                    if (kMessage(result)) {
-//
-//                        // 极光推送设置别名
-//                        [JPUSHService setAlias:kFORMAT(@"%@",result[@"data"][@"mobile"]) completion:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
-//                            NSLog(@"别名设置-------------%@",iAlias);
-//                        } seq:1];
-//
-//                        [[NSUserDefaults standardUserDefaults] setObject:result[@"data"][@"user_id"] forKey:@"login_credentials"];
-//                        [kNotiCenter postNotificationName:@"logoinRefresh" object:nil userInfo:nil];
-//                        [self loadDataSource];
-//                        [self.navigationController popViewControllerAnimated:YES];
-//                    } else {
-//                        [self showErrorText:result[@"status"][@"message"]];
-//                    }
-//                } errorHandle:^(NSError *result) {
-//                    [self showErrorText:@"网络异常，请重试!"];
-//                    NSLog(@"===Error: %@",result);
-//                }];
-//
-//            } else {
-//                [self showErrorText:@"请输入验证码"];
-//            }
-//        } else {
-//            [self showErrorText:@"请输入手机号码"];
-//        }
-//    }
-    
+    if (sender.tag == 102) {
+        if (self.passwordTextField.text.length == 0) {
+            [SVProgressHUD cod_showWithErrorInfo:@"请输入密码"];
+            return;
+        }
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"mobile"] = self.telNumTextField.text;
+        params[@"password"] = self.passwordTextField.text;
+        params[@"type"] = @"1";
+        
+        [SVProgressHUD cod_showStatu];
+        [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=login" andParameters:params Sucess:^(id object) {
+            [SVProgressHUD cod_dismis];
+            if ([object[@"code"] integerValue] == 200) {
+                [SVProgressHUD cod_showWithSuccessInfo:@"登录成功"];
+                
+                save(object[@"data"][@"user_id"], CODLoginTokenKey);
+                
+                [kNotiCenter postNotificationName:CODLoginNotificationName object:nil userInfo:nil];
+                
+//                [self loadUserInfo];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            }
+        } failed:^(NSError *error) {
+            [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+        }];
+    }
+    else {
+        if (self.verificationTextField.text.length == 0) {
+            [SVProgressHUD cod_showWithErrorInfo:@"请输入验证码"];
+            return;
+        }
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"mobile"] = self.telNumTextField.text;
+        params[@"code"] = self.verificationTextField.text;
+        params[@"type"] = @"2";
+        [SVProgressHUD cod_showStatu];
+        
+        [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=login" andParameters:params Sucess:^(id object) {
+            if ([object[@"code"] integerValue] == 200) {
+                [SVProgressHUD cod_showWithSuccessInfo:@"登录成功"];
+                
+                save(object[@"data"][@"user_id"], CODLoginTokenKey);
+                
+                [kNotiCenter postNotificationName:CODLoginNotificationName object:nil userInfo:nil];
+                
+//                [self loadUserInfo];
+                if (self.loginBlock) {
+                    self.loginBlock();
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:CODLoginCompletionNotificationName object:nil];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            }
+        } failed:^(NSError *error) {
+            [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+        }];
+    }
 }
 
 
--(void)loadDataSource {
+-(void)loadUserInfo {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
-//    [[LXGNetWorkQuery shareManager] AFrequestData:@"11033" HttpMethod:@"POST" params:params completionHandle:^(id result) {
-//        NSLog(@"----11033: %@",result);
-//        if (kMessage(result)) {
-//            [kUserCenter setObject:result[@"data"][@"list"] forKey:@"UserList_Information"];
-//        } else {
-//            [self showErrorText:result[@"status"][@"message"]];
-//        }
-//    } errorHandle:^(NSError *result) {
-//        [self showErrorText:@"网络异常，请重试!"];
-//        NSLog(@"===Error: %@",result);
-//    }];
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=user_info" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            
+            save(object[@"data"][@"user_id"], CODLoginTokenKey);
+            
+            [kNotiCenter postNotificationName:CODLoginNotificationName object:nil userInfo:nil];
+            [self loadUserInfo];
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 #pragma mark - 第三方登录

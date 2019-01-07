@@ -20,11 +20,9 @@
 // ==========↓↓↓↓↓↓↓↓↓↓========== //
 
 // !!!服务器地址!!!
-//static NSString * const CODServerDomain = @"http://app.api.i-hairs.com";// 生产，外网
-static NSString * const CODServerDomain = @"http://t.i-hairs.com";// 测试，外网
-// !!!图片地址!!!
-//static NSString * const CODImgServerDomain = @"http://img.i-hairs.com/app";// 图片生产，外网
-static NSString * const CODImgServerDomain = @"http://t.i-hairs.com/app";// 图片测试，外网
+static NSString * const CODServerDomain = @"http://yjw.0791jr.com/app.php?";// 嘉瑞生产环境
+//static NSString * const CODServerDomain = @"http://yijia.test/app.php?";// 本地测试环境
+
 // !!!平台!!!
 static NSString * const CODServerPlatform = @"api/app";// 应用
 static NSString * const CODWebPlatform = @"web/app";// 网页
@@ -62,7 +60,8 @@ static NSString * const CODCityDefaultIdKey = @"CODCityDefaultId";
 static NSString * const CODCityDefaultNameKey = @"CODCityDefaultName";
 
 // 本地存储key
-static NSString * const CODDeviceTokenKey = @"CODDeviceToken";// 设备令牌
+static NSString * const CODLoginTokenKey = @"CODDeviceToken";// 设备令牌
+static NSString * const CODUserInfoKey = @"CODUserInfoKey";// 用户信息key
 
 // 推送通知
 static NSString * const CODLoginNotificationName = @"CODLoginNotification";// 登录通知
@@ -78,6 +77,6 @@ static CGFloat const CODNavigationBarHeight = 44;
 static CGFloat const CODToolBarHeight = 44;
 static CGFloat const CODTabBarHeight = 49;
 
-static NSString * const CODDetaultWebUrl = @"https://www.0791jr.com";// 登录通知
+static NSString * const CODDetaultWebUrl = @"https://www.0791jr.com";// 嘉瑞网页
 
 #endif /* CODConstants_h */
