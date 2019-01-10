@@ -12,4 +12,6 @@
 
 @property(nonatomic,copy) NSString *titleStr;
 
+@property (copy, nonatomic) void(^doneBlock)(NSString *textValue);
+
 @end

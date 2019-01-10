@@ -7,8 +7,8 @@
 //
 
 #import "HPSearchViewController.h"
-#import "HPSearchCollectionViewCell.h"
-#import "HPSearchCollectionReusableView.h"
+#import "CODSearchCollectionViewCell.h"
+#import "CODSearchCollectionReusableView.h"
 #import "StoreSearchCollectLayout.h"
 #import "UIViewController+COD.h"
 #import "CODSearchModel.h"
@@ -79,9 +79,9 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
         _itemCollectionView.alwaysBounceVertical = YES;
         _itemCollectionView.backgroundColor = [UIColor whiteColor];
         [_itemCollectionView setKeyboardDismissMode:UIScrollViewKeyboardDismissModeOnDrag];
-        [_itemCollectionView registerClass:[HPSearchCollectionViewCell class] forCellWithReuseIdentifier:@"newsThressCollectionCell"];
+        [_itemCollectionView registerClass:[CODSearchCollectionViewCell class] forCellWithReuseIdentifier:@"newsThressCollectionCell"];
         // 注册头视图
-        [_itemCollectionView registerClass:[HPSearchCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MyWalletHeadVwID];
+        [_itemCollectionView registerClass:[CODSearchCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MyWalletHeadVwID];
     }return _itemCollectionView;
 }
 
@@ -204,7 +204,7 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     //根据行号获得行对象,没有就创建新的
-    HPSearchCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"newsThressCollectionCell" forIndexPath:indexPath];
+    CODSearchCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"newsThressCollectionCell" forIndexPath:indexPath];
     
     cell.nameLabel.text = self.titleArr[indexPath.section][indexPath.item];
     
@@ -224,7 +224,7 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
 {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader])
     {
-        HPSearchCollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MyWalletHeadVwID forIndexPath:indexPath];
+        CODSearchCollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MyWalletHeadVwID forIndexPath:indexPath];
         headerView.titleLab.text = self.titleHeadArr[indexPath.section];
         
         if ([headerView.titleLab.text isEqualToString:@"历史记录"]) {

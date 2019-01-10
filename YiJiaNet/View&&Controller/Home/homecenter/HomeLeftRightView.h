@@ -11,4 +11,5 @@
 @interface HomeLeftRightView : UIView
 @property(nonatomic,copy) void (^SelectImgVwBack)(NSString *str);
 
++(CGFloat)itemHeight;
 @end

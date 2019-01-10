@@ -7,8 +7,7 @@
 //
 
 #import "HomeLeftRightView.h"
-#define lettImgW (SCREENWIDTH-1.6)/2
-#define RightImgW (lettImgW-1.6)/2
+
 @interface HomeLeftRightView()
 
 @property(nonatomic,strong) UIImageView *leftImgVw;
@@ -51,25 +50,18 @@
         }];
         
         [self.RTopImgVw mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.leftImgVw.mas_right).offset(10);
+            make.left.equalTo(self.leftImgVw.mas_right).offset(5);
             make.top.offset(0);
             make.right.offset(0);
-            make.height.equalTo(@70);
+            make.height.equalTo(@74);
         }];
         
         [self.RBotomImgVw mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.leftImgVw.mas_right).offset(10);
-            make.top.equalTo(self.RTopImgVw.mas_bottom).offset(10);
+            make.left.equalTo(self.leftImgVw.mas_right).offset(5);
+            make.top.equalTo(self.RTopImgVw.mas_bottom).offset(5);
             make.right.offset(0);
-            make.height.equalTo(@70);
+            make.bottom.offset(0);
         }];
-//        self.leftImgVw = [UIImageView getImageViewWithFrame:(CGRect){0,0,lettImgW,lettImgW} andImage:kGetImage(@"home_activity1") andBgColor:nil];
-//        self.RTopImgVw = [UIImageView getImageViewWithFrame:(CGRect){(SCREENWIDTH/2+0.8),0,lettImgW,RightImgW} andImage:kGetImage(@"home_activity2") andBgColor:nil];
-//        self.RBotomImgVw = [UIImageView getImageViewWithFrame:(CGRect){(SCREENWIDTH/2+0.8),(lettImgW/2+0.8),lettImgW,RightImgW} andImage:kGetImage(@"home_activity3") andBgColor:nil];
-        
-//        [self addSubview:self.leftImgVw];
-//        [self addSubview:self.RTopImgVw];
-//        [self addSubview:self.RBotomImgVw];
         
         //单击的手势
         UITapGestureRecognizer *tapRecognize1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap1:)];

@@ -163,4 +163,36 @@
     resultSize = CGSizeMake(floor(resultSize.width + 1), floor(resultSize.height + 1));//上面用的小 width（height） 来计算了，这里要 +1
     return resultSize;
 }
+
+- (NSString *)cod_htmlEntityDecode {
+    NSString *decodeString;
+    decodeString = [self stringByReplacingOccurrencesOfString:@"&quot;" withString:@"\""];
+    decodeString = [self stringByReplacingOccurrencesOfString:@"&apos;" withString:@"'"];
+    decodeString = [self stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
+    decodeString = [self stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
+    decodeString = [self stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"]; // Do this last so that, e.g. @"&amp;lt;" goes to @"&lt;" not @“<"
+    // 上述操作是将后台返回的字符转译html字符
+    // 这段代码是css布局，这里css与js互用的话不兼容会出现缩小情况最好单一使用
+    decodeString = [NSString stringWithFormat:@"<html> \n"
+              "<head> \n"
+              "<style type=\"text/css\"> \n"
+              "</style> \n"
+              "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">"
+              
+              "</head> \n"
+              "<body>"
+              "<script type='text/javascript'>"
+              "window.onload = function(){\n"
+              "var $img = document.getElementsByTagName('img');\n"
+              "for(var p in  $img){\n"
+              " $img[p].style.width = '100%%';\n"
+              "$img[p].style.height ='auto'\n"
+              "}\n"
+              "}"
+              "</script>%@"
+              "</body>"
+              "</html>",decodeString];
+    
+    return decodeString;
+}
 @end

@@ -35,6 +35,8 @@
         
         self.iconImageView = ({
             UIImageView *imageView = [[UIImageView alloc] init];
+            imageView.layer.cornerRadius = 20;
+            imageView.layer.masksToBounds = YES;
             imageView;
         });
         [self.contentView addSubview:self.iconImageView];
@@ -98,12 +100,12 @@
     return self;
 }
 
-- (void)configureWithModel:(NSDictionary *)model {
-    [self.corverImageView sd_setImageWithURL:[NSURL URLWithString:[model objectForKey:@"icon"]] placeholderImage:kGetImage(@"place_zxal")];
-    [self.iconImageView sd_setImageWithURL:nil placeholderImage:kGetImage(@"place_default_avatar")];
-    self.nameLabel.text = @"雅丽豪庭金先生雅居";
-    self.introLabel.text = @"/三居/中式 | GREENWAY装修";
-    self.priceLabel.text = @"￥18.4万";
+- (void)configureWithModel:(CODDectateExampleModel *)model {
+    [self.corverImageView sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:kGetImage(@"place_zxal")];
+    [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:model.merchants_logo] placeholderImage:kGetImage(@"place_default_avatar")];
+    self.nameLabel.text = model.house_areas;
+    self.introLabel.text = model.introduction;
+    self.priceLabel.text = model.decorate_fare;
 }
 
 

@@ -82,28 +82,14 @@
 
 -(void)confirmAction
 {
-//    if (self.nickNameTextFile.text.length < 2 || self.nickNameTextFile.text.length > 10) {
-//        [self showErrorText:@"由2-10个字符，可由中文、字母、数字、“_”、“-”组成"];
-//    } else {
-//        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//        if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
-//            params[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
-//        }
-//        params[@"nickname"] = self.nickNameTextFile.text;
-//        [[HJNetWorkQuery shareManger] AFrequestData:@"App,Member,xgnickname" HttpMethod:@"POST" parames:params comPletionResult:^(id result) {
-//            if ([result[@"code"] integerValue] == 200) {
-//                // 通知主类刷新
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"MyDataViewClicked" object:nil userInfo:nil];
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"MyMainVCNoti" object:nil userInfo:nil];
-//                [self.navigationController popViewControllerAnimated:YES];
-//                [self showSuccessText:@"设置成功"];
-//            } else {
-//                [self showErrorText:result[@"message"]];
-//            }
-//        } AndError:^(NSError *error) {
-//            [self showErrorText:@"网络异常，请重试!"];
-//        }];
-//    }
+    if (kStringIsEmpty(self.nickNameTextFile.text)) {
+        [SVProgressHUD cod_showWithErrorInfo:@"内容不能为空"];
+        return;
+    }
+    if (self.doneBlock) {
+        self.doneBlock(self.nickNameTextFile.text);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 //限定尼称文字字数

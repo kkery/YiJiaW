@@ -9,5 +9,9 @@
 #import "CODDectateExampleModel.h"
 
 @implementation CODDectateExampleModel
++(NSDictionary<NSString *,id> *)modelCustomPropertyMapper
+{
+    return @{@"examId":@"id"};
+}
 
 @end

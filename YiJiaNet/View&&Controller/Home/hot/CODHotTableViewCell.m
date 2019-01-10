@@ -40,6 +40,7 @@
         
         self.corverImageView = ({
             UIImageView *imageView = [[UIImageView alloc] init];
+            imageView.layer.cornerRadius = 3;
             imageView.clipsToBounds = YES;
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             imageView;
@@ -64,12 +65,11 @@
     return self;
 }
 
-- (void)configureWithModel:(NSDictionary *)model {
-    self.titleLable.text = @"南昌新增一张生态名片玲岗湿公园基本完工";
-    self.timeLabel.text = @"2018-10-14";
-    [self.corverImageView sd_setImageWithURL:nil placeholderImage:kGetImage(@"place_list")];
+- (void)configureWithModel:(CODHotModel *)model {
+    self.titleLable.text = model.title;
+    self.timeLabel.text = model.add_time;
+    [self.corverImageView sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:kGetImage(@"place_list")];
 }
-
 
 + (CGFloat)heightForRow {
     return 110;

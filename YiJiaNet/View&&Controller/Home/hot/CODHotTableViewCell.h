@@ -7,9 +7,10 @@
 //
 
 #import "CODBaseTableViewCell.h"
+#import "CODHotModel.h"
 
 @interface CODHotTableViewCell : CODBaseTableViewCell
 
-- (void)configureWithModel:(NSDictionary *)model;
+- (void)configureWithModel:(CODHotModel *)model;
 
 @end

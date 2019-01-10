@@ -32,7 +32,7 @@
 -(void)creatUI {
     self.itmeBtnOne = [CODLayoutButton buttonWithType:UIButtonTypeCustom];
     [self.itmeBtnOne setTitle:@"综合" forState:UIControlStateNormal];
-    [self.itmeBtnOne setImage:kGetImage(@"decorate_screening") forState:UIControlStateNormal];
+    [self.itmeBtnOne setImage:kGetImage(@"mall_screening") forState:UIControlStateNormal];
     self.itmeBtnOne.titleLabel.font = [UIFont systemFontOfSize:15];
     [self.itmeBtnOne setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.itmeBtnOne.selected = YES;

@@ -13,6 +13,6 @@
 
 @property (nonatomic, strong, readonly) UIView *rightLineView;
 
-- (void)configureWithModel:(NSDictionary *)model;
+- (void)configureWithModel:(CODDectateExampleModel *)model;
 
 @end

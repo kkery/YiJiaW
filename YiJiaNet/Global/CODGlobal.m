@@ -25,11 +25,18 @@
 }
 
 #pragma mark - City
-- (NSInteger)currentCityId {// 当前城市id
-    return [[NSUserDefaults standardUserDefaults] integerForKey:CODCityDefaultIdKey] ?: CODCityDefaultId;
-}
-
 - (NSString *)currentCityName {// 当前城市名称
     return [[NSUserDefaults standardUserDefaults] objectForKey:CODCityDefaultNameKey] ?: CODCityDefaultName;
 }
+- (NSString *)longitude {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:CODCityDefaultLatitudeKey];
+}
+- (NSString *)latitude {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:CODCityDefaultLongitudeKey];
+}
+
++ (BOOL)logged {
+    return get(CODLoginTokenKey) != nil;
+}
+
 @end

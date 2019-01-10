@@ -10,7 +10,7 @@
 
 static CGFloat const kButtonWidth = 22;
 static CGFloat const kTextFieldWidth = 40;
-static CGFloat const kHorizontalMargin = 8;
+static CGFloat const kHorizontalMargin = 4;
 
 static CGFloat const kContentHeight = 30;
 static CGFloat const kContentWidth = kButtonWidth+kHorizontalMargin+kTextFieldWidth+kHorizontalMargin+kButtonWidth;
@@ -115,7 +115,7 @@ static NSUInteger const kMaxQuantity = 100;// 默认最大数量
         make.top.equalTo(self.mas_top);
         make.bottom.equalTo(self.mas_bottom);
         make.left.equalTo(self.minusButton.mas_right).offset(kHorizontalMargin);
-        make.width.equalTo(@40);
+        make.width.equalTo(@35);
     }];
     [self.unitLable mas_makeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);

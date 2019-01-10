@@ -8,11 +8,12 @@
 
 #import "CODBaseTableViewCell.h"
 #import "CODImageLineView.h"
+#import "CODDectateListModel.h"
 // 找装修 cell
 @interface CODDecorateTableViewCell : CODBaseTableViewCell
 
 @property (nonatomic, strong, readonly) CODImageLineView *corverImageView;
 
-- (void)configureWithModel:(NSDictionary *)model;
+- (void)configureWithModel:(CODDectateListModel *)model;
 
 @end

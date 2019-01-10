@@ -16,19 +16,47 @@
 @property(nonatomic, strong) UIScrollView *backScrollView;
 @property(nonatomic, strong) UIView *containView;
 
-
+/** 提交页面 */
 @property(nonatomic, strong) UIView *backBorderViewOne;
 
-@property(nonatomic, strong) UIView *backBorderViewTwo;
+@property(nonatomic, strong) UITextField *houseNameTF;
+@property(nonatomic, strong) UITextField *sizeTF;
+@property(nonatomic, strong) UITextField *phoneTF;
 
 @property(nonatomic, strong) CODModifyQuantityView *ModifyViewOne;
 @property(nonatomic, strong) CODModifyQuantityView *ModifyViewTwo;
 @property(nonatomic, strong) CODModifyQuantityView *ModifyViewThree;
 @property(nonatomic, strong) CODModifyQuantityView *ModifyViewFour;
 
-//属性引用
 @property(nonatomic, strong) UILabel *mCitylabel;
+@property (nonatomic, copy) NSString *fullAdressName;
+@property (nonatomic, strong) CLGeocoder *geocoder;
 
+// 参数
+@property (nonatomic, copy) NSString *hourseValue;
+@property (nonatomic, copy) NSString *provinceValue;//省
+@property (nonatomic, copy) NSString *cityValue;//市
+@property (nonatomic, copy) NSString *areaValue;//区
+@property (nonatomic, copy) NSString *longitude;
+@property (nonatomic, copy) NSString *latitude;
+@property (nonatomic, copy) NSString *sizeValue;
+@property (nonatomic, assign) NSInteger shiValue;
+@property (nonatomic, assign) NSInteger tingValue;
+@property (nonatomic, assign) NSInteger weiValue;
+@property (nonatomic, assign) NSInteger yangtValue;
+@property (nonatomic, copy) NSString *phoneValue;
+
+
+/** 结果页面 */
+@property(nonatomic, strong) UIView *backBorderViewTwo;
+
+@property(nonatomic, strong) UILabel *totalPriceLable;
+@property(nonatomic, strong) UILabel *intoLable;
+@property(nonatomic, strong) UILabel *rengongPriceLable;;
+@property(nonatomic, strong) UILabel *cailiaoPriceLable;
+
+
+@property(nonatomic, strong) NSDictionary *resultDic;
 
 @end
 
@@ -39,6 +67,8 @@
     // Do any additional setup after loading the view.
     self.title = @"算报价";
     self.view.backgroundColor = CODColorTheme;
+    
+    self.resultDic = [NSDictionary dictionary];
     
     self.containView = [[UIView alloc] init];
     [self.view addSubview:self.containView];
@@ -63,6 +93,9 @@
     self.backBorderViewOne.hidden = NO;
     self.backBorderViewTwo.hidden = YES;
     
+    RAC(self, hourseValue) = self.houseNameTF.rac_textSignal;
+    RAC(self, sizeValue) = self.sizeTF.rac_textSignal;
+    RAC(self, phoneValue) = self.phoneTF.rac_textSignal;
 }
 
 - (void)configureOne {
@@ -76,13 +109,14 @@
     lineView.layer.masksToBounds = YES;
     [largeTitleLable addSubview:lineView];
     // 小区名
-    UITextField *nameTextField = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor999999 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"您所在的小区名称"];
+    UITextField *nameTextField = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor333333 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"您所在的小区名称"];
     [nameTextField modifyPlaceholdFont:kFont(14) andColor:CODColor999999];
     nameTextField.backgroundColor = CODHexColor(0xF2F2F2);
     nameTextField.layer.cornerRadius = 5;
     nameTextField.layer.masksToBounds = YES;
     nameTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 10)];
     nameTextField.leftViewMode = UITextFieldViewModeAlways;
+    self.houseNameTF = nameTextField;
     [self.backBorderViewOne addSubview:nameTextField];
 
     //城市
@@ -96,7 +130,7 @@
     }];
     [self.backBorderViewOne addSubview:cityView];
     
-    UILabel *cityLabel = [UILabel GetLabWithFont:XFONT_SIZE(14) andTitleColor:CODColor999999 andTextAligment:NSTextAlignmentLeft andBgColor:nil andlabTitle:@"您所在的城市"];
+    UILabel *cityLabel = [UILabel GetLabWithFont:XFONT_SIZE(14) andTitleColor:CODColor666666 andTextAligment:NSTextAlignmentLeft andBgColor:nil andlabTitle:@"您所在的城市"];
     [cityView addSubview:cityLabel];
     self.mCitylabel = cityLabel;
     
@@ -110,8 +144,9 @@
     sizeView.layer.masksToBounds = YES;
     [self.backBorderViewOne addSubview:sizeView];
     
-    UITextField *sizeLabel = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor999999 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"我家的面积"];
+    UITextField *sizeLabel = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor333333 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"我家的面积"];
     [sizeLabel modifyPlaceholdFont:kFont(14) andColor:CODColor999999];
+    self.sizeTF = sizeLabel;
     [sizeView addSubview:sizeLabel];
 //
 //    UILabel *sizeLabel = [UILabel GetLabWithFont:XFONT_SIZE(14) andTitleColor:CODColor999999 andTextAligment:NSTextAlignmentLeft andBgColor:nil andlabTitle:@"我家的面积"];
@@ -125,8 +160,10 @@
     jiajianView1.layer.cornerRadius = 5;
     jiajianView1.layer.masksToBounds = YES;
     [self.backBorderViewOne addSubview:jiajianView1];
-    
     CODModifyQuantityView *modifyView1 = [[CODModifyQuantityView alloc] initWithFrame:CGRectZero Unit:@"室"];
+    modifyView1.quantityChangeBlock = ^(NSUInteger quantity) {
+        self.shiValue = quantity;
+    };
     [jiajianView1 addSubview:modifyView1];
     // 厅
     UIView *jiajianView2 = [[UIView alloc] init];
@@ -134,8 +171,10 @@
     jiajianView2.layer.cornerRadius = 5;
     jiajianView2.layer.masksToBounds = YES;
     [self.backBorderViewOne addSubview:jiajianView2];
-    
     CODModifyQuantityView *modifyView2 = [[CODModifyQuantityView alloc] initWithFrame:CGRectZero Unit:@"厅"];
+    modifyView2.quantityChangeBlock = ^(NSUInteger quantity) {
+        self.tingValue = quantity;
+    };
     [jiajianView2 addSubview:modifyView2];
     // 厨
     UIView *jiajianView3 = [[UIView alloc] init];
@@ -143,8 +182,10 @@
     jiajianView3.layer.cornerRadius = 5;
     jiajianView3.layer.masksToBounds = YES;
     [self.backBorderViewOne addSubview:jiajianView3];
-    
-    CODModifyQuantityView *modifyView3 = [[CODModifyQuantityView alloc] initWithFrame:CGRectZero Unit:@"厨"];
+    CODModifyQuantityView *modifyView3 = [[CODModifyQuantityView alloc] initWithFrame:CGRectZero Unit:@"卫"];
+    modifyView3.quantityChangeBlock = ^(NSUInteger quantity) {
+        self.weiValue = quantity;
+    };
     [jiajianView3 addSubview:modifyView3];
     // 卫
     UIView *jiajianView4 = [[UIView alloc] init];
@@ -152,12 +193,14 @@
     jiajianView4.layer.cornerRadius = 5;
     jiajianView4.layer.masksToBounds = YES;
     [self.backBorderViewOne addSubview:jiajianView4];
-    
-    CODModifyQuantityView *modifyView4 = [[CODModifyQuantityView alloc] initWithFrame:CGRectZero Unit:@"卫"];
+    CODModifyQuantityView *modifyView4 = [[CODModifyQuantityView alloc] initWithFrame:CGRectZero Unit:@"阳台"];
+    modifyView4.quantityChangeBlock = ^(NSUInteger quantity) {
+        self.yangtValue = quantity;
+    };
     [jiajianView4 addSubview:modifyView4];
     
     // 电话号码框
-    UITextField *phoneTextField = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor999999 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"您的电话号码"];
+    UITextField *phoneTextField = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor333333 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"您的电话号码"];
     [phoneTextField modifyPlaceholdFont:kFont(14) andColor:CODColor999999];
     phoneTextField.backgroundColor = CODHexColor(0xF2F2F2);
     phoneTextField.layer.cornerRadius = 5;
@@ -165,6 +208,7 @@
     phoneTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 10)];
     phoneTextField.leftViewMode = UITextFieldViewModeAlways;
     phoneTextField.keyboardType = UIKeyboardTypeNumberPad;
+    self.phoneTF = phoneTextField;
     [self.backBorderViewOne addSubview:phoneTextField];
     // 提交按钮
     UIButton *commitButton = [UIButton GetBtnWithTitleColor:[UIColor whiteColor] andFont:XFONT_SIZE(16) andBgColor:CODColorTheme andBgImg:nil andImg:nil andClickEvent:@selector(commitBtnAction) andAddVC:self andTitle:@"免费获取报价明细"];
@@ -291,31 +335,33 @@
     [largeTitleLable addSubview:lineView];
     
     //总价
-    UILabel *sumLable = [UILabel GetLabWithFont:kFont(40) andTitleColor:CODHexColor(0x00A0E9) andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@"5.5 万元"];
-    [sumLable setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(14) Color:CODColor333333 TotalString:@"5.5 万元" SubStringArray:@[@"万元"] AndOptions:1 andchangeLineSpaceWithLineSpace:1]];
+    UILabel *sumLable = [UILabel GetLabWithFont:kFont(40) andTitleColor:CODColorTheme andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@""];
+//    [sumLable setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(14) Color:CODColor333333 TotalString:@"0万元" SubStringArray:@[@"万元"] AndOptions:1 andchangeLineSpaceWithLineSpace:1]];
+    self.totalPriceLable = sumLable;
     [self.backBorderViewTwo addSubview:sumLable];
 
     UILabel *banbaoLabel = [UILabel GetLabWithFont:kFont(14) andTitleColor:CODColor333333 andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@"你家装修总估价（半包）"];
     [self.backBorderViewTwo addSubview:banbaoLabel];
 
     //户型
-    UILabel *houseTypeLabel = [UILabel GetLabWithFont:kFont(14) andTitleColor:CODColor999999 andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@"南昌/100m/3室3厅1卫1阳台"];
+    UILabel *houseTypeLabel = [UILabel GetLabWithFont:kFont(14) andTitleColor:CODColor999999 andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@""];
+    self.intoLable = houseTypeLabel;
     [self.backBorderViewTwo addSubview:houseTypeLabel];
     //line
     UIView *shuLineView = [[UIView alloc] init];
     shuLineView.backgroundColor = CODHexColor(0xeeeeee);
     [self.backBorderViewTwo addSubview:shuLineView];
     //人工费
-    UILabel *rengongLabel = [UILabel GetLabWithFont:kFont(14) andTitleColor:CODColor333333 andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@"人工费\n3.3万元"];
+    UILabel *rengongLabel = [UILabel GetLabWithFont:kFont(20) andTitleColor:CODColorTheme andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@""];
     rengongLabel.numberOfLines = 0;
-    [rengongLabel setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(16) Color:CODHexColor(0xFB5B1C) TotalString:@"人工费\n3.3万元" SubStringArray:@[@"3.3"] AndOptions:1 andchangeLineSpaceWithLineSpace:1]];
-    rengongLabel.textAlignment = NSTextAlignmentCenter;
+//    [rengongLabel setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(16) Color:CODHexColor(0xFB5B1C) TotalString:@"人工费\n0 万元" SubStringArray:@[@"0"] AndOptions:1 andchangeLineSpaceWithLineSpace:1]];
+    self.rengongPriceLable = rengongLabel;
     [self.backBorderViewTwo addSubview:rengongLabel];
     //材料费
-    UILabel *cailiaoLabel = [UILabel GetLabWithFont:kFont(14) andTitleColor:CODColor333333 andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@"材料费\n2.2万元"];
+    UILabel *cailiaoLabel = [UILabel GetLabWithFont:kFont(20) andTitleColor:CODColorTheme andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@""];
     cailiaoLabel.numberOfLines = 0;
-    [cailiaoLabel setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(16) Color:CODHexColor(0xFB5B1C) TotalString:@"材料费\n2.2万元" SubStringArray:@[@"2.2"] AndOptions:1 andchangeLineSpaceWithLineSpace:1]];
-    cailiaoLabel .textAlignment = NSTextAlignmentCenter;
+//    [cailiaoLabel setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(14) Color:CODColor333333 TotalString:@"材料费\n2.2万元" SubStringArray:@[@"万元", @"材料费"] AndOptions:1 andchangeLineSpaceWithLineSpace:5]];
+    self.cailiaoPriceLable = cailiaoLabel;
     [self.backBorderViewTwo addSubview:cailiaoLabel];
 
     UILabel *tipsLabel = [UILabel GetLabWithFont:kFont(12) andTitleColor:CODColor999999 andTextAligment:NSTextAlignmentCenter andBgColor:nil andlabTitle:@"30分钟内装修管家将会致电您\n为您提供更详细的装修预算评估，请留意来电"];
@@ -412,28 +458,116 @@
 
 #pragma mark - Action
 - (void)citySelectAction {
+    [self.houseNameTF resignFirstResponder];
+    [self.sizeTF resignFirstResponder];
+    [self.phoneTF resignFirstResponder];
+
     NSArray *defaultSelArr = nil;
     NSArray *dataSource = nil;//为空，则是使用框架自带城市数据
     [BRAddressPickerView showAddressPickerWithShowType:BRAddressPickerModeArea dataSource:dataSource defaultSelected:defaultSelArr isAutoSelect:NO themeColor:CODColorTheme resultBlock:^(BRProvinceModel *province, BRCityModel *city, BRAreaModel *area) {
         NSLog(@"省[%@]：%@，%@", @(province.index), province.code, province.name);
+        self.fullAdressName = [NSString stringWithFormat:@"%@%@%@",province.name, city.name, area.name];
+        self.provinceValue = province.name;
+        self.cityValue = city.name;
+        self.areaValue = area.name;
+        
         NSString *selectValue = [NSString stringWithFormat:@"%@%@",city.name, area.name];
+        self.mCitylabel.textColor =CODColor333333;
         self.mCitylabel.text = selectValue;
     } cancelBlock:^{
     }];
 }
 
 - (void)commitBtnAction {
-    [SVProgressHUD cod_showWithStatu:@"正在估算，请稍后..."];
+    if (kStringIsEmpty(self.hourseValue)) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请填写所在小区名称"];
+        return;
+    }if (kStringIsEmpty(self.fullAdressName)) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请选择所在城市"];
+        return;
+    }if (kStringIsEmpty(self.sizeValue)) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请填写面积"];
+        return;
+    }if (kStringIsEmpty(self.phoneValue)) {
+        [SVProgressHUD cod_showWithErrorInfo:@"请填写手机号码"];
+        return;
+    }
+    //地理编码
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+    [geocoder geocodeAddressString:self.fullAdressName completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (error!=nil || placemarks.count==0) {
+            CODLogObject(error);
+        }
+        //创建placemark对象
+        CLPlacemark *placemark = [placemarks firstObject];
+        //经度
+        self.longitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.longitude];
+        //纬度
+        self.latitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.latitude];
+        
+        NSLog(@"经度：%@，纬度：%@",self.longitude,self.latitude);
+    }];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    [SVProgressHUD cod_showWithStatu:@"正在估价，请稍后..."];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [SVProgressHUD cod_dismis];
-        self.backBorderViewOne.hidden = YES;
-        self.backBorderViewTwo.hidden = NO;
+        [self uploadData];
     });
-    
 }
+
+- (void)uploadData {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"longitude"] = self.longitude;
+    params[@"latitude"] = self.latitude;
+    params[@"province"] = self.provinceValue;
+    params[@"city"] = self.cityValue;
+    params[@"area"] = self.areaValue;
+    params[@"house_acreage"] = self.hourseValue;
+    params[@"house_type"] = [NSString stringWithFormat:@"%@室%@厅%@卫%@阳台",@(self.shiValue),@(self.tingValue),@(self.weiValue),@(self.yangtValue)];
+    params[@"house_acreage"] = self.sizeValue;
+    params[@"mobile"] = self.phoneValue;
+    params[@"house_name"] = self.hourseValue;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=ordered" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            
+            self.resultDic = object[@"data"][@"offer"];
+            
+            [self updateWithDic:self.resultDic];
+            
+            self.backBorderViewOne.hidden = YES;
+            self.backBorderViewTwo.hidden = NO;
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
+}
+
 - (void)againAction {
     self.backBorderViewOne.hidden = NO;
     self.backBorderViewTwo.hidden = YES;
 }
+
+- (void)updateWithDic:(NSDictionary *)dic {
+    
+    NSString *priceUnit = @"万元";
+    NSString *totalSum = kFORMAT(@"%@%@", @([dic[@"all_cost"] floatValue]), priceUnit);
+    NSString *totalRengong = kFORMAT(@"人工费\n%@%@", @([dic[@"labour_cost"] floatValue]), priceUnit);
+    NSString *totalCailiao = kFORMAT(@"材料费\n%@%@", @([dic[@"material_cost"] floatValue]), priceUnit);
+
+    [self.totalPriceLable setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(14) Color:CODColor333333 TotalString:totalSum SubStringArray:@[priceUnit] AndOptions:1 andchangeLineSpaceWithLineSpace:1]];
+    
+    [self.rengongPriceLable setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(14) Color:CODColor333333 TotalString:totalRengong SubStringArray:@[priceUnit, @"人工费"] AndOptions:1 andchangeLineSpaceWithLineSpace:5]];
+    
+    [self.cailiaoPriceLable setAttributedText:[TWHRichTextTool changeFontAndColor:kFont(16) Color:CODColor333333 TotalString:totalCailiao SubStringArray:@[priceUnit, @"材料费"] AndOptions:1 andchangeLineSpaceWithLineSpace:5]];
+    
+    self.totalPriceLable.textAlignment = NSTextAlignmentCenter;
+    self.rengongPriceLable.textAlignment = NSTextAlignmentCenter;
+    self.cailiaoPriceLable.textAlignment = NSTextAlignmentCenter;
+
+    self.intoLable.text = dic[@"house_info"];
+}
+
 @end

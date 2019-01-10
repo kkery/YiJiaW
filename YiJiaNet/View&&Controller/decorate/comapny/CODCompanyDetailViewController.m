@@ -27,6 +27,11 @@
 #import "CODExampleListViewController.h"
 #import "CODOrderPopView.h"
 #import "CustomIOSAlertView.h"
+#import "CODCompanyDetailModel.h"
+
+#import "CODCompShopTableViewCell.h"
+#import "CODShopInfoViewController.h"
+static NSString * const kCODCompShopTableViewCell = @"CODCompShopTableViewCell";
 
 static CGFloat const kTopViewHeight = 188;// 顶部图高度
 #define kOffsety 200.f  // 导航栏渐变的判定值
@@ -62,6 +67,12 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 @property (nonatomic,strong) NSMutableDictionary *Dic;
 /** 查看全部评价尾部视图 */
 @property (nonatomic,strong)UIView *comentFootVW;
+
+
+// data
+@property (nonatomic,strong) CODCompanyDetailModel *MModel;
+@property (nonatomic, strong) NSArray *commentArray;
+
 @end
 
 @implementation CODCompanyDetailViewController
@@ -69,37 +80,24 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    self.navigationController.navigationBar.cod_backgroundColor = [UIColor clearColor];
     [self SetNav];
-    
+    // view
     [self configureView];
-    
-    self.exampleArray = @[@{@"title":@"世茂大观程先生雅居",@"subTitle":@"/二居/中式/全装",@"icon":@"place_zxal_detail"},
-                       @{@"title":@"龙斗壹号周先生雅居",@"subTitle":@"/三居/中式/全装",@"icon":@"https://pic1.shejiben.com/case/2018/12/13/20181213191302-de334824.jpg"},
-                       ];
-    
-    self.specialArray = @[@{@"title":@"六大设计系统",@"subTitle":@"通风采光系统；动线规划系统；场景收纳系统；灯光设计系统；色彩美观系统；整装风格系统，六大科学设计系统重新定义家的户白岁丈。"},
-                          @{@"title":@"智能家居整装",@"subTitle":@"开启拎包入住家装智能家居新时代，提前享受未来；精选国内一线环保主材， 128 项全包， 28 项不限， 6 大费用全免；灯光一键开窍闭合，全屋电器手机可控，离家警戒安防模式；供应链集中配套，超低利润回馈客户；工厂模块化生产工期更合理。"},
-                          @{@"title":@"质量保障体系",@"subTitle":@"28 项特色施工工艺高于行业标准，工艺不达标，砸掉重做；环保不达标，全额退款。"},
-                          ];
-
-    MyCommentImfoMode *commentModel = [[MyCommentImfoMode alloc] init];
-    commentModel.nickname = @"张三";
-    commentModel.add_time = @"2018-12-12";
-    commentModel.content = @"设计师清风很用心，态度也很好，基本规定时间就可以给方案。节省了我不少的时间，最主要的是做出来的东西我很喜欢~整体风格我很满意。";
-    commentModel.images = @[@"",@"",@"",@"",@"",@""];
-    commentModel.scores = @"3";
-    self.imfoDic = [NSMutableDictionary dictionary];
-    [self.imfoDic setObject:commentModel forKey:@"mode"];
-    
-    [self.tableView reloadData];
+    // data
+    [self loadMerchantData];
     
     @weakify(self);
-    [[RACObserve(self, exampleArray) distinctUntilChanged] subscribeNext:^(NSArray *arr) {
+    [[RACObserve(self, MModel) distinctUntilChanged] subscribeNext:^(CODCompanyDetailModel *mod) {
         @strongify(self);
-        self.examCollectionView.dataArray = arr;
-        [self.tableView reloadData];
+        self.navTitleLabel.text = mod.name;
+        self.bannerView.imageURLStringsGroup = mod.images;
+        self.examCollectionView.dataArray = mod.cases;
     }];
+//    [[RACObserve(self, exampleArray) distinctUntilChanged] subscribeNext:^(NSArray *arr) {
+//        @strongify(self);
+//        self.examCollectionView.dataArray = arr;
+//        [self.tableView reloadData];
+//    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,7 +105,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
     self.edgesForExtendedLayout = UIRectEdgeAll;
     if (@available(iOS 11.0, *)) {
         // tableView 偏移20/64适配
-        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;//UIScrollView也适用
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     } else {
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
@@ -127,6 +125,30 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Data
+- (void)loadMerchantData {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"id"] = self.companyId;
+    params[@"user_id"] = COD_USERID;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=merchant&a=merchant" andParameters:params Sucess:^(id object) {
+        [self.tableView.mj_header endRefreshing];
+        if ([object[@"code"] integerValue] == 200) {
+            
+            CODCompanyDetailModel *model = [CODCompanyDetailModel modelWithJSON:object[@"data"][@"info"]];
+            self.exampleArray = model.cases;
+            self.specialArray = model.attr_list;
+            self.commentArray = model.comment;
+            self.MModel = model;
+            [self.tableView reloadData];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [self.tableView.mj_header endRefreshing];
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
+}
+
 #pragma mark - View
 - (void)configureView {
     self.tableView = ({
@@ -138,9 +160,9 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         tableView.estimatedRowHeight = 0;
         tableView.estimatedSectionHeaderHeight = 0;
         tableView.estimatedSectionFooterHeight = 0;
-        //        [tableView registerClass:[CODHotTableViewCell class] forCellReuseIdentifier:kCell];
         tableView.tableHeaderView = self.topView;
-        
+        [tableView registerClass:[CODCompShopTableViewCell class] forCellReuseIdentifier:kCODCompShopTableViewCell];
+        tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadMerchantData)];
         tableView;
     });
     [self.view addSubview:self.tableView];
@@ -152,8 +174,9 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         bannerView.delegate = self;
         bannerView.showPageControl = NO;
         bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
-        bannerView.currentPageDotColor = CODColorTheme;
-        bannerView.localizationImageNamesGroup = @[@"icon_banner", @"icon_banner1", @"icon_banner2"];
+        bannerView.currentPageDotImage = [UIImage cod_imageWithColor:[UIColor whiteColor] size:CGSizeMake(25, 3)];
+        bannerView.pageDotImage = [UIImage cod_imageWithColor:CODHexaColor(0xffffff, 0.3) size:CGSizeMake(25, 3)];
+//        bannerView.localizationImageNamesGroup = @[@"icon_banner", @"icon_banner1", @"icon_banner2"];
         bannerView;
     });
     [self.topView addSubview:self.bannerView];
@@ -185,7 +208,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             make.width.equalTo(@50);
         }];
         UIButton *callBtn = [[UIButton alloc] init];
-        [callBtn SetBtnTitle:@"电话" andTitleColor:CODColor666666 andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:kGetImage(@"decorate_collection") andClickEvent:@selector(callAction) andAddVC:self];
+        [callBtn SetBtnTitle:@"电话" andTitleColor:CODColor666666 andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:kGetImage(@"decorate_call") andClickEvent:@selector(callAction) andAddVC:self];
         [callBtn cod_alignImageUpAndTitleDown];
         [view addSubview:callBtn];
         [callBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -196,7 +219,6 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         }];
         
         UIView *btnBackView = [[UIView alloc] init];
-        btnBackView.backgroundColor = CODColorTheme;
         [btnBackView setLayWithCor:18 andLayerWidth:0 andLayerColor:0];
         [view addSubview:btnBackView];
         CGFloat btnBackViewW = SCREENWIDTH - 150 - 10;
@@ -208,7 +230,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         }];
         
         UIButton *orderBtn = [[UIButton alloc] init];
-        [orderBtn SetBtnTitle:@"免费预约" andTitleColor:[UIColor whiteColor] andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(orderAction) andAddVC:self];
+        [orderBtn SetBtnTitle:@"免费预约" andTitleColor:[UIColor whiteColor] andFont:kFont(12) andBgColor:nil andBgImg:[UIImage cod_imageWithColor:CODColorButtonHighlighted] andImg:nil andClickEvent:@selector(orderAction) andAddVC:self];
         [btnBackView addSubview:orderBtn];
         [orderBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(view);
@@ -217,12 +239,12 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             make.height.equalTo(@40);
         }];
         UIButton *priceBtn = [[UIButton alloc] init];
-        [priceBtn SetBtnTitle:@"为我报价" andTitleColor:[UIColor whiteColor] andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(priceAction) andAddVC:self];
+        [priceBtn SetBtnTitle:@"为我报价" andTitleColor:[UIColor whiteColor] andFont:kFont(12) andBgColor:nil andBgImg:[UIImage cod_imageWithColor:CODColorButtonNormal] andImg:nil andClickEvent:@selector(priceAction) andAddVC:self];
         [btnBackView addSubview:priceBtn];
         [priceBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(view);
             make.left.equalTo(orderBtn.mas_right);
-            make.right.offset(-10);
+            make.right.offset(0);
             make.height.equalTo(@40);
         }];
         
@@ -296,6 +318,8 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 cell.backgroundColor = [UIColor whiteColor];
                 
                 UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
+                iconImageView.layer.cornerRadius =  25;
+                iconImageView.layer.masksToBounds = YES;
                 iconImageView.tag = 1;
                 [cell.contentView addSubview:iconImageView];
                 
@@ -318,9 +342,10 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             UIImageView *iconImageView = (UIImageView *)[cell.contentView viewWithTag:1];
             UILabel *compNameLabel = (UILabel *)[cell.contentView viewWithTag:2];
             UILabel *subTitleLabel = (UILabel *)[cell.contentView viewWithTag:3];
-            iconImageView.image = kGetImage(@"place_default_avatar");
-            compNameLabel.text = @"牧野装饰";
-            subTitleLabel.text = @"案例：452 好评度：99%";
+            [iconImageView sd_setImageWithURL:[NSURL URLWithString:self.MModel.logo] placeholderImage:kGetImage(@"place_default_avatar")];
+            compNameLabel.text = self.MModel.name;
+            subTitleLabel.text = [NSString stringWithFormat:@"案例：%@  |  好评度：%@", self.MModel.cases_number, self.MModel.score];
+
             return cell;
         } else if (indexPath.row == 1) {// 路线
             static NSString * kAdressCellID = @"adressCellID";
@@ -340,7 +365,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 [cell.contentView addSubview:addressLab];
                 
                 UIButton *adreBtn = [[UIButton alloc] init];
-                [adreBtn SetBtnTitle:@"查看路线" andTitleColor:CODColor666666 andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:kGetImage(@"decorate_positioning") andClickEvent:@selector(callAction) andAddVC:self];
+                [adreBtn SetBtnTitle:@"查看路线" andTitleColor:CODHexColor(0x7496DF) andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:kGetImage(@"commodity_navigation_location") andClickEvent:@selector(callAction) andAddVC:self];
                 [adreBtn cod_alignImageUpAndTitleDown];
                 adreBtn.frame = CGRectMake(CGRectGetMaxX(addressLab.frame)+10, 0, 50, 60);
                 adreBtn.userInteractionEnabled = NO;
@@ -351,7 +376,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 [cell.contentView addSubview:linView];
             }
             UILabel *addreLab = (UILabel *)[cell.contentView viewWithTag:1];
-            addreLab.text = @"南昌市青云谱区新地路景泰华产业园1号...";
+            addreLab.text = self.MModel.address;
             
             return cell;
         } else {
@@ -366,9 +391,18 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             }
             
             NSString *title = @"特色服务";
-            NSString *cntent = @"样板房征集·免费上门量房·免费报价·盛大开业";
-            NSMutableAttributedString *attribute = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@：%@",title,cntent]];
-            [attribute addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor] range:[[NSString stringWithFormat:@"%@：%@",title,cntent] rangeOfString:title]];
+            NSString *content = @"暂无";
+            if (self.specialArray.count > 0) {
+                NSMutableArray *temp = [NSMutableArray array];
+                content = ((CODSpecialModel *)self.specialArray[0]).name;
+                for (CODSpecialModel *speci in self.specialArray) {
+                    [temp addObject:speci.name];
+                }
+                content = [temp componentsJoinedByString:@" · "];
+            }
+            
+            NSMutableAttributedString *attribute = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@：%@",title,content]];
+            [attribute addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor] range:[[NSString stringWithFormat:@"%@：%@",title,content] rangeOfString:title]];
             cell.textLabel.attributedText = attribute;
             
             return cell;
@@ -387,7 +421,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 cell.detailTextLabel.font = kFont(12);
             }
             cell.textLabel.text = @"装修案例";
-            cell.detailTextLabel.text = @"共2451个";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"共%@个",self.MModel.cases_number];
             return cell;
         } else {
             static NSString * kExampleCellID = @"exampleCell";
@@ -414,13 +448,13 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 cell.textLabel.font = kFont(16);
                 cell.detailTextLabel.font = kFont(12);
             }
-            cell.textLabel.text = @"评价(1000)";
-            cell.detailTextLabel.text = @"好评度 ";
+            cell.textLabel.text = [NSString stringWithFormat:@"评价(%@)",self.MModel.comment_number];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"好评度%@",self.MModel.score];
             return cell;
         } else {
             StoreGoodsCommentCell *comentCell = [StoreGoodsCommentCell cellWithTableView:tableView reuseIdentifier:nil];
-            if ([[self.imfoDic allKeys] containsObject:@"mode"]) {
-                comentCell.imfo_mode = self.imfoDic[@"mode"];
+            if (self.commentArray.count > 0) {
+                comentCell.imfo_mode = self.commentArray[0];
             }
             return comentCell;
         }
@@ -440,13 +474,8 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             cell.detailTextLabel.text = @"更多";
             return cell;
         } else {
-            static NSString * kExampleCellID = @"exampleCell";
-            CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kExampleCellID];
-            if (!cell) {
-                cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kExampleCellID];
-                
-                
-            }
+            CODCompShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODCompShopTableViewCell forIndexPath:indexPath];
+            cell.infoMod = self.MModel;
             return cell;
         }
     }
@@ -454,20 +483,6 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //    if (indexPath.section == 0) {
-    //        if (indexPath.row == 0) {
-    //            return 70;
-    //        } else {
-    //            return 140;
-    //        }
-    //    } else {
-    //        if (indexPath.row == 0) {
-    //            return 60;
-    //        } else {
-    //            return 140;
-    //        }
-    //    }
-    //
     if (indexPath.section == 0) {
         return indexPath.row == 0 ? 70 : 60;
     } else if (indexPath.section == 1) {
@@ -486,10 +501,22 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             }
         }
     } else if (indexPath.section == 2) {
-        return indexPath.row == 0 ? 40 : ((MyCommentImfoMode *)(self.imfoDic[@"mode"])).rowHeight;
-        
+        if (indexPath.row == 0) {
+            return 40;
+        } else {
+            if (self.commentArray.count > 0) {
+                return ((MyCommentImfoMode *)(self.commentArray[0])).rowHeight;
+            } else {
+                return 0;
+            }
+        }
+
     } else {
-        return indexPath.row == 0 ? 40 : 60;
+        if (indexPath.row == 0) {
+            return 40;
+        } else {
+            return self.MModel.shopRowHeight;
+        }
     }
 }
 
@@ -509,9 +536,10 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
-            webView.webTitleString = @"商家信息";
-            [self.navigationController pushViewController:webView animated:YES];
+            CODShopInfoViewController *shopInfoVC = [[CODShopInfoViewController alloc] init];
+            shopInfoVC.companyId = self.companyId;
+            [self.navigationController pushViewController:shopInfoVC animated:YES];
+
         } else if (indexPath.row ==1) {
             [self.mapNavigationView showMapNavigationViewWithtargetLatitude:0 targetLongitute:0 toName:@"地址"];
         } else {
@@ -531,9 +559,11 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         }
     } else {
         if (indexPath.row == 0) {
-            CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
-            webView.webTitleString = @"商家信息";
-            [self.navigationController pushViewController:webView animated:YES];
+            CODShopInfoViewController *shopInfoVC = [[CODShopInfoViewController alloc] init];
+            shopInfoVC.companyId = self.companyId;
+            [self.navigationController pushViewController:shopInfoVC animated:YES];
+        } else {
+            
         }
     }
 }
@@ -555,11 +585,14 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 }
 
 - (void)callAction {
-    [self alertVcTitle:nil message:@"是否拨打10086" leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", CODCustomerServicePhone) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
     } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
-        dispatch_async(dispatch_get_main_queue(), ^{;
-            NSMutableString * str = [[NSMutableString alloc] initWithFormat:@"tel://%@",@"10086"];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (@available(iOS 10.0, *)) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone] options:@{} completionHandler:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone]];
+            }
         });
     }];
 }
@@ -623,12 +656,11 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 
 - (UILabel *)navTitleLabel {
     if (!_navTitleLabel) {
-        _navTitleLabel = [[UILabel alloc] init];
+        _navTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
         _navTitleLabel.backgroundColor = [UIColor clearColor];
         _navTitleLabel.font = [UIFont boldSystemFontOfSize:18];
         _navTitleLabel.textColor = [UIColor colorWithWhite:0.0 alpha:0];
         _navTitleLabel.textAlignment = NSTextAlignmentCenter;
-        _navTitleLabel.text = @"牧野装饰";
     } return _navTitleLabel;
 }
 

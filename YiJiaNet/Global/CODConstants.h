@@ -23,9 +23,14 @@
 static NSString * const CODServerDomain = @"http://yjw.0791jr.com/app.php?";// 嘉瑞生产环境
 //static NSString * const CODServerDomain = @"http://yijia.test/app.php?";// 本地测试环境
 
-// !!!平台!!!
-static NSString * const CODServerPlatform = @"api/app";// 应用
-static NSString * const CODWebPlatform = @"web/app";// 网页
+// !!!友盟!!!
+static NSString * const QQAppKey = @"oSmTnXo7aX05gwco";
+static NSString * const QQAppID = @"1107047598";
+
+static NSString * const weChatID = @"wx69bd0632a8c89037";
+static NSString * const weChatSecret = @"08ec84d07176d90fcd2f6ec617e5b1c9";
+
+static NSString * const UMAPPKey = @"5b7ccfa18f4a9d0368000011";
 // !!!签名key!!!
 static NSString * const CODServerSignKey = @"2fa7b1d74a82e202cdedd153fcc91249";
 // !!!后台接口版本!!!
@@ -44,8 +49,10 @@ static NSString * const CODGuideKey = @"CODGuide3.3";// 需要引导的加上当
 static NSString * const CODAppSchema = @"cutorderuser";// app schema
 static NSString * const CODAppVersionKey = @"CODAppVersion";// 版本
 static NSString * const CODUmengAppKey = @"543b44d0fd98c52dc1001d36";// 友盟
-static NSString * const CODCustomerServicePhone = @"400-833-8892";// 客服电话
+static NSString * const CODCustomerServicePhone = @"10086";// 客服电话
 
+// 请求参数value
+static NSInteger const CODRequstPageSize = 10;// 默认每页数量
 // 请求参数key
 static NSString * const CODUseridParameterKey = @"userid";// 用户id
 static NSString * const CODTokenParameterKey = @"token";// 访问令牌
@@ -54,10 +61,10 @@ static NSString * const CODKeyParameterKey = @"key";// 密钥
 static NSString * const CODAppVersionParameterKey = @"appVersion";// 应用版本
 
 // 城市
-static NSInteger const CODCityDefaultId = 1;// 城市id
 static NSString * const CODCityDefaultName = @"南昌";// 城市名称
-static NSString * const CODCityDefaultIdKey = @"CODCityDefaultId";
 static NSString * const CODCityDefaultNameKey = @"CODCityDefaultName";
+static NSString * const CODCityDefaultLatitudeKey = @"CODCityDefaultLatitude";//纬度
+static NSString * const CODCityDefaultLongitudeKey = @"CODCityDefaultLongitude";//经度
 
 // 本地存储key
 static NSString * const CODLoginTokenKey = @"CODDeviceToken";// 设备令牌
@@ -70,6 +77,7 @@ static NSString * const CODAlixpayNotificationName = @"CODAlixpayNotification";/
 static NSString * const CODWxpayNotificationName = @"CODWxpayNotification";// 微信支付通知
 static NSString * const CODSwitchCityNotificationName = @"CODSwitchCityNotification";// 切换城市通知
 static NSString * const CODLoginCompletionNotificationName = @"CODLoginCompletionNotification";// 登录完成通知
+static NSString * const CODRefeshMineNotificationName = @"CODLoginCompletionNotification";// 个人信息刷新通知
 
 // UI
 static CGFloat const CODStatusBarHeight = 20;

@@ -13,9 +13,12 @@
 
 + (CODAnnouncementCell *)cellWithTableView:(UITableView *)tableView reuseIdentifier:(NSString *)identifier;
 
-@property(nonatomic,strong) NSMutableArray *topSignImages;
-@property(nonatomic,strong) NSMutableArray *topTitles;
-@property(nonatomic,strong) NSMutableArray *bottomTitles;
+@property(nonatomic,strong) NSArray *newstitles;
+@property(nonatomic,strong) NSArray *newstitlesIcons;
+//@property(nonatomic,strong) NSMutableArray *topTitles;
+//@property(nonatomic,strong) NSMutableArray *bottomTitles;
+
+//- (void)cofigureWithNews:(NSDictionary *)dic;
 
 /** 点击回调 */
 @property (nonatomic, copy) void(^NoticeScrollBlock)(SGAdvertScrollView *view,NSInteger idx);

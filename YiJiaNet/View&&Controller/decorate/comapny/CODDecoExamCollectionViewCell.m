@@ -88,10 +88,10 @@ static CGFloat const kVerticalMargin = 5;
     }];
 }
 
-- (void)configureWithModel:(NSDictionary *)model {
-    self.shopNameLabel.text = model[@"title"];
-    self.typeNameLabel.text = model[@"subTitle"];
-    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString:model[@"icon"]] placeholderImage:kGetImage(@"place_zxal")];
+- (void)configureWithModel:(CODDectateExampleModel *)model {
+    self.shopNameLabel.text = model.title;
+    self.typeNameLabel.text = model.introduction;
+    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:kGetImage(@"place_zxal")];
     
 }
 

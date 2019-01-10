@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger, CODImageLineViewDirection) {// 方向
 
 @property (nonatomic, assign) CODImageLineViewDirection direction;// 方向
 @property (nonatomic, strong) NSArray *images;// 图片
+@property (nonatomic, strong) NSArray *netImages;// 网络图片
 
 @property (nonatomic, copy) void(^singleTap)(NSUInteger index);// 单点
 

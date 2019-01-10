@@ -22,8 +22,6 @@
 @property(nonatomic,strong) UIImageView *reverseIDImageView;
 
 @property(nonatomic,assign) NSInteger imageType;
-//@property(nonatomic,assign) NSInteger imageType;
-//@property(nonatomic,assign) NSInteger imageType;
 @property(nonatomic,strong) NSMutableDictionary *ImgDic;
 
 @property(nonatomic,strong) NSMutableArray *imgArr;
@@ -67,13 +65,7 @@
         make.edges.equalTo(self.view);
     }];
     
-//
-//    RACSignal *imagValidSignal = [RACSignal combineLatest:@[RACObserve(self, imgArr)] reduce:^id(NSMutableArray *value) {
-//        return @(value.count == 2);
-//    }];
-    
     RAC(self.navigationItem.rightBarButtonItem, enabled) = [RACSignal combineLatest:@[self.nameField.rac_textSignal, self.identifierField.rac_textSignal, self.telField.rac_textSignal] reduce:^id (NSString *name, NSString *indentf, NSString *phone) {
-        
         return @((name.length > 0) && (indentf.length > 0) && (phone.length > 0));
     }];
     
@@ -81,29 +73,6 @@
         return @((name.length > 0) || (indentf.length > 0) || (phone.length > 0));
     }];
     RAC(self, edited) = editedSignal;
-
-//
-//
-//    RACSignal *validSignal = [RACSignal combineLatest:@[RACObserve(self.viewModel, remainWordCount)] reduce:^id(NSNumber *remainWordCount) {
-//        return @([remainWordCount integerValue] <= 0);
-//    }];
-//    RACSignal *textValidSignal = [RACSignal combineLatest:@[RACObserve(self.viewModel, content)] reduce:^id(NSString *content) {
-//        return @(content.length > 0);
-//    }];
-//    RACSignal *executingSignal = RACObserve(self.viewModel, executing);
-//    // 合并validSignal、textValidSignal、executingSignal
-//    RAC(self.navigationItem.rightBarButtonItem, enabled) = [RACSignal combineLatest:@[validSignal, textValidSignal, [executingSignal not]] reduce:^id(NSNumber *valid, NSNumber *executing){
-//        return @([valid boolValue] && [executing boolValue]);
-//    }];
-    
-    // rac
-//    RACSignal *enabledSignal = [RACSignal combineLatest:@[RACObserve(self, name)] reduce:^id(NSString *text) {
-//        return @(text.length > 0);
-//    }];
-//    
-//    RAC(self.navigationItem.rightBarButtonItem, enabled) = enabledSignal;
-    // data
-
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -247,8 +216,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
-//    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -282,33 +249,33 @@
     if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
         self.parmarDic[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
     }
-//    [[HJNetWorkQuery shareManger] AfPostUrl:@"App,RiderTask,application" params:self.parmarDic Data:self.ImgDic completionHandle:^(id result) {
-//        if ([result[@"code"] integerValue] == 200) {
-//            [self showSuccessText:@"提交申请成功"];
-//            // 通知主类刷新
-//            [kNotiCenter postNotificationName:@"MyMainVCNoti" object:nil userInfo:nil];
-//            XWXRiderApplyTypeViewController *Vw = [XWXRiderApplyTypeViewController new];
-//            Vw.infoDic = @{@"status":@"0"}.mutableCopy;
-//            Vw.isTwoReturn = YES;
-//            [self.navigationController pushViewController:Vw animated:YES];
-//        } else {
-//            [self showErrorText:result[@"message"]];
-//        }
-//    } errorHandle:^(NSError *error) {
-//        [self showErrorText:@"网络异常，请重试!"];
-//    }];
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"real_name"] = self.nameField.text;
+    params[@"id_number"] = self.identifierField.text;
+    params[@"mobile"] = self.telField.text;
+    [[CODNetWorkManager shareManager] AFPostData:@"m=App&c=Settinxxg&a=approve" Parameters:params ImageDatas:self.ImgDic AndSucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD cod_showWithSuccessInfo:@"提交认证成功"];
+            [kNotiCenter postNotificationName:CODRefeshMineNotificationName object:nil userInfo:nil];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
 }
 
 #pragma mark - GetImageDelegate
 -(void)getImageToActionWithImage:(UIImage *)image {
     if (self.imageType == 1) {
         [self.positiveIDImageView setImage:image];
-        self.ImgDic[@"identity_card1"] = image;
+        [self.ImgDic setObject:image forKey:@"id_number_just"];
         [self.imgArr addObject:image];
     } else {
         [self.reverseIDImageView setImage:image];
-        self.ImgDic[@"identity_card2"] = image;
+        [self.ImgDic setObject:image forKey:@"id_number_back"];
         [self.imgArr addObject:image];
     }
 }

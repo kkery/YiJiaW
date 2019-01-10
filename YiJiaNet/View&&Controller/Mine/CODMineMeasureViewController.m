@@ -51,10 +51,22 @@
     
     [self.view addSubview:self.tableView];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Refresh
+-(void)onRefreshing:(id)control
+{
+    [self loadData];
+}
+-(void)onLoadingMoreData:(id)control pageNum:(NSNumber *)pageNum
+{
+    [self loadData];
+}
+
 #pragma mark - Net load
 - (void)loadData
 {

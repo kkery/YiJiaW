@@ -7,11 +7,18 @@
 //
 #import "CODConstants.h"
 #import "CODMacros.h"
+
+#define COD_LOGGED ([CODGlobal logged])  // 已登录
+#define COD_USERID get(CODLoginTokenKey)  // 用户登录秘钥
+
 @interface CODGlobal : NSObject
 
 + (instancetype)sharedGlobal;// 单例对象
 
-@property (nonatomic, assign) NSInteger currentCityId;// 当前城市id
++ (BOOL)logged;// 登录状态，userid不为0
+
 @property (nonatomic, copy) NSString *currentCityName;// 当前城市名称
+@property (nonatomic, copy) NSString *longitude;// 经度
+@property (nonatomic, copy) NSString *latitude;// 纬度
 
 @end

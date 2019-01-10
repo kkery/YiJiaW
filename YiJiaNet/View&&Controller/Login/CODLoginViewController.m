@@ -13,7 +13,7 @@
 //#import "CYHForgetPassViewController.h"
 
 //#import "XWXBindingMobileViewController.h" // 去绑定手机号
-//#import <UMSocialCore/UMSocialCore.h>  // 友盟第三方登录
+#import <UMShare/UMShare.h> // 友盟第三方登录
 //#import "JPUSHService.h" // 极光推送
 
 @interface CODLoginViewController ()<UIScrollViewDelegate,UITextFieldDelegate>
@@ -373,8 +373,6 @@
         make.top.equalTo(self.weiChatBtn.mas_bottom).offset(20*proportionH);
     }];
     
-    
-    
     [self.view addSubview:self.qqChatFuBtn];
     [self.qqChatFuBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.offset(27*proportionW);
@@ -533,16 +531,76 @@
 #pragma mark - 第三方登录
 -(void)SDKLoginBtnClicked:(UIButton*)sender
 {
-//    if (sender.tag == 101) {
-//        // QQ
-//        [self getUserInfoForPlatform:UMSocialPlatformType_QQ withType:@"1"];
-//    } else if (sender.tag == 100) {
-//        // 微信
-//        [self getUserInfoForPlatform:UMSocialPlatformType_WechatSession withType:@"2"];
-//    }
-    
+    if (sender.tag == 101) {
+        // QQ
+        [self getUserInfoForPlatform:UMSocialPlatformType_QQ];
+    } else if (sender.tag == 100) {
+        // 微信
+        [self getUserInfoForPlatform:UMSocialPlatformType_WechatSession];
+    }
 }
 
+- (void)getUserInfoForPlatform:(UMSocialPlatformType)platformType
+{
+    __weak typeof(self)weakself = self;
+    [[UMSocialManager defaultManager] getUserInfoWithPlatform:platformType currentViewController:self completion:^(id result, NSError *error) {
+        if (error) {
+            UMSocialLogInfo(@"Get info fail with error %@",error);
+        } else {
+            UMSocialUserInfoResponse *resp = result;
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            if (platformType == UMSocialPlatformType_QQ) {
+                params[@"mod"] = @"qq";
+            }else{
+                params[@"mod"] = @"wx";
+            }
+            params[@"openid"] = resp.openid;
+//            [weakself NetWorkUrl:checkThirdLogin parameters:params Sucess:^(NSDictionary *dic) {
+//                if ([dic[@"data"][@"isBind"] integerValue] == 0) {
+//                    BindViewController *bindVc = [[BindViewController alloc] init];
+//                    bindVc.popToVc = weakself.CurrentVc;
+//                    bindVc.response = resp;
+//                    [weakself.navigationController pushViewController:bindVc animated:YES];
+//                }else
+//                {
+//                    [[HJHudTool sharedInstance] syncLoading];
+//                    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//                    if (platformType == UMSocialPlatformType_QQ) {
+//                        params[@"mod"] = @"qq";
+//                    }else{
+//                        params[@"mod"] = @"wx";
+//                    }
+//                    params[@"openid"] = resp.openid;
+//                    [weakself NetWorkUrl:ThirdLogin parameters:params Sucess:^(NSDictionary *dic) {
+//                        save(dic[@"data"][@"token"], Token);
+//                        [[HJNetWorkManager shareManager] AFRequestData:UserInfo andParameters:@{}.mutableCopy Sucess:^(id object) {
+//                            if ([object[@"code"] integerValue] == 200) {
+//                                [[NSNotificationCenter defaultCenter] postNotificationName:@"RefreshFollowData" object:nil];
+//                                save([NSMutableDictionary delectedNullDic:object[@"data"]], UserInfo);
+//
+//                                [weakself leftClick];
+//
+//                                [[HJHudTool sharedInstance] tipMessage:@"登录成功"];
+//                            }else
+//                            {
+//                                [[HJHudTool sharedInstance] tipMessage:object[@"message"]];
+//                            }
+//                        } failed:^(NSError *error) {
+//
+//                            [[HJHudTool sharedInstance] tipMessage:@"网络错误"];
+//                        }];
+//
+//                    } Error:^{
+//                    } andNetWorkError:^{
+//                    }];
+//                }
+//            } Error:^{
+//            } andNetWorkError:^{
+//            }];
+            
+        }
+    }];
+}
 //- (void)getUserInfoForPlatform:(UMSocialPlatformType)platformType withType:(NSString *)type
 //{
 //    [[UMSocialManager defaultManager] getUserInfoWithPlatform:platformType currentViewController:self completion:^(id result, NSError *error) {

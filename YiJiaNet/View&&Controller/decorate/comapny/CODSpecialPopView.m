@@ -8,7 +8,7 @@
 
 #import "CODSpecialPopView.h"
 #define self_ViewH (SCREENHEIGHT*0.75)
-
+#import "CODCompanyDetailModel.h"
 @interface CODSpecialPopView () <UITableViewDelegate,UITableViewDataSource>
 
 /*底部弹出视图*/
@@ -160,9 +160,8 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSDictionary *dict = [self.dataArray objectAtIndex:indexPath.row];
-    NSString *content = dict[@"subTitle"];
+    CODSpecialModel *mode = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *content = mode.content;
     CGSize textSize = kGetTextSize(content, SCREENWIDTH-50, MAXFLOAT, 14);
     return textSize.height + 40;
 }
@@ -195,12 +194,12 @@
     UILabel *titLab = (UILabel *)[cell.contentView viewWithTag:2];
     UILabel *subTitLab = (UILabel *)[cell.contentView viewWithTag:3];
     
-    NSDictionary *dict = [self.dataArray objectAtIndex:indexPath.row];
+    CODSpecialModel *mode = [self.dataArray objectAtIndex:indexPath.row];
     
     icoImageView.image = kGetImage(@"decorate_service_tick");
-    titLab.text = dict[@"title"];
-    subTitLab.text = dict[@"subTitle"];
-    CGSize textSize = kGetTextSize(dict[@"subTitle"], SCREENWIDTH-50, MAXFLOAT, 14);
+    titLab.text = mode.name;
+    subTitLab.text = mode.content;
+    CGSize textSize = kGetTextSize(mode.content, SCREENWIDTH-50, MAXFLOAT, 14);
     subTitLab.height = textSize.height;
 
     return cell;
@@ -211,7 +210,7 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIView *sectionHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 50)];
+    UIView *sectionHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 60)];
     
     UIImageView *imge = [[UIImageView alloc] initWithFrame:CGRectMake(10, 19, 15, 12)];
     imge.image = kGetImage(@"decorate_service_prompt");
@@ -222,11 +221,11 @@
     tipLabel.frame = CGRectMake(35, 0, SCREENWIDTH-45, 50);
     [sectionHeaderView addSubview:tipLabel];
     
-    return nil;
+    return sectionHeaderView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 0;
+    return 60;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{

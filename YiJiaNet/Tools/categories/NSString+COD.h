@@ -26,4 +26,6 @@
 
 - (NSInteger)cod_wordCount;
 
+- (NSString *)cod_htmlEntityDecode;
+
 @end

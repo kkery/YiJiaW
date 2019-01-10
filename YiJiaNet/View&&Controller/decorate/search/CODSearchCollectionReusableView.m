@@ -1,14 +1,14 @@
 //
-//  HPSearchCollectionReusableView.m
-//  JinFengGou
+//  CODSearchCollectionReusableView.m
+//  YiJiaNet
 //
-//  Created by apple on 2018/8/7.
-//  Copyright © 2018年 apple. All rights reserved.
+//  Created by KUANG on 2018/12/28.
+//  Copyright © 2018年 JIARUI. All rights reserved.
 //
 
-#import "HPSearchCollectionReusableView.h"
+#import "CODSearchCollectionReusableView.h"
 
-@implementation HPSearchCollectionReusableView
+@implementation CODSearchCollectionReusableView
 
 -(UILabel *)titleLab {
     if (!_titleLab) {

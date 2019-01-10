@@ -7,9 +7,10 @@
 //
 
 #import "CODBaseTableViewCell.h"
+#import "CODDectateExampleModel.h"
 
 @interface CODExampleTableViewCell : CODBaseTableViewCell
 
-- (void)configureWithModel:(NSDictionary *)model;
+- (void)configureWithModel:(CODDectateExampleModel *)model;
 
 @end

@@ -97,7 +97,8 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         bannerView.delegate = self;
         bannerView.showPageControl = NO;
         bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
-        bannerView.currentPageDotColor = CODColorTheme;
+        bannerView.currentPageDotImage = [UIImage cod_imageWithColor:[UIColor whiteColor] size:CGSizeMake(25, 3)];
+        bannerView.pageDotImage = [UIImage cod_imageWithColor:CODHexaColor(0xffffff, 0.3) size:CGSizeMake(25, 3)];
         bannerView.localizationImageNamesGroup = @[@"icon_banner", @"icon_banner1", @"icon_banner2"];
         bannerView;
     });
@@ -128,7 +129,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             make.height.equalTo(@50);
         }];
         UIButton *callBtn = [[UIButton alloc] init];
-        [callBtn SetBtnTitle:@"电话" andTitleColor:CODColor666666 andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(callAction) andAddVC:self];
+        [callBtn SetBtnTitle:@"电话" andTitleColor:CODColor666666 andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:kGetImage(@"decorate_call") andClickEvent:@selector(callAction) andAddVC:self];
         [callBtn cod_alignImageUpAndTitleDown];
         [view addSubview:callBtn];
         [callBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -439,7 +440,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 
 - (UILabel *)navTitleLabel {
     if (!_navTitleLabel) {
-        _navTitleLabel = [[UILabel alloc] init];
+        _navTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
         _navTitleLabel.backgroundColor = [UIColor clearColor];
         _navTitleLabel.font = [UIFont boldSystemFontOfSize:18];
         _navTitleLabel.textColor = [UIColor colorWithWhite:0.0 alpha:0];

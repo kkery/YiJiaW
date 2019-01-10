@@ -9,6 +9,7 @@
 #import "CODPersonInfoViewController.h"
 #import "GetImage.h"
 #import "BRDatePickerView.h"
+#import "UIImageView+WebCache.h"
 //#import "SelectDatapickView.h"//选择时间
 
 
@@ -56,7 +57,13 @@
 {
     self.textArr = @[@[@"头像"],@[@"昵称",@"手机号",@"性别",@"生日"]];
 //    self.dataArr = [[NSMutableArray alloc] initWithObjects:@[@[@""],@[@"未设置",@"未设置",@"未设置",@"未设置"]], nil];
-    self.dataArr = [NSMutableArray arrayWithArray:@[@[@""],@[@"未设置",@"未设置",@"未设置",@"未设置"]]];
+//    self.dataArr = [NSMutableArray arrayWithArray:@[@[@""],@[@"未设置",@"未设置",@"未设置",@"未设置"]]];
+    
+    NSMutableArray *arr0 = [NSMutableArray arrayWithObjects:@"", nil];
+    NSMutableArray *arr = [NSMutableArray arrayWithObjects:@"未设置",@"未设置",@"未设置",@"未设置", nil];
+    self.dataArr = [[NSMutableArray alloc] initWithObjects:arr0, arr, nil];
+
+    
 }
 
 - (void)MyDataViewControllerNoti
@@ -64,51 +71,51 @@
     [self loadData];
 }
 
-- (void)loadData
-{
-    NSMutableDictionary *params = [NSMutableDictionary new];
-    if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
-        params[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
-    }
-//    [[HJNetWorkQuery shareManger] AFrequestData:@"App,Member,userinfo" HttpMethod:@"POST" parames:params comPletionResult:^(id result) {
-//        if ([result[@"code"] integerValue] == 200) {
-//
-//            self.AllImfoDic = [NSDictionary getValuesForKeysWithDictionary:result[@"data"]];
-//            self.imfoDic = self.AllImfoDic[@"info"];
-//
-//            [self.headPortraitImageView sd_setImageWithURL:[NSURL URLWithString:kFORMAT(@"%@%@",AllImgAddressUrl,self.imfoDic[@"avatar"])] placeholderImage:[UIImage imageNamed:@"avatar_my"]];
-//
-//            NSMutableArray *arr = self.dataArr[0];
-//            if ([self.imfoDic[@"nickname"] isKindOfClass:[NSNull class]]) {
-//                [arr replaceObjectAtIndex:1 withObject:kFORMAT(@"未设置")];
-//            } else {
-//                [arr replaceObjectAtIndex:1 withObject:kFORMAT(@"%@",self.imfoDic[@"nickname"])];
-//            }
-//            if ([self.imfoDic[@"sex"] isEqualToString:@"未知"]) {
-//                [arr replaceObjectAtIndex:2 withObject:kFORMAT(@"未设置")];
-//            } else if ([self.imfoDic[@"sex"] isEqualToString:@"1"]) {
-//                [arr replaceObjectAtIndex:2 withObject:@"男"];
-//            } else if ([self.imfoDic[@"sex"] isEqualToString:@"2"]) {
-//                [arr replaceObjectAtIndex:2 withObject:@"女"];
-//            }
-//            if ([self.imfoDic[@"birthday"] isKindOfClass:[NSNull class]]) {
-//                [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"未设置")];
-//            } else {
-//                [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"%@",[NSString getDateStringWithTimeInterval:self.imfoDic[@"birthday"] DataFormatterString:@"YYYY-MM-dd"])];
-//            }
-//            if ([self.imfoDic[@"mobile"] isKindOfClass:[NSNull class]]) {
-//                [arr replaceObjectAtIndex:4 withObject:kFORMAT(@"未设置")];
-//            } else {
-//                [arr replaceObjectAtIndex:4 withObject:kFORMAT(@"%@",self.imfoDic[@"mobile"])];
-//            }
-//
-//            [self.baseTabeleviewGrouped reloadData];
-//        } else {
-//            [self showErrorText:result[@"message"]];
-//        }
-//    } AndError:^(NSError *error) {
-//        [self showErrorText:@"网络异常，请重试!"];
-//    }];
+- (void)loadData {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = get(CODLoginTokenKey);
+    
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=user_info" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            
+            save(object[@"data"][@"info"], CODUserInfoKey);
+            
+            self.imfoDic = object[@"data"][@"info"];
+            
+            [self.headPortraitImageView sd_setImageWithURL:[NSURL URLWithString:self.imfoDic[@"avatar"]] placeholderImage:[UIImage imageNamed:@"place_default_avatar"]];
+
+            NSMutableArray *arr = self.dataArr[1];
+            if (kStringIsEmpty(self.imfoDic[@"nickname"])) {
+                [arr replaceObjectAtIndex:0 withObject:kFORMAT(@"未设置")];
+            } else {
+                [arr replaceObjectAtIndex:0 withObject:kFORMAT(@"%@",self.imfoDic[@"nickname"])];
+            }
+            if ([self.imfoDic[@"sex"] integerValue] == 0) {
+                [arr replaceObjectAtIndex:2 withObject:kFORMAT(@"未设置")];
+            } else if ([self.imfoDic[@"sex"] isEqualToString:@"1"]) {
+                [arr replaceObjectAtIndex:2 withObject:@"男"];
+            } else if ([self.imfoDic[@"sex"] isEqualToString:@"2"]) {
+                [arr replaceObjectAtIndex:2 withObject:@"女"];
+            }
+            if ([self.imfoDic[@"birthday"] integerValue] == 0) {
+                [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"未设置")];
+            } else {
+                [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"%@",[NSString getDateStringWithTimeInterval:self.imfoDic[@"birthday"] DataFormatterString:@"YYYY-MM-dd"])];
+            }
+            if (kStringIsEmpty(self.imfoDic[@"mobile"])) {
+                [arr replaceObjectAtIndex:1 withObject:kFORMAT(@"未设置")];
+            } else {
+                [arr replaceObjectAtIndex:1 withObject:kFORMAT(@"%@",self.imfoDic[@"mobile"])];
+            }
+            
+            [self.baseTabeleviewGrouped reloadData];
+            
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -183,6 +190,9 @@
         if (indexPath.row == 0) {
             SetNickNameViewController* setNickVC = [[SetNickNameViewController alloc] init];
             setNickVC.titleStr = self.imfoDic[@"nickname"];
+            setNickVC.doneBlock = ^(NSString *textValue) {
+                [self requestUpdateNick:textValue];
+            };
             [self.navigationController pushViewController:setNickVC animated:YES];
         } else if (indexPath.row == 1) {
             SetNickNameViewController* setNickVC = [[SetNickNameViewController alloc] init];
@@ -194,44 +204,10 @@
             }];
             
             UIAlertAction *photos = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                //            [self showText:@"正在修改..."];
-                NSMutableDictionary *params = [NSMutableDictionary dictionary];
-                if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
-                    params[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
-                }
-                params[@"sex"] = @"1";
-                //            [[HJNetWorkQuery shareManger] AFrequestData:@"App,Member,xgsex" HttpMethod:@"POST" parames:params comPletionResult:^(id result) {
-                //                if ([result[@"code"] integerValue] == 200) {
-                //                    [self showSuccessText:@"设置成功"];
-                //                    NSMutableArray *arr = self.dataArr[0];
-                //                    [arr replaceObjectAtIndex:2 withObject:@"男"];
-                //                    [self.baseTabeleviewGrouped reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                //                } else {
-                //                    [self showErrorText:result[@"message"]];
-                //                }
-                //            } AndError:^(NSError *error) {
-                //                [self showErrorText:@"网络异常，请重试!"];
-                //            }];
+                [self requestUpdateSex:@"男"];
             }];
             UIAlertAction *camera = [UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                //            [self showText:@"正在修改..."];
-                //            NSMutableDictionary *params = [NSMutableDictionary dictionary];
-                //            if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
-                //                params[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
-                //            }
-                //            params[@"sex"] = @"2";
-                //            [[HJNetWorkQuery shareManger] AFrequestData:@"App,Member,xgsex" HttpMethod:@"POST" parames:params comPletionResult:^(id result) {
-                //                if ([result[@"code"] integerValue] == 200) {
-                //                    [self showSuccessText:@"设置成功"];
-                //                    NSMutableArray *arr = self.dataArr[0];
-                //                    [arr replaceObjectAtIndex:2 withObject:@"女"];
-                //                    [self.baseTabeleviewGrouped reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                //                } else {
-                //                    [self showErrorText:result[@"message"]];
-                //                }
-                //            } AndError:^(NSError *error) {
-                //                [self showErrorText:@"网络异常，请重试!"];
-                //            }];
+                [self requestUpdateSex:@"女"];
             }];
             
             [cancel setValue:[UIColor grayColor] forKey:@"titleTextColor"];
@@ -249,18 +225,18 @@
             NSDate *minDate = [NSDate br_setYear:1990 month:3 day:12];
             NSDate *maxDate = [NSDate date];
             NSString *defaultValue;
-//            if ([get(UserInfo)[@"birthday"] isNotBlank]) {
-//                defaultValue = [NSString TimeStrType:@"yyyy-MM-dd" andCreatTime:get(UserInfo)[@"birthday"]];
-//            } else {
-//                defaultValue = @"";
-//            }
-            
+
+            if ([self.imfoDic[@"birthday"] integerValue] == 0) {
+                defaultValue = @"";
+            } else {
+                defaultValue = kFORMAT(@"%@",[NSString getDateStringWithTimeInterval:self.imfoDic[@"birthday"] DataFormatterString:@"YYYY-MM-dd"]);
+            }
             [BRDatePickerView showDatePickerWithTitle:@"出生日期" dateType:BRDatePickerModeYMD defaultSelValue:defaultValue minDate:minDate maxDate:maxDate isAutoSelect:NO themeColor:CODColorTheme resultBlock:^(NSString *selectValue) {
                 NSDateFormatter *format = [[NSDateFormatter alloc] init];
                 format.dateFormat = @"yyyy-MM-dd";
                 NSDate *selectedDate = [format dateFromString:selectValue];
-                NSTimeInterval interval = [selectedDate timeIntervalSince1970]*1000;
-//                [self requestUpdateInfoWithValue:[NSString stringWithFormat:@"%@",@(interval)] key:@"birthday"];
+                NSString *dateString = [format stringFromDate:selectedDate];
+                [self requestUpdateBirthday:dateString];
             } cancelBlock:^{
             }];
         }
@@ -269,29 +245,98 @@
     
 }
 
+#pragma mark - Update data
+- (void)requestUpdateNick:(NSString *)obj {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"nickname"] = obj;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=edit_nickname" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD cod_showWithSuccessInfo:@"更新成功"];
+            [self loadData];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
+}
+- (void)requestUpdateSex:(NSString *)obj {
+    
+    NSString *sex;
+    if ([obj isEqualToString:@"男"]) {
+        sex = @"1";
+    } else {
+        sex = @"2";
+    }
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"sex"] = sex;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=edit_sex" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD cod_showWithSuccessInfo:@"更新成功"];
+            [self loadData];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
+}
 
-#pragma mark - GetImageDelegate(选取的图片上传到服务器)的代理方法
+- (void)requestUpdateBirthday:(NSString *)obj {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"birthday"] = obj;//1994-06-12
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=edit_birthday" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD cod_showWithSuccessInfo:@"更新成功"];
+            [self loadData];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
+}
+
+- (void)requestUpdatePhone:(NSString *)obj {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"new_mobile"] = obj;
+    params[@"code"] = obj;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=edit_mobile" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD cod_showWithSuccessInfo:@"更新成功"];
+            [self loadData];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
+}
+
+#pragma mark - GetImageDelegate
 -(void)getImageToActionWithImage:(UIImage *)image {
     
-    NSMutableDictionary *params = [NSMutableDictionary new];
-    if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
-        params[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
-    }
     NSMutableDictionary *imageData = [NSMutableDictionary dictionary];
-//    [imageData setObject:image forKey:@"avatar"];
-//    [[HJNetWorkQuery shareManger] AfPostUrl:@"App,Member,avatar_edit" params:params Data:imageData completionHandle:^(id result) {
-//        if ([result[@"code"] integerValue] == 200) {
-//            self.headPortraitImageView.image = image;
-//            // 通知主类刷新
-//            [kNotiCenter postNotificationName:@"MyMainVCNoti" object:nil userInfo:nil];
-//            [self showSuccessText:@"设置头像成功"];
-//        } else {
-//            [self showErrorText:result[@"message"]];
-//        }
-//    } errorHandle:^(NSError *error) {
-//        [self showErrorText:@"网络异常，请重试!"];
-//    }];
+    [imageData setObject:image forKey:@"avatar"];
     
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    
+    [[CODNetWorkManager shareManager] AFPostData:@"m=App&c=member&a=edit_avatar" Parameters:params ImageDatas:imageData AndSucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD cod_showWithSuccessInfo:@"设置头像成功"];
+            self.headPortraitImageView.image = image;
+            [kNotiCenter postNotificationName:CODRefeshMineNotificationName object:nil userInfo:nil];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
 }
 
 #pragma mark - 移除通知

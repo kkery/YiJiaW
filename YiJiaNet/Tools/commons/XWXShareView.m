@@ -9,6 +9,7 @@
 #define self_ViewH 235
 #import "TWHImgTitleBtn.h"
 #import "XWXShareView.h"
+#import <UMShare/UMShare.h>// 友盟
 
 //#import <UMSocialCore/UMSocialCore.h>//友盟分享
 //#import <UShareUI/UShareUI.h>
@@ -257,42 +258,41 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
 
 - (void)imgVwBtnClicked:(TWHImgTitleBtn *)sender
 {
-
-//    if (sender.tag == 100) {
-//        if ([kUserCenter objectForKey:klogin_WeChat] != nil) {
-//            // 微信
-//            [self shareWebPageToPlatformType:UMSocialPlatformType_WechatSession withDic:self.dic];
-//        }else {
-//            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装微信"];
-//        }
-//        
-//    } else if (sender.tag == 101) {
-//        
-//        if ([kUserCenter objectForKey:klogin_WeChat] != nil) {
-//            // 朋友圈
-//            [self shareWebPageToPlatformType:UMSocialPlatformType_WechatTimeLine withDic:self.dic];
-//        }else {
-//            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装微信"];
-//        }
-//        
-//    } else if (sender.tag == 102) {
-//        
-//        if ([kUserCenter objectForKey:klogin_QQ] != nil) {
-//            // QQ
-//            [self shareWebPageToPlatformType:UMSocialPlatformType_QQ withDic:self.dic];
-//        } else {
-//            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装QQ"];
-//        }
-//        
-//    } else {
-//        if ([kUserCenter objectForKey:klogin_QQ] != nil) {
-//            // QQ空间
-//            [self shareWebPageToPlatformType:UMSocialPlatformType_Qzone withDic:self.dic];
-//        } else {
-//            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装QQ"];
-//        }
-//        
-//    }
+    if (sender.tag == 100) {
+        if ([kUserCenter objectForKey:klogin_WeChat] != nil) {
+            // 微信
+            [self shareWebPageToPlatformType:UMSocialPlatformType_WechatSession withDic:self.dic];
+        }else {
+            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装微信"];
+        }
+        
+    } else if (sender.tag == 101) {
+        
+        if ([kUserCenter objectForKey:klogin_WeChat] != nil) {
+            // 朋友圈
+            [self shareWebPageToPlatformType:UMSocialPlatformType_WechatTimeLine withDic:self.dic];
+        }else {
+            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装微信"];
+        }
+        
+    } else if (sender.tag == 102) {
+        
+        if ([kUserCenter objectForKey:klogin_QQ] != nil) {
+            // QQ
+            [self shareWebPageToPlatformType:UMSocialPlatformType_QQ withDic:self.dic];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装QQ"];
+        }
+        
+    } else {
+        if ([kUserCenter objectForKey:klogin_QQ] != nil) {
+            // QQ空间
+            [self shareWebPageToPlatformType:UMSocialPlatformType_Qzone withDic:self.dic];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装QQ"];
+        }
+        
+    }
  
     [self removeMain];
 }
@@ -332,26 +332,26 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
 }
 
 // 网页分享
-//- (void)shareWebPageToPlatformType:(UMSocialPlatformType)platformType withDic:(NSDictionary *)dic
-//{
-//    //创建分享消息对象
-//    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
-//    //创建网页内容对象
-//    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:dic[@"share_title"] descr:dic[@"share_content"] thumImage:[UIImage imageNamed:@"AppIcon"]];
-//    //设置网页地址
-//    shareObject.webpageUrl =@"http://cnbitao.com/app.php?m=App&c=Articlew&a=upload";
-//    //分享消息对象设置分享内容对象
-//    messageObject.shareObject = shareObject;
-//    //调用分享接口
-//    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self.navSelf completion:^(id data, NSError *error) {
-//        if (error) {
-//            NSLog(@"************Share fail with error %@*********",error);
-//        }else{
-//            NSLog(@"response data is %@",data);
-//        }
-//    }];
-//
-//}
+- (void)shareWebPageToPlatformType:(UMSocialPlatformType)platformType withDic:(NSDictionary *)dic
+{
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页内容对象
+    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:dic[@"share_title"] descr:dic[@"share_content"] thumImage:[UIImage imageNamed:@"AppIcon"]];
+    //设置网页地址
+    shareObject.webpageUrl =@"http://cnbitao.com/app.php?m=App&c=Articlew&a=upload";
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self.navSelf completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            NSLog(@"response data is %@",data);
+        }
+    }];
+
+}
 
 //抱错误或成功
 - (void)alertWithError:(NSError *)error

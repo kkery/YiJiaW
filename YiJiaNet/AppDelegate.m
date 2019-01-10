@@ -9,7 +9,8 @@
 #import "AppDelegate.h"
 #import "CODMainTabBarController.h"
 #import <EAIntroView/EAIntroView.h>
-
+#import <UMShare/UMShare.h>// 友盟
+#import <UMCommon/UMCommon.h>
 @interface AppDelegate ()<EAIntroDelegate>
 
 @end
@@ -21,8 +22,28 @@
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    // root
     
+    [UMConfigure initWithAppkey:UMAPPKey channel:@"App Store"];
+
+    /* 设置分享到QQ互联的appID
+     * U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。
+     */
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:QQAppID appSecret:nil redirectURL:nil];
+    
+    /* 设置微信的appKey和appSecret */
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:weChatID appSecret:weChatSecret redirectURL:@"http://mobile.umeng.com/social"];
+
+    // 判断QQ、微信设备上是否安装
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
+        [kUserCenter setObject:@"QQ" forKey:klogin_QQ];
+    }
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL  URLWithString:@"weixin://"]]) {
+        [kUserCenter setObject:@"WeChat" forKey:klogin_WeChat];
+    }
+    // 设置全局UI
+    [[UITextField appearance] setTintColor:CODColorTheme];//设置UITextField的光标颜色
+    [[UITextView appearance] setTintColor:CODColorTheme];//设置UITextView的光标颜色
+    // root
     CODMainTabBarController *mainTabBarController = [[CODMainTabBarController alloc] init];
     self.window.rootViewController = mainTabBarController;
     [self.window makeKeyAndVisible];

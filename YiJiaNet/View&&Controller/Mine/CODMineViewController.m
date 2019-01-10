@@ -61,6 +61,8 @@ static CGFloat const kWhiteBackViewHeight = 124;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [kNotiCenter addObserver:self selector:@selector(refeshMineNotification) name:CODRefeshMineNotificationName object:nil];
+
 //    self.title = @"我的";
     self.navigationItem.leftBarButtonItem = nil;
     
@@ -105,6 +107,9 @@ static CGFloat const kWhiteBackViewHeight = 124;
 
 }
 
+- (void)refeshMineNotification {
+    [self loadUserInfo];
+}
 #pragma mark - View
 - (void)configureView {
     [self configureTableView];
@@ -140,7 +145,7 @@ static CGFloat const kWhiteBackViewHeight = 124;
         imageView.frame = CGRectMake(0, 0, SCREENWIDTH, kCoverHeaderViewHeight);
         imageView.userInteractionEnabled = YES;
         [imageView addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-            [self gotoLogin];
+            [self gotoPersonInfo];
         }];
         imageView;
     });
@@ -378,28 +383,20 @@ static CGFloat const kWhiteBackViewHeight = 124;
             });
         }];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"推荐给好友"]) {
-        XWXShareView *ShareView = [[XWXShareView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
-        [ShareView show];
+        XWXShareView *shareView = [[XWXShareView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
+                             @"分享标题", @"share_title",
+                             @"分享内容", @"share_content",
+                             nil ];
+        shareView.dic = dic;
+
+        shareView.navSelf = self;
+        [shareView show];
     }
 }
 
 #pragma mark - Action
-- (void)gotoLogin {
-    if (COD_LOGGED) {
-        [self gotoPersonInfo];
-    } else {
-        CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
-        loginViewController.loginBlock = ^(void) {
-            if (COD_LOGGED) {
-                NSLog(@"login success");
-            } else {
-                NSLog(@"login fail");
-            }
-//            [self loadUserInfo];
-        };
-        [self.navigationController pushViewController:loginViewController animated:YES];
-    }
-}
 - (void)gotoSetting {
     if (COD_LOGGED) {
         CODSettingViewController *setVC = [[CODSettingViewController alloc] init];
@@ -409,23 +406,33 @@ static CGFloat const kWhiteBackViewHeight = 124;
     }
 }
 - (void)gotoPersonInfo {
-    CODPersonInfoViewController *infoVC = [[CODPersonInfoViewController alloc] init];
-    [self.navigationController pushViewController:infoVC animated:YES];
+    if (!COD_LOGGED) {
+        CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
+        [self.navigationController pushViewController:loginViewController animated:YES];
+    } else {
+        CODPersonInfoViewController *infoVC = [[CODPersonInfoViewController alloc] init];
+        [self.navigationController pushViewController:infoVC animated:YES];
+    }
 }
 - (void)authenAction {
-    //0认证中 1成功 2失败 3未认证
-    NSInteger AuthenStatus = [get(CODUserInfoKey)[@"approve_status"] integerValue];
-    if (AuthenStatus == 3) {
-        CODAuthenViewController *authenVC = [[CODAuthenViewController alloc] init];
-        [self.navigationController pushViewController:authenVC animated:YES];
-    } else if (AuthenStatus == 1) {
-        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
-        webView.webTitleString = @"实名认证";
-        [self.navigationController pushViewController:webView animated:YES];
+    if (!COD_LOGGED) {
+        CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
+        [self.navigationController pushViewController:loginViewController animated:YES];
     } else {
-        CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
-        authenVC.status = AuthenStatus;
-        [self.navigationController pushViewController:authenVC animated:YES];
+        //0认证中 1成功 2失败 3未认证
+        NSInteger AuthenStatus = [get(CODUserInfoKey)[@"approve_status"] integerValue];
+        if (AuthenStatus == 3) {
+            CODAuthenViewController *authenVC = [[CODAuthenViewController alloc] init];
+            [self.navigationController pushViewController:authenVC animated:YES];
+        } else if (AuthenStatus == 1) {
+            CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
+            webView.webTitleString = @"实名认证";
+            [self.navigationController pushViewController:webView animated:YES];
+        } else {
+            CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
+            authenVC.status = AuthenStatus;
+            [self.navigationController pushViewController:authenVC animated:YES];
+        }
     }
 }
 

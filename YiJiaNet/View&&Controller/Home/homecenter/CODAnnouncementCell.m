@@ -69,8 +69,8 @@
     self.notice_scroll.titleFont = kFont(14);
     self.notice_scroll.titleColor = CODColor333333;
     //一行文字滚动
-    self.notice_scroll.signImages = @[@"hp_notice_point", @"hp_notice_point", ];
-    self.notice_scroll.titles = @[@"你敢信吗？中国35个大城市有12个存在楼市泡...",@"你敢信吗？中国35个大城市有12个存在楼市泡..."];
+//    self.notice_scroll.signImages = @[@"hp_notice_point", @"hp_notice_point", ];
+//    self.notice_scroll.titles = @[@"你敢信吗？中国35个大城市有12个存在楼市泡...",@"你敢信吗？中国35个大城市有12个存在楼市泡..."];
     
     self.notice_scroll.scrollTimeInterval = 3.0;
     
@@ -92,28 +92,13 @@
     }
 }
 
-
-- (void)setTopSignImages:(NSMutableArray *)topSignImages
-{
-    _topSignImages = topSignImages;
-    
-    self.notice_scroll.topSignImages = self.topSignImages;
-    self.notice_scroll.bottomSignImages = self.topSignImages;
+- (void)setNewstitles:(NSMutableArray *)newstitles {
+    _newstitles = newstitles;
+    self.notice_scroll.titles = newstitles;
 }
-
-- (void)setTopTitles:(NSMutableArray *)topTitles
-{
-    _topTitles = topTitles;
-    
-    self.notice_scroll.topTitles = self.topTitles;
-}
-
-- (void)setBottomTitles:(NSMutableArray *)bottomTitles
-{
-    _bottomTitles = bottomTitles;
-    
-   
-    self.notice_scroll.bottomTitles = self.bottomTitles;
+- (void)setNewstitlesIcons:(NSMutableArray *)newstitlesIcons {
+    _newstitlesIcons = newstitlesIcons;
+    self.notice_scroll.signImages = newstitlesIcons;
 }
 
 - (void)awakeFromNib {

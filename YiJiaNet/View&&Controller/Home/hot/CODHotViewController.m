@@ -10,14 +10,14 @@
 #import "UIScrollView+EmptyDataSet.h"
 #import "CODHotTableViewCell.h"
 #import "MJRefresh.h"
-#import "CODBaseWebViewController.h"
+#import "CODHotDetailViewController.h"
 
 static NSString * const kCell = @"CODHotTableViewCell";
 
-@interface CODHotViewController () <UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
+@interface CODHotViewController () <UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, MJRefreshEXDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
@@ -27,6 +27,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"益家头条";
+    self.dataArray = [NSMutableArray array];
     // configure view
     self.tableView = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -43,41 +44,74 @@ static NSString * const kCell = @"CODHotTableViewCell";
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-    
     // data
-    [self loadData];
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(LoadMoreData)];
-    
-//    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:YES delegate:self animation:YES];
-//    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
-
-    [self.view addSubview:self.tableView];
+    [self loadDataWithPage:1 andIsHeader:YES];
+    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:NO delegate:self animation:YES];
+    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-#pragma mark - Net load
-- (void)loadData
-{
-    [self.tableView.mj_header endRefreshing];
+
+#pragma mark - Refresh
+-(void)onRefreshing:(id)control {
+    [self loadDataWithPage:1 andIsHeader:YES];
 }
 
-- (void)LoadMoreData
-{
-    [self.tableView.mj_footer endRefreshing];
+-(void)onLoadingMoreData:(id)control pageNum:(NSNumber *)pageNum {
+    [self loadDataWithPage:pageNum.integerValue andIsHeader:NO];
+}
+
+#pragma mark - Data
+-(void)loadDataWithPage:(NSInteger)pageNum andIsHeader:(BOOL)isHeader {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"page"] = @(pageNum);
+    params[@"pagesize"] = @(CODRequstPageSize);
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=head_lines" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODHotModel class] json:object[@"data"][@"list"]];
+                [self.dataArray removeAllObjects];
+                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
+                [self.dataArray addObjectsFromArray:models];
+            } else {
+                [self.tableView endFooterRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODHotModel class] json:object[@"data"][@"list"]];
+                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
+                [self.dataArray addObjectsFromArray:models];
+            }
+            self.tableView.mj_footer.hidden = (self.dataArray.count == 0);
+            [self.tableView reloadData];
+            
+        } else {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+            } else  {
+                [self.tableView endFooterRefreshWithChangePageIndex:NO];
+            }
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        if (isHeader) {
+            [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+        }else
+        {
+            [self.tableView endFooterRefreshWithChangePageIndex:NO];
+        }
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return self.dataArray.count;
-    return 3;
+    return self.dataArray.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CODHotTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCell forIndexPath:indexPath];
-    [cell configureWithModel:nil];
+    [cell configureWithModel:(CODHotModel *)self.dataArray[indexPath.row]];
     return cell;
 }
 
@@ -88,7 +122,8 @@ static NSString * const kCell = @"CODHotTableViewCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
+    CODHotModel *hot = self.dataArray[indexPath.row];
+    CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:hot.url];
     [self.navigationController pushViewController:webVC animated:YES];
 }
 
@@ -98,7 +133,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
 }
 
 -(NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {
-    return [[NSAttributedString alloc] initWithString:@"还没有动态，快去逛逛吧" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15],NSForegroundColorAttributeName: CODHexColor(0x555555)}];
+    return [[NSAttributedString alloc] initWithString:@"数据空空如也，去别处逛逛吧" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15],NSForegroundColorAttributeName: CODHexColor(0x555555)}];
 }
 
 -(BOOL)emptyDataSetShouldAllowScroll:(UIScrollView *)scrollView {

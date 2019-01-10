@@ -9,5 +9,6 @@
 #import "CODBaseViewController.h"
 
 @interface CODCompanyDetailViewController : CODBaseViewController
+@property (nonatomic, strong) NSString *companyId;
 
 @end

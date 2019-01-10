@@ -162,20 +162,10 @@ static NSString *const itemID = @"imgCollectItemIdentifer";
                 [self.imgVW setImage:kGetImage(@"place_list")];
             }
         }
-    }else if ([imgData isKindOfClass:[UIImage class]]){
+    } else if ([imgData isKindOfClass:[UIImage class]]){
         [self.imgVW setImage:(UIImage *)imgData];
     }
 }
-
-//-(void)setImgData:(NSString *)imgData{
-//    _imgData = imgData;
-//
-//    if ([imgData hasPrefix:@"http"]) {
-//        [self.imgVW sd_setImageWithURL:[NSURL URLWithString:kFORMAT(@"%@",imgData)] placeholderImage:kGetImage(@"hp_item_default")];
-//    }else{
-//        [self.imgVW setImage:kGetImage(imgData)];
-//    }
-//}
 
 @end
 

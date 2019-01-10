@@ -24,6 +24,8 @@ static NSString * const kSectionOneCell = @"LocationCityCollectionViewCell";
 @property(nonatomic,strong) UICollectionView *itemCollectionView;
 @property(nonatomic,strong) NSMutableArray* titleHeadArr;
 @property(nonatomic,strong) NSMutableArray* titleArr;
+@property(nonatomic,strong) NSMutableArray* allMessageArr;
+
 
 @property(nonatomic,strong) NSString *currentSelectCity;
 
@@ -37,6 +39,12 @@ static NSString * const kSectionOneCell = @"LocationCityCollectionViewCell";
 
 @implementation SwitchCityViewController
 static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
+
+-(NSMutableArray *)allMessageArr {
+    if (!_allMessageArr) {
+        _allMessageArr = [[NSMutableArray alloc] init];
+    }return _allMessageArr;
+}
 
 -(UICollectionView *)itemCollectionView {
     if (!_itemCollectionView) {
@@ -66,10 +74,13 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
     // 开启定位
     [self locationStart];
     
+//    self.titleHeadArr = @[@"当前定位城市",@"开通城市"].mutableCopy;
+//    NSMutableArray *arrTwo = [NSMutableArray arrayWithObjects:@"定位中", nil];
+//    NSMutableArray *arrThree = [NSMutableArray arrayWithObjects:@"北京",@"高安",@"上饶",@"景德镇",@"宜春", nil];
+//    self.titleArr = [[NSMutableArray alloc]initWithObjects:arrTwo,arrThree, nil];
+    
     self.titleHeadArr = @[@"当前定位城市",@"开通城市"].mutableCopy;
-    NSMutableArray *arrTwo = [NSMutableArray arrayWithObjects:@"定位中", nil];
-    NSMutableArray *arrThree = [NSMutableArray arrayWithObjects:@"北京",@"高安",@"上饶",@"景德镇",@"宜春", nil];
-    self.titleArr = [[NSMutableArray alloc]initWithObjects:arrTwo,arrThree, nil];
+    self.titleArr = @[@[@"定位中"],@[]].mutableCopy;
     
     [self.view addSubview:self.itemCollectionView];
     [self.itemCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -94,39 +105,31 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
 #pragma mark - 加载数据
 - (void)loadData
 {
-//    [[LXGNetWorkQuery shareManager] AFrequestData:@"20020" HttpMethod:@"POST" params:@{}.mutableCopy completionHandle:^(id result) {
-//        if (kMessage(result)) {
-//
-//            self.imfoDic = [NSDictionary getValuesForKeysWithDictionary:result[@"data"]];
-//            [self.titleArr removeAllObjects];
-//            NSMutableArray *OneArr = [NSMutableArray new];
-//            if ([kUserCenter objectForKey:kCity] != nil) {
-//                [OneArr addObject:[kUserCenter objectForKey:kCity]];;
-//            } else {
-//               [OneArr addObject:@"定位中"];
-//            }
-//            NSMutableArray *TwoArr = [NSMutableArray new];
-//            [self.imfoDic[@"city"] enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                [TwoArr addObject:obj[@"name"]];
-//            }];
-//            self.titleArr = [[NSMutableArray alloc]initWithObjects:OneArr,TwoArr, nil];
-//
-//            [self.itemCollectionView reloadData];
-//        } else {
-//            if ([result[@"data"] isKindOfClass:[NSNull class]]) {
-//                kGetFailError;
-//            } else {
-//                if ([[result allKeys] containsObject:@"data"] && ![result[@"data"][@"ERROR_Param_Format"] isKindOfClass:[NSNull class]]) {
-//                    [SVProgressHUD XWX_showWithErrorInfo:result[@"data"][@"ERROR_Param_Format"]];
-//                }else{
-//                    kGetFailError;
-//                }
-//            }
-//        }
-//
-//    } errorHandle:^(NSError *result) {
-//        kNetError;
-//    }];
+    [SVProgressHUD cod_showStatu];
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=open_citys" andParameters:nil Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [SVProgressHUD cod_dismis];
+            [self.allMessageArr removeAllObjects];
+            
+            if (![object[@"data"][@"list"] isKindOfClass:[NSNull class]]) {
+                [self.allMessageArr addObjectsFromArray:object[@"data"][@"list"]];
+            }
+            
+            NSMutableArray* arr = [NSMutableArray new];
+            [self.allMessageArr enumerateObjectsUsingBlock:^(NSDictionary*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [arr addObject:obj[@"area_name"]];
+            }];
+            
+            [self.titleArr removeObjectAtIndex:1];
+            [self.titleArr addObject:arr];
+            
+            [self.itemCollectionView reloadData];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 -(CGFloat )collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
@@ -148,14 +151,12 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-//    NSString* itemsTitle = self.titleArr[indexPath.section][indexPath.item];
+    NSString* itemsTitle = self.titleArr[indexPath.section][indexPath.item];
     
-//    CGSize textSize = kGetTextSize(itemsTitle,MAXFLOAT,30*proportionH,IS_IPHONE_5?13:15);
-//    CGFloat itemWidth = textSize.width + 30*proportionW;
-//
-//    return CGSizeMake(itemWidth, 30*proportionH);
-    
-    return CGSizeMake((SCREENWIDTH - 4*15*proportionW)/3, 40);
+    CGSize textSize = kGetTextSize(itemsTitle,MAXFLOAT,30*proportionH,IS_IPHONE_5?13:15);
+    CGFloat itemWidth = textSize.width + 30*proportionW;
+
+    return CGSizeMake(itemWidth, 30*proportionH);
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -223,6 +224,8 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
         self.currentSelectCity = self.locationCity;
     } else {
         self.currentSelectCity = self.titleArr[indexPath.section][indexPath.row];
+        [kUserCenter setObject:kFORMAT(@"%@",self.allMessageArr[indexPath.row][@"latitude"]) forKey:CODCityDefaultLatitudeKey];
+        [kUserCenter setObject:kFORMAT(@"%@",self.allMessageArr[indexPath.row][@"longitude"]) forKey:CODCityDefaultLongitudeKey];
     }
     
 //    if (self.SelectCity) {
@@ -230,10 +233,10 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
 //        self.SelectCity(self.currentSelectCity);
 //    }
     
-    [[NSUserDefaults standardUserDefaults] setObject:self.currentSelectCity forKey:CODCityDefaultNameKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [kUserCenter setObject:self.currentSelectCity forKey:CODCityDefaultNameKey];
+    [kUserCenter synchronize];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:CODSwitchCityNotificationName object:nil];
+    [kNotiCenter postNotificationName:CODSwitchCityNotificationName object:nil];
 
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -258,7 +261,6 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
     }else {
         //提示用户无法进行定位操作
         [SVProgressHUD cod_showWithErrorInfo:@"定位服务未开启，请检查手机设置"];
-        
     }
 }
 #pragma mark - CoreLocation Delegate
@@ -270,7 +272,10 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
     [self.locationManager stopUpdatingLocation];
     //此处locations存储了持续更新的位置坐标值，取最后一个值为最新位置，如果不想让其持续更新位置，则在此方法中获取到一个值之后让locationManager stopUpdatingLocation
     CLLocation *currentLocation = [locations lastObject];
-    
+    NSLog(@"location:{lat:%f; lon:%f; accuracy:%f}", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude, currentLocation.horizontalAccuracy);
+    [kUserCenter setObject:kFORMAT(@"%f",currentLocation.coordinate.latitude) forKey:CODCityDefaultLatitudeKey];
+    [kUserCenter setObject:kFORMAT(@"%f",currentLocation.coordinate.longitude) forKey:CODCityDefaultLongitudeKey];
+
     //获取当前所在的城市名
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     //根据经纬度反向地理编译出地址信息

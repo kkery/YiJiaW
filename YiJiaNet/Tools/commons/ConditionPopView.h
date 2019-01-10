@@ -44,4 +44,5 @@
 /** 是否是处于展示状态(外部仅可读) */
 @property (nonatomic,assign,readonly) BOOL isShow;
 
+
 @end

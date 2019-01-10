@@ -8,11 +8,6 @@
 
 #ifndef CODMacros_h
 #define CODMacros_h
-
-// User
-#define COD_LOGGED get(CODLoginTokenKey) != nil // 已登录
-
-
 // UI
 #define CODScreenBounds [UIScreen mainScreen].bounds
 #define SCREENWIDTH [UIScreen mainScreen].bounds.size.width
@@ -96,9 +91,9 @@ _Pragma("clang diagnostic pop")\
 
 #define CODColorTheme CODHexColor(0x00A0E9)
 // 背景
-#define CODColorBackground CODHexColor(0xeeeeee)
+#define CODColorBackground CODHexColor(0xF5F5F5)
 // 线
-#define CODColorLine CODHexColor(0xdfdfdf)
+#define CODColorLine CODHexColor(0xF5F5F5)
 
 //分割线颜色
 #define kSepLineColor CODRgbColor(221, 221, 221)
@@ -137,7 +132,13 @@ _Pragma("clang diagnostic pop")\
 #define kDictIsEmpty(dic) (dic == nil || [dic isKindOfClass:[NSNull class]] || dic.allKeys == 0 ? YES : NO )
 //字符串初始化
 #define kFORMAT(f, ...)      [NSString stringWithFormat:f, ## __VA_ARGS__]
-
+//打电话
+#define kCall(PhNumStr) NSComparisonResult compare = [[UIDevice currentDevice].systemVersion compare:@"10.0"];\
+if (compare == NSOrderedDescending || compare == NSOrderedSame) {\
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFORMAT(@"telprompt://%@",PhNumStr)] options:@{} completionHandler:nil];\
+} else {\
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFORMAT(@"telprompt://%@",PhNumStr)]];\
+}
 /**
  *  字体适配 我在PCH文件定义了一个方法
  */

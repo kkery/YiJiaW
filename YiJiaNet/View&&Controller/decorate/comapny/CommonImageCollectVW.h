@@ -16,7 +16,6 @@
 @end
 
 
-
 @interface CommonImageCollectItem : UICollectionViewCell
 
 /** 图片信息 */

@@ -28,12 +28,13 @@
 #import "CODIntrinsicTitleView.h"
 #import "NSString+COD.h"
 #import "CQPlaceholderView.h"
+#import "MJRefresh.h"
 static CGFloat const kBannerRadio = 375 / 751.0;// 广告图片比例
 static CGFloat const kPadding = 12;
 
 static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 
-@interface CODHomeViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface CODHomeViewController () <UITableViewDataSource, UITableViewDelegate, MJRefreshEXDelegate>
 
 @property(nonatomic,strong) UIView *CityVw;
 //@property(nonatomic,strong) AutoScrollLabel *cityBtn;
@@ -54,7 +55,11 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 @property (nonatomic, strong) HomeLeftRightView *leftRightView;
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSArray *banners;
+@property (nonatomic, strong) NSArray *lineNews;
+@property (nonatomic, strong) NSArray *lineNewsIcon;
+@property (nonatomic, strong) NSMutableArray *listArray;
+
 /** 占位图*/
 @property(nonatomic,strong) CQPlaceholderView* placeholderView;
 
@@ -69,23 +74,110 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchCity) name:CODSwitchCityNotificationName object:nil];
     self.title = @"首页";
     self.navigationItem.leftBarButtonItem = nil;
+    
+    self.banners = [NSArray array];
+    self.lineNews = [NSArray array];
+    self.lineNewsIcon = [NSArray array];
+
+    self.listArray = [NSMutableArray array];
+    
     [self configureNavgationView];
     [self configureView];
     
-    [self loadData];
-    
-}
+    // data
+    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:NO delegate:self animation:YES];
+    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
 
-- (void)loadData {
-    // 假数据
-    self.dataArray = @[@{@"icon":@"http://www.nczyzs.com/images/kt_699.jpg"}, @{@"icon":@""}, @{@"icon":@"http://www.nczyzs.com/images/699_ws.jpg"}];
+    [self loadDataWithPage:1 andIsHeader:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    
 }
+
+#pragma mark - Refresh
+-(void)onRefreshing:(id)control {
+    [self loadDataWithPage:1 andIsHeader:YES];
+}
+
+-(void)onLoadingMoreData:(id)control pageNum:(NSNumber *)pageNum {
+    [self loadDataWithPage:pageNum.integerValue andIsHeader:NO];
+}
+
+#pragma mark - Data
+-(void)loadDataWithPage:(NSInteger)pageNum andIsHeader:(BOOL)isHeader {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"latitude"] = [CODGlobal sharedGlobal].latitude;
+    params[@"longitude"] = [CODGlobal sharedGlobal].longitude;
+    params[@"city"] = [CODGlobal sharedGlobal].currentCityName;
+    params[@"page"] = @(pageNum);
+    params[@"pagesize"] = @"10";
+    
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=index" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+        
+            NSMutableArray *tempAds = [NSMutableArray array];
+            for (NSDictionary *dic in object[@"data"][@"ad"]) {
+                [tempAds addObject:[NSURL URLWithString:dic[@"content"]]];
+            }
+            self.banners = tempAds;
+            self.bannerView.imageURLStringsGroup = self.banners;
+            
+            NSMutableArray *tempNews = [NSMutableArray array];
+            NSMutableArray *tempNews1 = [NSMutableArray array];
+            for (NSDictionary *dic in object[@"data"][@"news"]) {
+                [tempNews addObject:dic[@"title"]];
+                [tempNews1 addObject:@"hp_notice_point"];
+            }
+            self.lineNews = tempNews;
+            self.lineNewsIcon = tempNews1;
+
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODDectateExampleModel class] json:object[@"data"][@"list"]];
+                [self.listArray removeAllObjects];
+                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
+                [self.listArray addObjectsFromArray:models];
+            } else {
+                [self.tableView endFooterRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODDectateExampleModel class] json:object[@"data"][@"list"]];
+                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
+                [self.listArray addObjectsFromArray:models];
+            }
+            self.tableView.mj_footer.hidden = (self.listArray.count == 0);
+            
+            [self.tableView reloadData];
+            
+            if (self.listArray.count > 0) {
+                self.placeholderView.hidden = YES;
+                self.tableView.hidden = NO;
+            } else {
+                self.placeholderView.hidden = NO;
+                self.tableView.hidden = YES;
+            }
+        } else {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+            } else  {
+                [self.tableView endFooterRefreshWithChangePageIndex:NO];
+            }
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            self.tableView.mj_footer.hidden = YES;
+        }
+    } failed:^(NSError *error) {
+        if (isHeader) {
+            [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+        }else
+        {
+            [self.tableView endFooterRefreshWithChangePageIndex:NO];
+        }
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+        self.tableView.mj_footer.hidden = YES;
+    }];
+}
+
 #pragma mark - View
 - (void)configureNavgationView {
 
@@ -236,8 +328,9 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     if (!_bannerView) {
         _bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*kBannerRadio) delegate:nil placeholderImage:[UIImage imageNamed:@"placeholder"]];
         _bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
-        _bannerView.pageControlBottomOffset = 30;
-        _bannerView.currentPageDotColor = CODColorTheme;
+        _bannerView.currentPageDotImage = [UIImage cod_imageWithColor:[UIColor whiteColor] size:CGSizeMake(25, 3)];
+        _bannerView.pageDotImage = [UIImage cod_imageWithColor:CODHexaColor(0xffffff, 0.3) size:CGSizeMake(25, 3)];
+        _bannerView.pageControlBottomOffset = 25;
         _bannerView.localizationImageNamesGroup = @[@"icon_banner", @"icon_banner1", @"icon_banner2"];
     }
     return _bannerView;
@@ -263,7 +356,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 
 - (HomeLeftRightView *)leftRightView {
     if (!_leftRightView) {
-        _leftRightView = [[HomeLeftRightView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 150)];
+        _leftRightView = [[HomeLeftRightView alloc] init];
         @weakify(self);
         _leftRightView.SelectImgVwBack = ^(NSString *str) {
             if ([str isEqualToString:@"算报价"]) {
@@ -315,7 +408,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     } else if (section == 2) {
         return 1;
     } else {
-        return self.dataArray.count;
+        return self.listArray.count;
     }
 }
 
@@ -338,8 +431,11 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
         //轮播公告
         CODAnnouncementCell *anceCell = [CODAnnouncementCell cellWithTableView:tableView reuseIdentifier:nil];
 
+        anceCell.newstitles = self.lineNews;
+        anceCell.newstitlesIcons = self.lineNewsIcon;
+        
 //        anceCell.topSignImages = self.leftImgS;
-//        anceCell.topTitles = self.titleStr;
+        
 //        anceCell.bottomTitles = self.titleRightStr;
 //        [anceCell setNoticeScrollBlock:^(SGAdvertScrollView *view, NSInteger idx) {
 //            [SVProgressHUD cod_showWithErrorInfo:@"敬请期待"];
@@ -362,7 +458,8 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     else {
         CODExampleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODExampleTableViewCell forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell configureWithModel:self.dataArray[indexPath.row]];
+        
+        [cell configureWithModel:(CODDectateExampleModel *)self.listArray[indexPath.row]];
         
         return cell;
     }
@@ -385,7 +482,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-         return 150 + kPadding*2;
+         return 153 + kPadding*2;
     } else if (indexPath.section == 1) {
         return [CODAnnouncementCell heightForRow];
     } else if (indexPath.section == 2) {
@@ -412,13 +509,15 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
    
     self.cityButton.text = [CODGlobal sharedGlobal].currentCityName;
     
-    if ([self.cityButton.text isEqualToString:@"南昌市"]) {
-        self.placeholderView.hidden = NO;
-        self.tableView.hidden = YES;
-    } else {
-        self.placeholderView.hidden = YES;
-        self.tableView.hidden = NO;
-    }
+    [self loadDataWithPage:1 andIsHeader:YES];
+    
+//    if ([self.cityButton.text isEqualToString:@"南昌市"]) {
+//        self.placeholderView.hidden = NO;
+//        self.tableView.hidden = YES;
+//    } else {
+//        self.placeholderView.hidden = YES;
+//        self.tableView.hidden = NO;
+//    }
 }
 #pragma mark - Action
 - (void)locationAction {
@@ -434,15 +533,27 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     [self.navigationController pushViewController:cityVC animated:YES];
 }
 - (void)calcuQuoteAction{
-    CODCalcuQuoteViewController *VC = [[CODCalcuQuoteViewController alloc] init];
-    [self.navigationController pushViewController:VC animated:YES];
+    if (!COD_LOGGED) {
+        CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
+        loginViewController.loginBlock = ^{
+            CODCalcuQuoteViewController *VC = [[CODCalcuQuoteViewController alloc] init];
+            [self.navigationController pushViewController:VC animated:YES];
+        };
+        [self.navigationController pushViewController:loginViewController animated:YES];
+    } else {
+        CODCalcuQuoteViewController *VC = [[CODCalcuQuoteViewController alloc] init];
+        [self.navigationController pushViewController:VC animated:YES];
+    }
 }
 - (void)callAction {
-    [self alertVcTitle:nil message:@"是否拨打10086" leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", CODCustomerServicePhone) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
     } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
-        dispatch_async(dispatch_get_main_queue(), ^{;
-            NSMutableString * str = [[NSMutableString alloc] initWithFormat:@"tel://%@",@"10086"];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (@available(iOS 10.0, *)) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone] options:@{} completionHandler:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone]];
+            }
         });
     }];
 }

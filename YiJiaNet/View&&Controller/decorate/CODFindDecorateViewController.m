@@ -37,18 +37,16 @@
 
 #import "ConditionPopView.h"
 #import "DecorateConditionView.h"
-
-static CGFloat const kBannerRadio = 375 / 751.0;// 广告图片比例
-static CGFloat const kPadding = 12;
+#import "ImageBrowserViewController.h"
+#import "UIScrollView+EmptyDataSet.h"
 
 static CGFloat const kTopHeight = 240;
 static CGFloat const kFourItemHeight = 80;
 static CGFloat const kBannerHeight = 140;
 
-
 static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 
-@interface CODFindDecorateViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface CODFindDecorateViewController () <UITableViewDataSource, UITableViewDelegate, MJRefreshEXDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 
 @property(nonatomic,strong) UIView *CityVw;
 //@property(nonatomic,strong) AutoScrollLabel *cityBtn;
@@ -61,9 +59,7 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 /** 下拉视图 */
 @property (nonatomic,strong) ConditionPopView *popVW;
 /** 下拉选项数据*/
-@property (nonatomic,strong)NSMutableArray *choseArr;
-/** 请求参数*/
-@property(nonatomic,strong) NSMutableDictionary *parDic;
+@property (nonatomic,strong) NSArray *popArray;
 
 @property (nonatomic, strong) UIView *searchView;// 搜索视图
 @property (nonatomic, strong) UILabel *searchTextLable;// 搜索视图;
@@ -77,8 +73,10 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
+/** 请求参数*/
+@property(nonatomic, assign) NSInteger orderType;//1综合 2案例 3口碑 4距离
 
 @end
 
@@ -88,30 +86,97 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"找装修";
-    
+    self.dataArray = [NSMutableArray array];
+    self.popArray = @[@"综合",@"案例"];
+
     [self configureNavgationView];
     [self configureView];
     
-    self.choseArr = [[NSMutableArray alloc]initWithObjects:
-                     @[@"综合",@"案例"],
-                     @[],
-                     @[],
-                     nil];
+    // data
+    self.orderType = 1;
+    [self refreshData];
+    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:NO delegate:self animation:YES];
+    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
     
-    [self loadData];
-    
-}
-
-- (void)loadData {
-    // 假数据
-    self.dataArray = @[@{@"icon":@"http://www.nczyzs.com/images/kt_699.jpg"}, @{@"icon":@""}, @{@"icon":@"http://www.nczyzs.com/images/699_ws.jpg"}, @{@"icon":@""}, @{@"icon":@""}, @{@"icon":@""}, @{@"icon":@""}];
+//    [[RACObserve(self, dataArray) distinctUntilChanged] subscribeNext:^(id x) {
+//        @strongify(self);
+//        self.tableView.mj_footer.hidden = (self.dataArray.count == 0);
+//        [self.tableView reloadData];
+//    }];
+    @weakify(self);
+    [[RACObserve(self.popVW, isShow) distinctUntilChanged] subscribeNext:^(id x) {
+        @strongify(self);
+        if ([x boolValue]) {
+            [self.conditionTitleView.itmeBtnOne setImage:[UIImage imageNamed:@"mall_screening_selected"] forState:UIControlStateSelected];
+        } else {
+            [self.conditionTitleView.itmeBtnOne setImage:[UIImage imageNamed:@"mall_screening"] forState:UIControlStateSelected];
+        }
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    
 }
+
+- (void)refreshData {
+     [self loadDataWithPage:1 andIsHeader:YES];
+}
+
+#pragma mark - Refresh
+-(void)onRefreshing:(id)control {
+    [self loadDataWithPage:1 andIsHeader:YES];
+}
+
+-(void)onLoadingMoreData:(id)control pageNum:(NSNumber *)pageNum {
+    [self loadDataWithPage:pageNum.integerValue andIsHeader:NO];
+}
+
+#pragma mark - Data
+-(void)loadDataWithPage:(NSInteger)pageNum andIsHeader:(BOOL)isHeader {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"latitude"] = [CODGlobal sharedGlobal].latitude;
+    params[@"longitude"] = [CODGlobal sharedGlobal].longitude;;
+    params[@"order_type"] = @(self.orderType);// 排序类型
+    params[@"page"] = @(pageNum);
+    params[@"pagesize"] = @"10";
+    
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=merchant&a=index" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODDectateListModel class] json:object[@"data"][@"list"]];
+                [self.dataArray removeAllObjects];
+                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
+                [self.dataArray addObjectsFromArray:models];
+            } else {
+                [self.tableView endFooterRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODDectateListModel class] json:object[@"data"][@"list"]];
+                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
+                [self.dataArray addObjectsFromArray:models];
+            }
+            self.tableView.mj_footer.hidden = (self.dataArray.count == 0);
+            [self.tableView reloadData];
+        } else {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+            } else  {
+                [self.tableView endFooterRefreshWithChangePageIndex:NO];
+            }
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            self.tableView.mj_footer.hidden = YES;
+        }
+    } failed:^(NSError *error) {
+        if (isHeader) {
+            [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+        }else
+        {
+            [self.tableView endFooterRefreshWithChangePageIndex:NO];
+        }
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+        self.tableView.mj_footer.hidden = YES;
+    }];
+}
+
 #pragma mark - View
 - (void)configureNavgationView {
     
@@ -205,6 +270,8 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
         tableView.estimatedSectionHeaderHeight = 0;
         tableView.estimatedSectionFooterHeight = 0;
         [tableView registerClass:[CODDecorateTableViewCell class] forCellReuseIdentifier:kCODDecorateTableViewCell];
+        tableView.emptyDataSetSource = self;
+        tableView.emptyDataSetDelegate = self;
         tableView;
     });
     [self.view addSubview:self.tableView];
@@ -222,8 +289,6 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     
     [self.headerView addSubview:self.decorateFourItemView];
     [self.headerView addSubview:self.bannerView];
-    
-    
 }
 
 - (DecorateFourItemView *)decorateFourItemView {
@@ -250,26 +315,76 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
         _bannerView.layer.cornerRadius = 5;
         _bannerView.clipsToBounds = YES;
         _bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
-        _bannerView.currentPageDotColor = CODColorTheme;
+        _bannerView.currentPageDotImage = [UIImage cod_imageWithColor:[UIColor whiteColor] size:CGSizeMake(25, 3)];
+        _bannerView.pageDotImage = [UIImage cod_imageWithColor:CODHexaColor(0xffffff, 0.3) size:CGSizeMake(25, 3)];
         _bannerView.localizationImageNamesGroup = @[@"icon_banner", @"icon_banner1", @"icon_banner2"];
     }
     return _bannerView;
 }
 
+
+- (DecorateConditionView *)conditionTitleView {
+    if (!_conditionTitleView) {
+        _conditionTitleView = [[DecorateConditionView alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 50)];
+        @weakify(self);
+        [_conditionTitleView setBtnSelectItemBlock:^(ConditionType condition) {
+            @strongify(self);
+            // 综合
+            if (condition == ConditionTypeNormal) {
+                
+                // 已置顶，直接弹出
+                if (self.tableView.contentOffset.y >= self.tableView.tableHeaderView.height) {
+                    if (self.popVW.isShow == YES) {
+                        [self.popVW dismiss];
+                    } else {
+                        [self.popVW showWithData:self.popArray opitionKey:@"分类"];
+                    }
+                } else {
+                    [self.tableView setContentOffset:CGPointMake(0,self.tableView.tableHeaderView.height) animated:YES];
+                    // 先置顶在弹出
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        if (self.popVW.isShow == YES) {
+                            [self.popVW dismiss];
+                        } else {
+                            [self.popVW showWithData:self.popArray opitionKey:@"分类"];
+                        }
+                    });
+                }
+                
+            } else if (condition == ConditionTypePraise) {
+                if (self.popVW.isShow == YES) [self.popVW dismiss];
+                self.orderType = 3;
+                [self refreshData];
+            } else {
+                if (self.popVW.isShow == YES) [self.popVW dismiss];
+                self.orderType = 4;
+                [self refreshData];
+            }
+        }];
+    }return _conditionTitleView;
+}
+
 -(ConditionPopView *)popVW
 {
     if (!_popVW) {
-        _popVW = [[ConditionPopView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(self.conditionTitleView.frame), SCREENWIDTH, SCREENHEIGHT - CGRectGetHeight(self.conditionTitleView.frame)) supView:self.view];
-        kWeakSelf(self)
+        _popVW = [[ConditionPopView alloc] initWithFrame:CGRectMake(0,CGRectGetMaxY(self.conditionTitleView.frame), SCREENWIDTH, SCREENHEIGHT - CGRectGetHeight(self.conditionTitleView.frame)) supView:self.view];
+        @weakify(self);
         [_popVW setSelectBlock:^(NSString *key, NSInteger idx,NSString *tle) {
-            [weakself.popVW dismiss];
+            @strongify(self);
+            [self.popVW dismiss];
             //            UIButton *btn = weakself.conditionTitleView.recodeChoseDic[@"select"];
-            UIButton *btn = weakself.conditionTitleView.itmeBtnOne;
-            
+            UIButton *btn = self.conditionTitleView.itmeBtnOne;
+            //        if (self.isOn) {
+            //            [self.itmeBtnOne setImage:kGetImage(@"shop_up_sel") forState:UIControlStateSelected];
+            //            self.isOn = NO;
+            //        } else {
+            //            [self.itmeBtnOne setImage:kGetImage(@"top_sel") forState:UIControlStateSelected];
+            //            self.isOn = YES;
+            //        }
             [btn setTitle:tle forState:0];
-            
-//            weakself.parDic[@"cat_id"] = weakself.FenLeiIdArr[idx];
-            [weakself loadData];
+    
+            self.orderType = idx + 1;
+            [self refreshData];
         }];
         
     }return _popVW;
@@ -286,48 +401,42 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    if (section == 0) {
-//        return 1;
-//    }
     return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-//    if (indexPath.section == 0) {
-//        static NSString *kExampleReusableCellID = @"exampleReusableCellID";
-//        CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kExampleReusableCellID];
-//        if (!cell) {
-//            cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kExampleReusableCellID];
-//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//            UILabel *exampleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 20)];
-//            [exampleLabel SetlabTitle:@"— 装修案例 —" andFont:[UIFont systemFontOfSize:16] andTitleColor:CODColor333333 andTextAligment:NSTextAlignmentCenter andBgColor:nil];
-//            [cell.contentView addSubview:exampleLabel];
-//        }
-//        return cell;
-//    } else {
-//        CODExampleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODExampleTableViewCell forIndexPath:indexPath];
-//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        [cell configureWithModel:self.dataArray[indexPath.row]];
-//        return cell;
-//    }
     CODDecorateTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODDecorateTableViewCell forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell configureWithModel:self.dataArray[indexPath.row]];
-    return cell;
     
+    CODDectateListModel *model = self.dataArray[indexPath.row];
+    [cell configureWithModel:model];
+    cell.corverImageView.singleTap = ^(NSUInteger index) {
+        if ([UIViewController getCurrentVC]) {
+            [ImageBrowserViewController show:[UIViewController getCurrentVC] type:PhotoBroswerVCTypeModal index:index imagesBlock:^NSArray *{
+                return model.images;
+            }];
+        }
+    };
+    return cell;
 }
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     CODCompanyDetailViewController *comDetailVC = [[CODCompanyDetailViewController alloc] init];
+    comDetailVC.companyId = [(CODDectateListModel *)self.dataArray[indexPath.row] compId];
     [self.navigationController pushViewController:comDetailVC animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-     return [CODDecorateTableViewCell heightForRow];
+    CODDectateListModel *model = self.dataArray[indexPath.row];
+
+    if (model.images.count > 0) {
+        return [CODDecorateTableViewCell heightForRow];
+    } else {
+        return 90;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -351,46 +460,11 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     lineView2.backgroundColor = CODColorBackground;
     [sectionHeaderview addSubview:lineView2];
     
-    self.conditionTitleView = [[DecorateConditionView alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 50)];
+    // warning！必须懒加载设置，否则刷新table时会重新创建导致赋值错误
     [sectionHeaderview addSubview:self.conditionTitleView];
-    kWeakSelf(self)
-    [self.conditionTitleView setBtnSelectItemBlock:^(ConditionType condition) {
-        // 综合
-        if (condition == ConditionTypeNormal) {
-            // 已置顶，直接弹出
-            if (tableView.contentOffset.y >= tableView.tableHeaderView.height) {
-                if (self.popVW.isShow == YES) {
-                    [weakself.popVW dismiss];
-                } else {
-                    [weakself.popVW showWithData:weakself.choseArr[0] opitionKey:@"分类"];
-                }
-            } else {
-                [tableView setContentOffset:CGPointMake(0,tableView.tableHeaderView.height) animated:YES];
-                // 先置顶在弹出
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if (self.popVW.isShow == YES) {
-                        [weakself.popVW dismiss];
-                    } else {
-                        [weakself.popVW showWithData:weakself.choseArr[0] opitionKey:@"分类"];
-                    }
-                });
-            }
-            
-        } else if (condition == ConditionTypePraise) {
-            if (self.popVW.isShow == YES) [weakself.popVW dismiss];
-            weakself.parDic[@"cat_id"] = @"";
-            [weakself loadData];
-        } else {
-            if (self.popVW.isShow == YES) [weakself.popVW dismiss];
-            weakself.parDic[@"cat_id"] = @"";
-            [weakself loadData];
-        }
-    }];
-
-    return sectionHeaderview;
     
+    return sectionHeaderview;
 }
-
 
 #pragma mark - Action
 - (void)searchAction {
@@ -403,11 +477,14 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     [self.navigationController pushViewController:VC animated:YES];
 }
 - (void)callAction {
-    [self alertVcTitle:nil message:@"是否拨打10086" leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", CODCustomerServicePhone) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
     } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
-        dispatch_async(dispatch_get_main_queue(), ^{;
-            NSMutableString * str = [[NSMutableString alloc] initWithFormat:@"tel://%@",@"10086"];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (@available(iOS 10.0, *)) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone] options:@{} completionHandler:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone]];
+            }
         });
     }];
 }
@@ -416,4 +493,20 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     [self.navigationController pushViewController:messageVC animated:YES];
 }
 
+#pragma mark - EmptyDataSet
+-(UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
+    return kGetImage(@"icon_data_no");
+}
+
+-(NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {
+    return [[NSAttributedString alloc] initWithString:@"数据空空如也，去别处逛逛吧" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15],NSForegroundColorAttributeName: CODHexColor(0x555555)}];
+}
+
+-(BOOL)emptyDataSetShouldAllowScroll:(UIScrollView *)scrollView {
+    return YES;
+}
+
+-(CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView {
+    return 100;
+}
 @end

@@ -37,7 +37,7 @@
     CODMainNavController *homeNavController = [[CODMainNavController alloc] initWithRootViewController:homeVC];
     // 贷款
     CODLoanViewController *loanVC = [[CODLoanViewController alloc] init];
-    loanVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"贷款" image:[[UIImage imageNamed:@"home_tabbar_loan"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"home_tabbar_fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    loanVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"金服" image:[[UIImage imageNamed:@"home_tabbar_loan"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"home_tabbar_fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     loanVC.tabBarItem.tag = 1;
     CODMainNavController *loanNavController = [[CODMainNavController alloc] initWithRootViewController:loanVC];
     // 我的
@@ -58,8 +58,8 @@
 
 
 -(BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-    if ([viewController.tabBarItem.title isEqualToString:@"贷款"]) {
-        [SVProgressHUD cod_showWithErrorInfo:@"贷款功能暂未开放，敬请期待..."];
+    if ([viewController.tabBarItem.title isEqualToString:@"金服"]) {
+        [SVProgressHUD cod_showWithErrorInfo:@"金服功能暂未开放，敬请期待..."];
         return NO;
     } else {
         return YES;

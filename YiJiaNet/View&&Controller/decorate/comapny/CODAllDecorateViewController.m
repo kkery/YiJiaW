@@ -30,7 +30,6 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 /** 下拉选项数据*/
 @property (nonatomic,strong) NSMutableArray *choseArr;
 
-
 /** 个人信息数据 */
 @property (nonatomic, copy) NSDictionary *imfoDic;
 @property(nonatomic,strong) NSMutableArray *FenLeiTitleArr;

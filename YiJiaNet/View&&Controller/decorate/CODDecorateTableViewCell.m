@@ -37,6 +37,8 @@
         
         self.iconImageView = ({
             UIImageView *imageView = [[UIImageView alloc] init];
+            imageView.layer.cornerRadius = 18;
+            imageView.layer.masksToBounds = YES;
             imageView;
         });
         [self.backView addSubview:self.iconImageView];
@@ -73,11 +75,11 @@
         [self.backView addSubview:self.corverImageView];
         
         [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.contentView).mas_offset(UIEdgeInsetsMake(10, 10, 10, 10));
+            make.edges.equalTo(self.contentView).mas_offset(UIEdgeInsetsMake(10, 10, 0, 10));
         }];
         
         [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(26, 26));
+            make.size.mas_equalTo(CGSizeMake(36, 36));
             make.left.offset(10);
             make.top.equalTo(self.backView.mas_top).offset(10);
         }];
@@ -104,32 +106,26 @@
             make.right.offset(-10);
             make.height.equalTo(@100);
         }];
-//
-//        [self.priceLabel setContentHuggingPriority:251 forAxis:UILayoutConstraintAxisHorizontal|UILayoutConstraintAxisVertical];
-//        [self.priceLabel setContentCompressionResistancePriority:751 forAxis:UILayoutConstraintAxisHorizontal|UILayoutConstraintAxisVertical];
-//        [self.priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerY.equalTo(self.introLabel.mas_centerY);
-//            make.left.equalTo(self.introLabel.mas_right).offset(10);
-//            make.right.equalTo(self.corverImageView.mas_right);
-//        }];
     }
     return self;
 }
 
-- (void)configureWithModel:(NSDictionary *)model {
-//    [self.corverImageView sd_setImageWithURL:[NSURL URLWithString:[model objectForKey:@"icon"]] placeholderImage:kGetImage(@"place_zxal")];
-    [self.iconImageView sd_setImageWithURL:nil placeholderImage:kGetImage(@"place_default_avatar")];
-    self.nameLabel.text = @"雅丽豪庭金先生雅居";
-    self.distanceLabel.text = @"￥15.2km";
-    self.introLabel.text = @"案例：452 |  好评度：99%";
-    
-    self.corverImageView.images = @[kGetImage(@"place_zxal"), kGetImage(@"place_zxal"), kGetImage(@"place_zxal")];
+- (void)configureWithModel:(CODDectateListModel *)model {
+    [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:kGetImage(@"place_default_avatar")];
+    self.nameLabel.text = model.name;
+    self.distanceLabel.text = model.distance;
+   
+    self.introLabel.text = [NSString stringWithFormat:@"案例：%@  |  好评度：%@", model.case_number, model.score];
+    if (model.images.count > 0) {
+        self.corverImageView.hidden = NO;
+        self.corverImageView.netImages = model.images;
+    } else {
+        self.corverImageView.hidden = YES;
+    }
 }
-
 
 + (CGFloat)heightForRow {
     return 200;
 }
-
 
 @end
