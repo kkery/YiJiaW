@@ -10,7 +10,7 @@
 
 @interface CODOrderPopView : UIView
 
-@property (nonatomic,copy) void (^commitBlock)(NSString * city, NSString *name, NSString *phone);
+@property (nonatomic,copy) void (^commitBlock)(NSString *fulladdress, NSString *province, NSString *city, NSString *area, NSString *hourse, NSString *phone);
 
 -(void)show;
 -(void)close;

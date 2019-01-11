@@ -15,6 +15,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *info;
 @property (nonatomic, strong) UIImageView *logoImageView;
+@property (nonatomic, assign) CGFloat imageH;
 
 @end
 
@@ -24,6 +25,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"商户信息";
+    [self wr_setNavBarShadowImageHidden:NO];
     self.info = [NSDictionary dictionary];
     // configure view
     self.tableView = ({
@@ -92,17 +94,18 @@ static NSString * const kCell = @"CODHotTableViewCell";
         cell.textLabel.textColor = CODColor333333;
         
         if (indexPath.section == 2) {
-            self.logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, SCREENWIDTH-20, 160)];
+            self.logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, SCREENWIDTH-20, 200)];
             [cell.contentView addSubview:self.logoImageView];
         }
     }
     
     if (indexPath.section == 0) {
-        cell.textLabel.text = [self.info objectForKey:@"info"];
-    } else if (indexPath.row == 1) {
-        cell.textLabel.text = [self.info objectForKey:@"Business_hours"];
+        cell.textLabel.text = self.info[@"res"][@"info"];
+        cell.textLabel.numberOfLines = 0;
+    } else if (indexPath.section == 1) {
+        cell.textLabel.text = self.info[@"res"][@"business_hours"];
     } else {
-        [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:[self.info objectForKey:@"photo"]] placeholderImage:nil];
+        [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:self.info[@"url"][@"url"]] placeholderImage:nil];
     }
     return cell;
 }
@@ -110,11 +113,11 @@ static NSString * const kCell = @"CODHotTableViewCell";
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        return kGetTextSize([self.info objectForKey:@"info"], SCREENWIDTH-30, MAXFLOAT, 15).height;
+        return kGetTextSize(self.info[@"res"][@"info"], SCREENWIDTH-30, MAXFLOAT, 15).height;
     } else if (indexPath.section == 1) {
-        return kGetTextSize([self.info objectForKey:@"Business_hours"], SCREENWIDTH-30, MAXFLOAT, 15).height;
+        return kGetTextSize(self.info[@"res"][@"business_hours"], SCREENWIDTH-30, MAXFLOAT, 15).height;
     } else {
-        return 180;
+        return 250;
     }
 }
 
@@ -134,7 +137,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
     UILabel *titleLab = [[UILabel alloc] init];
     titleLab.textColor = [UIColor blackColor];
     titleLab.font = kFont(18);
-    
+    titleLab.frame = CGRectMake(10, 30, SCREENWIDTH-20, 20);
     [sectionHeaderview addSubview:titleLab];
     
     if (section == 0) {

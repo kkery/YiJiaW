@@ -74,15 +74,16 @@ static NSString * const kCell = @"CODHotTableViewCell";
                 [self.tableView endHeaderRefreshWithChangePageIndex:YES];
                 NSArray *models = [NSArray modelArrayWithClass:[CODHotModel class] json:object[@"data"][@"list"]];
                 [self.dataArray removeAllObjects];
-                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
                 [self.dataArray addObjectsFromArray:models];
             } else {
                 [self.tableView endFooterRefreshWithChangePageIndex:YES];
                 NSArray *models = [NSArray modelArrayWithClass:[CODHotModel class] json:object[@"data"][@"list"]];
-                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
                 [self.dataArray addObjectsFromArray:models];
             }
             self.tableView.mj_footer.hidden = (self.dataArray.count == 0);
+            if (self.dataArray.count == [object[@"data"][@"pageCount"] integerValue]) {
+                [self.tableView noMoreData];
+            }
             [self.tableView reloadData];
             
         } else {

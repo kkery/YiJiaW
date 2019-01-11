@@ -465,12 +465,11 @@
     NSArray *defaultSelArr = nil;
     NSArray *dataSource = nil;//为空，则是使用框架自带城市数据
     [BRAddressPickerView showAddressPickerWithShowType:BRAddressPickerModeArea dataSource:dataSource defaultSelected:defaultSelArr isAutoSelect:NO themeColor:CODColorTheme resultBlock:^(BRProvinceModel *province, BRCityModel *city, BRAreaModel *area) {
-        NSLog(@"省[%@]：%@，%@", @(province.index), province.code, province.name);
         self.fullAdressName = [NSString stringWithFormat:@"%@%@%@",province.name, city.name, area.name];
         self.provinceValue = province.name;
         self.cityValue = city.name;
         self.areaValue = area.name;
-        
+        CODLogObject(self.fullAdressName);
         NSString *selectValue = [NSString stringWithFormat:@"%@%@",city.name, area.name];
         self.mCitylabel.textColor =CODColor333333;
         self.mCitylabel.text = selectValue;

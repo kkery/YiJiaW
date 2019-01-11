@@ -113,11 +113,14 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     params[@"longitude"] = [CODGlobal sharedGlobal].longitude;
     params[@"city"] = [CODGlobal sharedGlobal].currentCityName;
     params[@"page"] = @(pageNum);
-    params[@"pagesize"] = @"10";
+    params[@"pagesize"] = @(CODRequstPageSize);
     
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=index" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
         
+            // 电话
+            save(object[@"data"][@"tel"], CODServiceTelKey);
+            
             NSMutableArray *tempAds = [NSMutableArray array];
             for (NSDictionary *dic in object[@"data"][@"ad"]) {
                 [tempAds addObject:[NSURL URLWithString:dic[@"content"]]];
@@ -138,7 +141,6 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
                 [self.tableView endHeaderRefreshWithChangePageIndex:YES];
                 NSArray *models = [NSArray modelArrayWithClass:[CODDectateExampleModel class] json:object[@"data"][@"list"]];
                 [self.listArray removeAllObjects];
-                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
                 [self.listArray addObjectsFromArray:models];
             } else {
                 [self.tableView endFooterRefreshWithChangePageIndex:YES];
@@ -147,7 +149,9 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
                 [self.listArray addObjectsFromArray:models];
             }
             self.tableView.mj_footer.hidden = (self.listArray.count == 0);
-            
+            if (self.listArray.count == [object[@"data"][@"pageCount"] integerValue]) {
+                [self.tableView noMoreData];
+            }
             [self.tableView reloadData];
             
             if (self.listArray.count > 0) {
@@ -546,13 +550,13 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     }
 }
 - (void)callAction {
-    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", CODCustomerServicePhone) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", get(CODServiceTelKey)) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
     } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (@available(iOS 10.0, *)) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone] options:@{} completionHandler:nil];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)] options:@{} completionHandler:nil];
             } else {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone]];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)]];
             }
         });
     }];

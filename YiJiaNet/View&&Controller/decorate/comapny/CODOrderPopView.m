@@ -26,9 +26,10 @@
 @property(nonatomic,strong) UIButton *cpmmitBtn;
 @property(nonatomic,strong) UIButton *colseBtn;
 
+@property (nonatomic, copy) NSString *fullAdressName;
+@property(nonatomic,copy) NSString *proviceValue;
 @property(nonatomic,copy) NSString *cityValue;
-@property(nonatomic,copy) NSString *hourseValue;
-@property(nonatomic,copy) NSString *phoneValue;
+@property(nonatomic,copy) NSString *areaValue;
 
 @end
 
@@ -67,10 +68,6 @@
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
-        
-//        RAC(self, hourseValue) = self.hourseTF.rac_textSignal;
-//        RAC(self, phoneValue) = self.phoneTF.rac_textSignal;
-        
         [self congigureView];
     }return self;
 }
@@ -165,18 +162,21 @@
     }
     
     if (self.commitBlock) {
-        self.commitBlock(self.cityValue, self.hourseTF.text, self.phoneTF.text);
+        [self close];
+        self.commitBlock(self.fullAdressName, self.proviceValue, self.cityValue, self.areaValue, self.hourseTF.text, self.phoneTF.text);
     }
-    [self close];
 }
 
 -(void)citySelectAction:(UIButton *)button {
     NSArray *defaultSelArr = nil;
     NSArray *dataSource = nil;
     [BRAddressPickerView showAddressPickerWithShowType:BRAddressPickerModeArea dataSource:dataSource defaultSelected:defaultSelArr isAutoSelect:NO themeColor:CODColorTheme resultBlock:^(BRProvinceModel *province, BRCityModel *city, BRAreaModel *area) {
-        NSLog(@"省[%@]：%@，%@", @(province.index), province.code, province.name);
-        self.cityValue = [NSString stringWithFormat:@"%@%@",city.name, area.name];
-        [self.cityBtn setTitle:self.cityValue forState:0];
+        self.fullAdressName = [NSString stringWithFormat:@"%@%@%@",province.name, city.name, area.name];
+        self.proviceValue = province.name;
+        self.cityValue = city.name;
+        self.areaValue = area.name;
+        CODLogObject(self.fullAdressName);
+        [self.cityBtn setTitle:self.fullAdressName forState:0];
     } cancelBlock:^{
     }];
 }
@@ -208,11 +208,10 @@
 
 #pragma mark - 隐藏视图
 -(void)close {
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         self.coverView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.0];
-        self.whiteView.y = -self_ViewH;
+//        self.whiteView.y = -self_ViewH;
     }completion:^(BOOL finished){
-        // 如果使用单例就不能置空控件，否则会展现nil的（但在主控制器使用创建对象的形式展现的话，最好要置空控件即nil）
         self.coverView = nil;
         self.whiteView = nil;
         [self removeFromSuperview];

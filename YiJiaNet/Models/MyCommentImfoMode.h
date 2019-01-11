@@ -12,18 +12,16 @@
 
 /** 评价id */
 @property (nonatomic,copy) NSString *CommentImfoID;
-/** 头像1 */
-@property (nonatomic,copy) NSString *image;
-/** 头像2 */
+/** 用户id */
+@property (nonatomic,copy) NSString *uid;
+/** 头像 */
 @property (nonatomic,copy) NSString *avatar;
 /** 昵称 */
 @property (nonatomic,copy) NSString *nickname;
-/** 库存 */
-@property (nonatomic,copy) NSString *item_sku;
 /** 时间 */
 @property (nonatomic,copy) NSString *add_time;
 /** 星级 */
-@property (nonatomic,copy) NSString *scores;
+@property (nonatomic,copy) NSString *score;
 /** 内容描述 */
 @property (nonatomic,copy) NSString *content;
 /** 图片 */

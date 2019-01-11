@@ -16,8 +16,6 @@
 @property (nonatomic,strong)UICollectionView *kindCollect;
 /** 当前选中的下标 */
 @property (nonatomic,assign) NSInteger curent_select_index;
-/** 全部评价 */
-@property (nonatomic,strong)UILabel *comentNumLab;
 
 @end
 
@@ -35,18 +33,11 @@ static NSString *const itemID = @"GoodsDetailCommentGradeItemIdentifer";
 
 -(void)setMainUI
 {
-    self.comentNumLab = [UILabel GetLabWithFont:kFont(16) andTitleColor:CODColor333333 andTextAligment:NSTextAlignmentLeft andBgColor:nil andlabTitle:@"宝贝评价(0)"];
-    [self addSubview:self.comentNumLab];
-    [self.comentNumLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.mas_left).offset(15);
-        make.top.equalTo(self.mas_top).offset(15);
-    }];
-    
     [self addSubview:self.kindCollect];
     [self.kindCollect mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self);
         make.bottom.equalTo(self.mas_bottom).offset(-8);
-        make.top.equalTo(self.comentNumLab.mas_bottom).offset(10);
+        make.top.equalTo(self.mas_top).offset(20);
     }];
 }
 
@@ -110,12 +101,6 @@ static NSString *const itemID = @"GoodsDetailCommentGradeItemIdentifer";
     _kinArr = kinArr;
     [self.kindCollect reloadData];
     [super layoutIfNeeded];
-}
-
-- (void)setCountStr:(NSString *)countStr
-{
-    _countStr = countStr;
-    self.comentNumLab.text = self.countStr;
 }
 
 #pragma mark - getter

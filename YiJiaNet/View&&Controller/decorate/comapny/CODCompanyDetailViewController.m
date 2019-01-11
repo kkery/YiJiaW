@@ -72,6 +72,19 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 // data
 @property (nonatomic,strong) CODCompanyDetailModel *MModel;
 @property (nonatomic, strong) NSArray *commentArray;
+// 参数
+@property (nonatomic, copy) NSString *hourseValue;
+@property (nonatomic, copy) NSString *provinceValue;//省
+@property (nonatomic, copy) NSString *cityValue;//市
+@property (nonatomic, copy) NSString *areaValue;//区
+@property (nonatomic, copy) NSString *longitude;
+@property (nonatomic, copy) NSString *latitude;
+@property (nonatomic, copy) NSString *sizeValue;
+@property (nonatomic, assign) NSInteger shiValue;
+@property (nonatomic, assign) NSInteger tingValue;
+@property (nonatomic, assign) NSInteger weiValue;
+@property (nonatomic, assign) NSInteger yangtValue;
+@property (nonatomic, copy) NSString *phoneValue;
 
 @end
 
@@ -92,6 +105,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         self.navTitleLabel.text = mod.name;
         self.bannerView.imageURLStringsGroup = mod.images;
         self.examCollectionView.dataArray = mod.cases;
+        self.collectButton.selected = ([mod.is_collect integerValue] == 1);
     }];
 //    [[RACObserve(self, exampleArray) distinctUntilChanged] subscribeNext:^(NSArray *arr) {
 //        @strongify(self);
@@ -197,7 +211,9 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             make.height.equalTo(@50);
         }];
         UIButton *collectBtn = [[UIButton alloc] init];
-        [collectBtn SetBtnTitle:@"收藏" andTitleColor:CODColor666666 andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:kGetImage(@"decorate_collection") andClickEvent:@selector(collectAction:) andAddVC:self];
+        [collectBtn SetBtnTitle:@"收藏" andTitleColor:CODColor666666 andFont:kFont(12) andBgColor:nil andBgImg:nil andImg:nil andClickEvent:@selector(collectAction:) andAddVC:self];
+        [collectBtn setImage:kGetImage(@"decorate_collection") forState:UIControlStateNormal];
+        [collectBtn setImage:kGetImage(@"decorate_collection_fill") forState:UIControlStateSelected];
         [collectBtn cod_alignImageUpAndTitleDown];
         [view addSubview:collectBtn];
         self.collectButton = collectBtn;
@@ -303,12 +319,38 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
     
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return section == 0 ? 3 : 2;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ((indexPath.section == 1 && indexPath.row == 0) || (indexPath.section == 2 && indexPath.row == 0) || (indexPath.section == 3 && indexPath.row == 0)) {
+        static NSString * kTitleBaseCellID = @"titleBaseCellID";
+        CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kTitleBaseCellID];
+        if (!cell) {
+            cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kTitleBaseCellID];
+            cell.backgroundColor = [UIColor whiteColor];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.font = kFont(16);
+            cell.detailTextLabel.font = kFont(12);
+        }
+        
+        if (indexPath.section == 1) {
+            cell.textLabel.text = @"装修案例";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"共%@个",self.MModel.cases_number];
+        } else if (indexPath.section == 2) {
+            cell.textLabel.text = [NSString stringWithFormat:@"评价(%@)",self.MModel.comment_number];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"好评度%@",self.MModel.score];
+        } else {
+            cell.textLabel.text = @"商家信息";
+            cell.detailTextLabel.text = @"更多";
+        }
+        
+        return cell;
+    }
+    
+    else if (indexPath.section == 0) {
         if (indexPath.row == 0) {//装修公司名
             static NSString * kCompanyCellID = @"companyCellID";
             CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCompanyCellID];
@@ -345,14 +387,16 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             [iconImageView sd_setImageWithURL:[NSURL URLWithString:self.MModel.logo] placeholderImage:kGetImage(@"place_default_avatar")];
             compNameLabel.text = self.MModel.name;
             subTitleLabel.text = [NSString stringWithFormat:@"案例：%@  |  好评度：%@", self.MModel.cases_number, self.MModel.score];
-
+            
             return cell;
+            
         } else if (indexPath.row == 1) {// 路线
             static NSString * kAdressCellID = @"adressCellID";
             CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kAdressCellID];
             if (!cell) {
                 cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAdressCellID];
                 cell.backgroundColor = [UIColor whiteColor];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 
                 UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 24, 10, 12)];
                 iconImageView.image = kGetImage(@"amount_location");
@@ -379,6 +423,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             addreLab.text = self.MModel.address;
             
             return cell;
+            
         } else {
             static NSString * kTeseCellID = @"teseCellID";
             CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kTeseCellID];
@@ -386,6 +431,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kTeseCellID];
                 cell.backgroundColor = [UIColor whiteColor];
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.textLabel.font = kFont(12);
                 cell.textLabel.textColor = CODColor333333;
             }
@@ -408,76 +454,34 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             return cell;
         }
     }
-    
+
     else if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
-            static NSString * kExampleTitleCellID = @"exampleTitleCell";
-            CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kExampleTitleCellID];
-            if (!cell) {
-                cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kExampleTitleCellID];
-                cell.backgroundColor = [UIColor whiteColor];
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                cell.textLabel.font = kFont(16);
-                cell.detailTextLabel.font = kFont(12);
-            }
-            cell.textLabel.text = @"装修案例";
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"共%@个",self.MModel.cases_number];
-            return cell;
-        } else {
-            static NSString * kExampleCellID = @"exampleCell";
-            CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kExampleCellID];
-            if (!cell) {
-                cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kExampleCellID];
-                [cell.contentView addSubview:self.examCollectionView];
-                [self.examCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(cell.contentView);
-                }];
-            }
-            return cell;
+        static NSString * kExampleCellID = @"exampleCell";
+        CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kExampleCellID];
+        if (!cell) {
+            cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kExampleCellID];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.contentView addSubview:self.examCollectionView];
+            [self.examCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(cell.contentView);
+            }];
         }
-        
+        return cell;
     }
+    
     else if (indexPath.section == 2) {
-        if (indexPath.row == 0) {
-            static NSString * kCommentTitleCellID = @"commentTitleCell";
-            CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCommentTitleCellID];
-            if (!cell) {
-                cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kCommentTitleCellID];
-                cell.backgroundColor = [UIColor whiteColor];
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                cell.textLabel.font = kFont(16);
-                cell.detailTextLabel.font = kFont(12);
-            }
-            cell.textLabel.text = [NSString stringWithFormat:@"评价(%@)",self.MModel.comment_number];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"好评度%@",self.MModel.score];
-            return cell;
-        } else {
-            StoreGoodsCommentCell *comentCell = [StoreGoodsCommentCell cellWithTableView:tableView reuseIdentifier:nil];
-            if (self.commentArray.count > 0) {
-                comentCell.imfo_mode = self.commentArray[0];
-            }
-            return comentCell;
+        StoreGoodsCommentCell *comentCell = [StoreGoodsCommentCell cellWithTableView:tableView reuseIdentifier:nil];
+        comentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if (self.commentArray.count > 0) {
+            comentCell.imfo_mode = self.commentArray[0];
         }
+        return comentCell;
     }
     else {
-        if (indexPath.row == 0) {
-            static NSString * kExampleTitleCellID = @"exampleTitleCell";
-            CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kExampleTitleCellID];
-            if (!cell) {
-                cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kExampleTitleCellID];
-                cell.backgroundColor = [UIColor whiteColor];
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                cell.textLabel.font = kFont(16);
-                cell.detailTextLabel.font = kFont(12);
-            }
-            cell.textLabel.text = @"商家信息";
-            cell.detailTextLabel.text = @"更多";
-            return cell;
-        } else {
-            CODCompShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODCompShopTableViewCell forIndexPath:indexPath];
-            cell.infoMod = self.MModel;
-            return cell;
-        }
+        CODCompShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODCompShopTableViewCell forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.infoMod = self.MModel;
+        return cell;
     }
 }
 
@@ -485,7 +489,9 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         return indexPath.row == 0 ? 70 : 60;
-    } else if (indexPath.section == 1) {
+    }
+    
+    else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             return 40;
         } else {
@@ -500,7 +506,9 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 return 0;
             }
         }
-    } else if (indexPath.section == 2) {
+    }
+    
+    else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             return 40;
         } else {
@@ -511,7 +519,9 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             }
         }
 
-    } else {
+    }
+    
+    else {
         if (indexPath.row == 0) {
             return 40;
         } else {
@@ -541,7 +551,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             [self.navigationController pushViewController:shopInfoVC animated:YES];
 
         } else if (indexPath.row ==1) {
-            [self.mapNavigationView showMapNavigationViewWithtargetLatitude:0 targetLongitute:0 toName:@"地址"];
+            [self.mapNavigationView showMapNavigationViewWithtargetLatitude:[self.MModel.latitude doubleValue] targetLongitute:[self.MModel.longitude doubleValue] toName:self.MModel.address];
         } else {
             CODSpecialPopView *popView = [[CODSpecialPopView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
             popView.dataArray = self.specialArray;
@@ -550,12 +560,12 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             CODExampleListViewController *exampleListVV = [[CODExampleListViewController alloc] init];
+            exampleListVV.companyId = self.companyId;
             [self.navigationController pushViewController:exampleListVV animated:YES];
         }
     } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
-            CODCommentViewController *commentVC = [[CODCommentViewController alloc] init];
-            [self.navigationController pushViewController:commentVC animated:YES];
+            [self allCommentAction];
         }
     } else {
         if (indexPath.row == 0) {
@@ -574,46 +584,93 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 - (void)collectAction:(UIButton *)btn {
-    btn.selected = !btn.selected;
-    if (btn.selected) {
-        [SVProgressHUD cod_showWithSuccessInfo:@"收藏成功"];
-        [btn setImage:kGetImage(@"decorate_collection_fill") forState:UIControlStateNormal];
+    NSString *path;
+    if (btn.selected == YES) {
+        path = @"m=App&c=collect&a=delete";
     } else {
-        [SVProgressHUD cod_showWithSuccessInfo:@"已取消收藏"];
-        [btn setImage:kGetImage(@"decorate_collection") forState:UIControlStateNormal];
+        path = @"m=App&c=collect&a=add";
     }
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"all_id"] = self.MModel.companyId;
+    params[@"type"] = @"1";// 1：装修公司 2：新房 3：二手房 4：租房
+    [[CODNetWorkManager shareManager] AFRequestData:path andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            if ([path isEqualToString:@"m=App&c=collect&a=add"]) {
+                btn.selected = YES;
+                [SVProgressHUD cod_showWithSuccessInfo:@"收藏成功"];
+            } else {
+                btn.selected = NO;
+                [SVProgressHUD cod_showWithSuccessInfo:@"已取消收藏"];
+            }
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 - (void)callAction {
-    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", CODCustomerServicePhone) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", self.MModel.contact_number) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
     } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (@available(iOS 10.0, *)) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone] options:@{} completionHandler:nil];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.MModel.contact_number] options:@{} completionHandler:nil];
             } else {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone]];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.MModel.contact_number]];
             }
         });
     }];
 }
 
 - (void)orderAction {
+    
     CODOrderPopView *popView = [[CODOrderPopView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
-    popView.commitBlock = ^(NSString *city, NSString *name, NSString *phone) {
-        NSLog(@"city=%@,name=%@,phone=%@",city,name,phone);
-        
-        [SVProgressHUD cod_showWithStatu:@"正在提交，请稍后"];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [SVProgressHUD cod_dismis];
+    popView.commitBlock = ^(NSString *fulladdress, NSString *province, NSString *city, NSString *area, NSString *hourse, NSString *phone) {
+        //地理编码
+        static NSString *longitude;
+        static NSString *latitude;
+        CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+        [geocoder geocodeAddressString:fulladdress completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+            if (error!=nil || placemarks.count==0) {
+                CODLogObject(error);
+            }
+            //创建placemark对象
+            CLPlacemark *placemark = [placemarks firstObject];
+            //经度
+            longitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.longitude];
+            //纬度
+            latitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.latitude];
             
-            [SVProgressHUD cod_showWithSuccessInfo:@"提交成功\n我们将尽快为您回电"];
-
+            NSLog(@"经度：%@，纬度：%@",longitude,latitude);
+        }];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            params[@"user_id"] = COD_USERID;
+            params[@"longitude"] = longitude;
+            params[@"latitude"] = latitude;
+            params[@"province"] = province;
+            params[@"city"] = city;
+            params[@"area"] = area;
+            params[@"house_name"] = hourse;
+            params[@"mobile"] = phone;
+            params[@"house_acreage"] = @"";
+            params[@"house_type"] = @"";
+            [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=ordered" andParameters:params Sucess:^(id object) {
+                if ([object[@"code"] integerValue] == 200) {
+                    [SVProgressHUD cod_showWithTips:@"预约成功\n我们将尽快为您回电" icon:kGetImage(@"feedback_successful")];
+                } else {
+                    [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+                }
+            } failed:^(NSError *error) {
+                [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+            }];
         });
     };
     
     [popView show];
-
 }
 
 - (void)priceAction {
@@ -623,6 +680,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 
 - (void)allCommentAction {
     CODCommentViewController *commentVC = [[CODCommentViewController alloc] init];
+    commentVC.shop_id = self.companyId;
     [self.navigationController pushViewController:commentVC animated:YES];
 }
 

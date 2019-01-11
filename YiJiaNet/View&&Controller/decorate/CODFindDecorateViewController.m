@@ -138,7 +138,7 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     params[@"longitude"] = [CODGlobal sharedGlobal].longitude;;
     params[@"order_type"] = @(self.orderType);// 排序类型
     params[@"page"] = @(pageNum);
-    params[@"pagesize"] = @"10";
+    params[@"pagesize"] = @(CODRequstPageSize);
     
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=merchant&a=index" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
@@ -477,13 +477,13 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     [self.navigationController pushViewController:VC animated:YES];
 }
 - (void)callAction {
-    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", CODCustomerServicePhone) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+    [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", get(CODServiceTelKey)) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
     } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (@available(iOS 10.0, *)) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone] options:@{} completionHandler:nil];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)] options:@{} completionHandler:nil];
             } else {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CODCustomerServicePhone]];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)]];
             }
         });
     }];

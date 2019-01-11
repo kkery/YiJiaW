@@ -13,8 +13,6 @@
 /** 分类视图 */
 @property (nonatomic, copy) NSArray *kinArr;
 
-@property(nonatomic,strong) NSString *countStr;
-
 /** 高度加载出来之后的高度 */
 @property (nonatomic, copy) void(^ReloadHeightBlock)(void);
 /** 点击iteam的选中回调 */

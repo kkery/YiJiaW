@@ -13,6 +13,9 @@
 
 +(void)cod_showWithErrorInfo:(NSString *)info;
 
++(void)cod_showWithTips:(NSString *)tips icon:(UIImage *)icon;
+
+
 +(void)cod_showStatu;
 +(void)cod_showWithStatu:(NSString *)info;
 

@@ -53,6 +53,8 @@
         _whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREENHEIGHT, SCREENWIDTH, self_ViewH)];
         _whiteView.backgroundColor = [UIColor whiteColor];
         _whiteView.userInteractionEnabled = YES;
+        _whiteView.layer.cornerRadius = 10;
+        _whiteView.layer.masksToBounds = YES;
     }
     return _whiteView;
 }

@@ -78,7 +78,9 @@
     
     
     _name = name;
-    NSArray *appListArr = [JXMapNavigationView checkHasOwnApp];
+//    NSArray *appListArr = [JXMapNavigationView checkHasOwnApp];
+    // 只需这两种地图
+    NSArray *appListArr = @[@"百度地图", @"高德地图"];
     NSString *sheetTitle = [NSString stringWithFormat:@"导航到 %@",name];
     
     UIAlertController* alertCon = [UIAlertController alertControllerWithTitle:sheetTitle message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -100,69 +102,19 @@
 - (void)remove{
     //移除阴影部分提示页
 }
+
 -(void)createBtn:(NSInteger)buttonIndex andArr:(NSArray*) appListArr {
-    
-    
-    NSString *name = _name;
-    float ios_version=[[[UIDevice currentDevice] systemVersion] floatValue];
-    NSString *btnTitle = appListArr[buttonIndex];
-    if (buttonIndex == 0) {
-        if (ios_version < 6.0) {//ios6 调用goole网页地图
-            NSString *urlString = [[NSString alloc]
-                                   initWithFormat:@"http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f&dirfl=d",
-                                   _currentLatitude,_currentLongitute,_targetLatitude,_targetLongitute];
-            
-            NSURL *aURL = [NSURL URLWithString:urlString];
-            //打开网页google地图
-            [[UIApplication sharedApplication] openURL:aURL];
-        }else{//起点
-  
-            CLLocationCoordinate2D from = CLLocationCoordinate2DMake(_currentLatitude,_currentLongitute);
-            MKMapItem *currentLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:from addressDictionary:nil]];
-            currentLocation.name = @"我的位置";
-            
-            //终点
-            CLLocationCoordinate2D to = CLLocationCoordinate2DMake(_targetLatitude,_targetLongitute);
-            MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:to addressDictionary:nil]];
-            NSLog(@"网页google地图:%f,%f",to.latitude,to.longitude);
-            toLocation.name = name;
-            NSArray *items = [NSArray arrayWithObjects:currentLocation, toLocation, nil];
-            NSDictionary *options = @{
-                                      MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,
-                                      MKLaunchOptionsMapTypeKey:
-                                          [NSNumber numberWithInteger:MKMapTypeStandard],
-                                      MKLaunchOptionsShowsTrafficKey:@YES
-                                      };
-            
-            //打开苹果自身地图应用
-            [MKMapItem openMapsWithItems:items launchOptions:options];
+    if (buttonIndex == 0) { //百度
+        if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"baidumap://"]]) {
+            [SVProgressHUD cod_showWithErrorInfo:@"您未安装百度地图"];
+            return;
         }
-    }
-    if ([btnTitle isEqualToString:@"google地图"]) {
-        
-        NSString *urlStr = [NSString stringWithFormat:@"comgooglemaps://?saddr=%.8f,%.8f&daddr=%.8f,%.8f&directionsmode=transit",_currentLatitude,_currentLongitute,_targetLatitude,_targetLongitute];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
-    }else if ([btnTitle isEqualToString:@"高德地图"]){
-        NSString *urlString = [[NSString stringWithFormat:@"iosamap://path?sourceApplication=applicationName&sid=BGVIS1&slat=%f&slon=%f&sname=%@&did=BGVIS2&dlat=%f&dlon=%f&dname=%@&dev=0&m=0&t=0",_currentLatitude,_currentLongitute,@"我的位置",_targetLatitude,_targetLongitute,_name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSURL *r = [NSURL URLWithString:urlString];
-        [[UIApplication sharedApplication] openURL:r];
-        //        NSLog(@"%@",_lastAddress);
-        
-    }else if ([btnTitle isEqualToString:@"腾讯地图"]){
-        
-        NSString *urlStr = [NSString stringWithFormat:@"qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&policy=1",_currentLatitude,_currentLongitute,_targetLatitude,_targetLongitute];
-        NSURL *r = [NSURL URLWithString:urlStr];
-        [[UIApplication sharedApplication] openURL:r];
-        
-        
-    }else if([btnTitle isEqualToString:@"百度地图"])
-    {
         //火星位置转化百度位置
         CLLocation *from = [[CLLocation alloc]initWithLatitude:_currentLatitude longitude:_currentLongitute];
         CLLocation *fromLoction = [from locationBaiduFromMars];
         
         CLLocation *target = [[CLLocation alloc]initWithLatitude:_targetLatitude longitude:_targetLongitute];
-        CLLocation *targetLoction = [target locationBaiduFromMars];        
+        CLLocation *targetLoction = [target locationBaiduFromMars];
         
         NSString *baiduParameterFormat = @"baidumap://map/direction?origin=latlng:%f,%f|name:我的位置&destination=latlng:%f,%f|name:%@&mode=driving";
         NSString *urlString = [[NSString stringWithFormat:
@@ -174,7 +126,15 @@
                                stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
         
-    
+    } else {//高德
+        if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"iosamap://"]]) {
+            [SVProgressHUD cod_showWithErrorInfo:@"您未安装高德地图"];
+            return;
+        }
+
+        NSString *urlString = [[NSString stringWithFormat:@"iosamap://path?sourceApplication=applicationName&sid=BGVIS1&slat=%f&slon=%f&sname=%@&did=BGVIS2&dlat=%f&dlon=%f&dname=%@&dev=0&m=0&t=0",_currentLatitude,_currentLongitute,@"我的位置",_targetLatitude,_targetLongitute,_name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSURL *r = [NSURL URLWithString:urlString];
+        [[UIApplication sharedApplication] openURL:r];
     }
 }
 - (void)showMapNavigationViewWithtargetLatitude:(double)targetLatitude targetLongitute:(double)targetLongitute toName:(NSString *)name{

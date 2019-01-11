@@ -978,17 +978,17 @@
 		6EBF871E21CCE454003E7E25 /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				6EBF871F21CCE454003E7E25 /* SVRadialGradientLayer.m */,
 				6EBF872021CCE454003E7E25 /* SVIndefiniteAnimatedView.h */,
-				6EBF872121CCE454003E7E25 /* SVProgressHUD.h */,
-				6EBF872221CCE454003E7E25 /* SVProgressAnimatedView.m */,
-				6EBF872321CCE454003E7E25 /* SVRadialGradientLayer.h */,
-				6EBF872421CCE454003E7E25 /* SVProgressHUD.m */,
 				6EBF872521CCE454003E7E25 /* SVIndefiniteAnimatedView.m */,
-				6EBF872621CCE454003E7E25 /* SVProgressHUD.bundle */,
 				6EBF872721CCE454003E7E25 /* SVProgressAnimatedView.h */,
+				6EBF872221CCE454003E7E25 /* SVProgressAnimatedView.m */,
+				6EBF872621CCE454003E7E25 /* SVProgressHUD.bundle */,
+				6EBF872121CCE454003E7E25 /* SVProgressHUD.h */,
+				6EBF872421CCE454003E7E25 /* SVProgressHUD.m */,
 				6EBF873021CCE4BE003E7E25 /* SVProgressHUD+COD.h */,
 				6EBF873121CCE4BE003E7E25 /* SVProgressHUD+COD.m */,
+				6EBF872321CCE454003E7E25 /* SVRadialGradientLayer.h */,
+				6EBF871F21CCE454003E7E25 /* SVRadialGradientLayer.m */,
 			);
 			path = SVProgressHUD;
 			sourceTree = "<group>";

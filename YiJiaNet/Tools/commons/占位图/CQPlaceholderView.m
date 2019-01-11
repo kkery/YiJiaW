@@ -39,7 +39,7 @@
     self.backgroundColor = [UIColor whiteColor];
     
     //------- 图片在正中间 -------//
-    self.imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.centerX-140*proportionW/2, 85*proportionH, 140*proportionW, 140*proportionH)];
+    self.imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.centerX-248*proportionW/2, 100*proportionH, 248*proportionW, 117*proportionH)];
     self.imageView.clipsToBounds = YES;
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.imageView setContentScaleFactor:[[UIScreen mainScreen] scale]];

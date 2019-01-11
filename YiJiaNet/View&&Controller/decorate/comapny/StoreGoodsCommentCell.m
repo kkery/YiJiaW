@@ -118,13 +118,8 @@
     
     [self.headIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",kFORMAT(@"%@",imfo_mode.avatar)]] placeholderImage:kGetImage(@"place_default_avatar")];
     self.nameLab.text = kFORMAT(@"%@",imfo_mode.nickname);
-    
-    /** 时间戳转日期 */
-    self.timeLab.text = [NSString getDateStringWithTimeInterval:imfo_mode.add_time DataFormatterString:@"yyyy-MM-dd"];
-    if ([self.add_timeStr isEqualToString:@"1"]) {
-        self.timeLab.text = kFORMAT(@"%@",imfo_mode.add_time);
-    }
-    self.starVW.starCount = [kFORMAT(@"%@",imfo_mode.scores) intValue];
+    self.timeLab.text = kFORMAT(@"%@",imfo_mode.add_time);
+    self.starVW.starCount = [kFORMAT(@"%@",imfo_mode.score) intValue];
     self.contentLab.text = kFORMAT(@"%@",imfo_mode.content);
     self.contentLab.height = [self getCurentLabelTestHieght:self.contentLab].height;
     
@@ -139,12 +134,6 @@
     imfo_mode.rowHeight = CGRectGetMaxY(self.imgVW.frame) + 10;
     
 }
-
-- (void)setAdd_timeStr:(NSString *)add_timeStr
-{
-    _add_timeStr = add_timeStr;
-}
-
 
 - (void)awakeFromNib {
     [super awakeFromNib];

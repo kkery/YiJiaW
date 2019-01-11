@@ -23,6 +23,10 @@
 @property (nonatomic,copy) NSString *contact_number;
 /** 地址 */
 @property (nonatomic,copy) NSString *address;
+/** 经度 */
+@property (nonatomic,copy) NSString *longitude;
+/** 纬度 */
+@property (nonatomic,copy) NSString *latitude;
 /** 列头部-店招轮播图 */
 @property (nonatomic,strong) NSArray *images;
 /** 好评度 */

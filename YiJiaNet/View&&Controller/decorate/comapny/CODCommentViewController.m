@@ -34,8 +34,8 @@
     [super viewDidLoad];
     self.navigationItem.title = @"评价";
     // Do any additional setup after loading the view.
-    self.dataArr = [[NSMutableArray alloc]init];
-    self.parDic = [NSMutableDictionary new];
+    self.dataArr = [[NSMutableArray alloc] init];
+    self.parDic = [NSMutableDictionary dictionary];
     self.parDic[@"type"] = @"";
     
     [self initVariable];
@@ -64,16 +64,16 @@
         @strongify(self);
         if (indexCount == 0) {
             // 全部
-            self.parDic[@"type"] = @"";
+            self.parDic[@"type"] = @"0";
         } else if(indexCount == 1) {
             // 好评
-            self.parDic[@"type"] = @"good";
+            self.parDic[@"type"] = @"1";
         } else if(indexCount == 2) {
             // 中评
-            self.parDic[@"type"] = @"normal";
+            self.parDic[@"type"] = @"2";
         } else if(indexCount == 3) {
             // 差评
-            self.parDic[@"type"] = @"bad";
+            self.parDic[@"type"] = @"3";
         }
         [self loadGoodsData];
     }];
@@ -83,51 +83,41 @@
 #pragma mark - Net load
 -(void)loadGoodsData
 {
+    [self.baseTabeleviewGrouped resetNoMoreData];
     self.page = 1;
     self.parDic[@"page"] = @1;
-    self.parDic[@"item_id"] = self.shop_id;
-    self.parDic[@"param"] = self.Vc_Type;
-    
-//    [[TWHNetWorkQuery sharedManage] AFrequestData:mHome cPar:@"Comment" aPar:@"index" HttpMethod:kGet params:self.parDic completionHandle:^(id result) {
-//        if (kMessage(result)) {
-//            [self.dataArr removeAllObjects];
-//            [self.dataArr addObjectsFromArray:[NSArray yy_modelArrayWithClass:[MyCommentImfoMode class] json:result[@"data"][@"result"]]];
-//
-//            self.baseTabeleviewGrouped.mj_footer.hidden = (self.dataArr.count == 0);
-//            if (self.dataArr.count >= [kFORMAT(@"%@",result[@"data"][@"pageCount"]) floatValue]) {
-//                [self.baseTabeleviewGrouped.mj_footer endRefreshingWithNoMoreData];
-//            }else
-//            {
-//                [self.baseTabeleviewGrouped.mj_footer endRefreshing];
-//            }
-//
-//            if (self.dataArr.count >0) {
-//                self.baseTabeleviewGrouped.backgroundView = nil;
-//            } else {
-//                self.baseTabeleviewGrouped.backgroundView = self.nullVW;
-//            }
-//
-//            self.Dic = [NSDictionary getValuesForKeysWithDictionary:result[@"data"][@"comment_count"]];
-//            self.kindVW.kinArr = @[kFORMAT(@"全部(%ld)",[self.Dic[@"all"] integerValue]),kFORMAT(@"好评(%ld)",[self.Dic[@"good"] integerValue]),kFORMAT(@"中评(%ld)",[self.Dic[@"normal"] integerValue]),kFORMAT(@"差评(%ld)",[self.Dic[@"bad"] integerValue])];
-//
-//            self.kindVW.countStr = kFORMAT(@"宝贝评价(%ld)",[self.Dic[@"all"] integerValue]);
-//
-//            [self.baseTabeleviewGrouped.mj_header endRefreshing];
-//            [self.baseTabeleviewGrouped reloadData];
-//
-//        }else{
-//            if ([[result allKeys] containsObject:@"message"] && ![result[@"message"] isKindOfClass:[NSNull class]]) {
-//                [SVProgressHUD TWH_showWithErrorInfo:result[@"message"]];
-//            }else{
-//                kGetFailError;
-//            }
-//            self.baseTabeleviewGrouped.mj_footer.hidden = YES;
-//        }
-//    } errorHandle:^(NSError *result) {
-//        self.baseTabeleviewGrouped.mj_footer.hidden = YES;
-//        kNetError;
-//    }];
-    
+    self.parDic[@"id"] = self.shop_id;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=merchant&a=comment" andParameters:self.parDic Sucess:^(id object) {
+        [self.baseTabeleviewGrouped.mj_header endRefreshing];
+        if ([object[@"code"] integerValue] == 200) {
+            [self.dataArr removeAllObjects];
+            [self.dataArr addObjectsFromArray:[NSArray modelArrayWithClass:[MyCommentImfoMode class] json:object[@"data"][@"list"]]];
+
+            if (self.dataArr.count >0) {
+                self.baseTabeleviewGrouped.backgroundView = nil;
+            } else {
+                self.baseTabeleviewGrouped.backgroundView = self.nullVW;
+            }
+            
+            self.Dic = [NSDictionary getValuesForKeysWithDictionary:object[@"data"]];
+            self.kindVW.kinArr = @[kFORMAT(@"全部(%ld)",[self.Dic[@"all_number"] integerValue]),kFORMAT(@"好评(%ld)",[self.Dic[@"good_number"] integerValue]),kFORMAT(@"中评(%ld)",[self.Dic[@"mid_number"] integerValue]),kFORMAT(@"差评(%ld)",[self.Dic[@"bad_number"] integerValue])];
+        
+            self.baseTabeleviewGrouped.mj_footer.hidden = (self.dataArr.count == 0);
+            if (self.dataArr.count == [object[@"data"][@"pageCount"] integerValue]) {
+                [self.baseTabeleviewGrouped noMoreData];
+            }
+            [self.baseTabeleviewGrouped reloadData];
+            
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+
+            self.baseTabeleviewGrouped.mj_footer.hidden = YES;
+        }
+    } failed:^(NSError *error) {
+        [self.baseTabeleviewGrouped.mj_header endRefreshing];
+        self.baseTabeleviewGrouped.mj_footer.hidden = YES;
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
 }
 
 - (void)LoadMoreData
@@ -135,38 +125,24 @@
     self.page ++;
     self.parDic[@"page"] = @(self.page);
     self.parDic[@"item_id"] = self.shop_id;
-    //    self.parDic[@"item_id"] = @"2441";
-    self.parDic[@"param"] = self.Vc_Type;
-//    [[TWHNetWorkQuery sharedManage] AFrequestData:mHome cPar:@"Comment" aPar:@"index" HttpMethod:kGet params:self.parDic completionHandle:^(id result) {
-//        if (kMessage(result)) {
-//            
-//            [self.dataArr addObjectsFromArray:[NSArray yy_modelArrayWithClass:[MyCommentImfoMode class] json:result[@"data"][@"reslut"]]];
-//            
-//            if (self.dataArr.count >= [kFORMAT(@"%@",result[@"data"][@"pageCount"]) floatValue]) {
-//                [self.baseTabeleviewGrouped.mj_footer endRefreshingWithNoMoreData];
-//            }else
-//            {
-//                [self.baseTabeleviewGrouped.mj_footer endRefreshing];
-//            }
-//            
-//            [self.baseTabeleviewGrouped.mj_header endRefreshing];
-//            [self.baseTabeleviewGrouped reloadData];
-//            
-//        }else{
-//            if ([[result allKeys] containsObject:@"message"] && ![result[@"message"] isKindOfClass:[NSNull class]]) {
-//                [SVProgressHUD TWH_showWithErrorInfo:result[@"message"]];
-//            }else{
-//                kGetFailError;
-//            }
-//        }
-//    } errorHandle:^(NSError *result) {
-//        kNetError;
-//    }];
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=merchant&a=comment" andParameters:self.parDic Sucess:^(id object) {
+        [self.self.baseTabeleviewGrouped.mj_footer endRefreshing];
+        if ([object[@"code"] integerValue] == 200) {
+            [self.dataArr addObjectsFromArray:[NSArray modelArrayWithClass:[MyCommentImfoMode class] json:object[@"data"][@"list"]]];
+            if (self.dataArr.count == [object[@"data"][@"pageCount"] integerValue]) {
+                [self.baseTabeleviewGrouped noMoreData];
+            }
+            [self.baseTabeleviewGrouped reloadData];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [self.baseTabeleviewGrouped.mj_footer endRefreshing];
+        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+    }];
 }
 
-
 #pragma mark - UI
-
 -(void)setUI
 {
     [self.baseTabeleviewGrouped setTableHeaderView:self.kindVW];
