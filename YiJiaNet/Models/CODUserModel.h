@@ -20,7 +20,6 @@ static NSString * const CODUserPasswordKey = @"CODUserPassword";
 //
 //#define COD_LOGGED ([CODUserModel logged])
 //
-#define COD_USERID (@([[CODUserModel unarchive] userid]))
 //#define COD_USERNAME ([[CODUserModel unarchive] username] ?: @"")
 
 @interface CODUserModel : CODBaseModel

@@ -52,13 +52,7 @@ static NSString * const CODUmengAppKey = @"543b44d0fd98c52dc1001d36";// 友盟
 static NSString * const CODCustomerServicePhone = @"10086";// 客服电话
 
 // 请求参数value
-static NSInteger const CODRequstPageSize = 1;// 默认每页数量
-// 请求参数key
-static NSString * const CODUseridParameterKey = @"userid";// 用户id
-static NSString * const CODTokenParameterKey = @"token";// 访问令牌
-static NSString * const CODSignParameterKey = @"sign";// 签名
-static NSString * const CODKeyParameterKey = @"key";// 密钥
-static NSString * const CODAppVersionParameterKey = @"appVersion";// 应用版本
+static NSInteger const CODRequstPageSize = 10;// 默认每页数量
 
 // 城市
 static NSString * const CODCityDefaultName = @"南昌";// 城市名称
@@ -71,7 +65,7 @@ static NSString * const CODLoginTokenKey = @"CODDeviceToken";// 设备令牌
 static NSString * const CODUserInfoKey = @"CODUserInfo";// 用户信息key
 static NSString * const CODServiceTelKey = @"CODServiceTel";// 用户信息key
 
-// 推送通知
+// 通知
 static NSString * const CODLoginNotificationName = @"CODLoginNotification";// 登录通知
 static NSString * const CODMessageUnreadCountNotificationName = @"CODMessageUnreadCountNotification";// 消息未读个数通知
 static NSString * const CODAlixpayNotificationName = @"CODAlixpayNotification";// 阿里无线支付通知
@@ -79,6 +73,7 @@ static NSString * const CODWxpayNotificationName = @"CODWxpayNotification";// �
 static NSString * const CODSwitchCityNotificationName = @"CODSwitchCityNotification";// 切换城市通知
 static NSString * const CODLoginCompletionNotificationName = @"CODLoginCompletionNotification";// 登录完成通知
 static NSString * const CODRefeshMineNotificationName = @"CODLoginCompletionNotification";// 个人信息刷新通知
+static NSString * const CODDeleteHistotyNotificationName= @"CODDeleteHistotyNotification";// 删除足迹通知
 
 // UI
 static CGFloat const CODStatusBarHeight = 20;

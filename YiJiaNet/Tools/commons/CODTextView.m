@@ -15,7 +15,7 @@
     if (self = [super init]) {
         
         // 设置默认字体
-        self.font = [UIFont systemFontOfSize:15];
+        self.font = [UIFont systemFontOfSize:14];
         
         // 设置默认颜色
         self.placeholderColor = [UIColor grayColor];
@@ -33,7 +33,7 @@
     if (self = [super initWithFrame:frame]) {
         
         // 设置默认字体
-        self.font = [UIFont systemFontOfSize:15];
+        self.font = [UIFont systemFontOfSize:14];
         
         // 设置默认颜色
         self.placeholderColor = [UIColor grayColor];

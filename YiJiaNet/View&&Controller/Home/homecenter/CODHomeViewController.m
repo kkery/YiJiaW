@@ -29,6 +29,8 @@
 #import "NSString+COD.h"
 #import "CQPlaceholderView.h"
 #import "MJRefresh.h"
+#import "UIView+YeeBadge.h"
+
 static CGFloat const kBannerRadio = 375 / 751.0;// 广告图片比例
 static CGFloat const kPadding = 12;
 
@@ -59,6 +61,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 @property (nonatomic, strong) NSArray *lineNews;
 @property (nonatomic, strong) NSArray *lineNewsIcon;
 @property (nonatomic, strong) NSMutableArray *listArray;
+@property (nonatomic, assign) NSInteger messageNum;
 
 /** 占位图*/
 @property(nonatomic,strong) CQPlaceholderView* placeholderView;
@@ -87,6 +90,17 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     // data
     [self.tableView addHeaderWithHeaderClass:nil beginRefresh:NO delegate:self animation:YES];
     [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
+    
+    @weakify(self);
+     [RACObserve(self, messageNum) subscribeNext:^(id x) {
+        @strongify(self);
+         NSInteger count = [x integerValue];
+         if (count == 0) {
+             [self.msgBtn hideBadgeView];
+         } else {
+             [self.msgBtn ShowBadgeView];
+         }
+    }];
 
     [self loadDataWithPage:1 andIsHeader:YES];
 }
@@ -117,17 +131,18 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=index" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
-        
             // 电话
             save(object[@"data"][@"tel"], CODServiceTelKey);
-            
+            // 新消息数量
+            self.messageNum = [object[@"data"][@"new_message"] integerValue];
+            // banner
             NSMutableArray *tempAds = [NSMutableArray array];
             for (NSDictionary *dic in object[@"data"][@"ad"]) {
                 [tempAds addObject:[NSURL URLWithString:dic[@"content"]]];
             }
             self.banners = tempAds;
             self.bannerView.imageURLStringsGroup = self.banners;
-            
+            // 头条
             NSMutableArray *tempNews = [NSMutableArray array];
             NSMutableArray *tempNews1 = [NSMutableArray array];
             for (NSDictionary *dic in object[@"data"][@"news"]) {
@@ -136,7 +151,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
             }
             self.lineNews = tempNews;
             self.lineNewsIcon = tempNews1;
-
+            // 列表
             if (isHeader) {
                 [self.tableView endHeaderRefreshWithChangePageIndex:YES];
                 NSArray *models = [NSArray modelArrayWithClass:[CODDectateExampleModel class] json:object[@"data"][@"list"]];
@@ -145,13 +160,12 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
             } else {
                 [self.tableView endFooterRefreshWithChangePageIndex:YES];
                 NSArray *models = [NSArray modelArrayWithClass:[CODDectateExampleModel class] json:object[@"data"][@"list"]];
-                if (models.count < CODRequstPageSize) [self.tableView noMoreData];
                 [self.listArray addObjectsFromArray:models];
             }
-            self.tableView.mj_footer.hidden = (self.listArray.count == 0);
             if (self.listArray.count == [object[@"data"][@"pageCount"] integerValue]) {
                 [self.tableView noMoreData];
             }
+            self.tableView.mj_footer.hidden = (self.listArray.count == 0);
             [self.tableView reloadData];
             
             if (self.listArray.count > 0) {
@@ -292,7 +306,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     [self.msgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.titleView.mas_centerY);
         make.width.equalTo(@20);
-        make.height.equalTo(@(CODNavigationBarHeight));
+        make.height.equalTo(@(17));
         make.left.equalTo(self.callBtn.mas_right).offset(10);
     }];
 }
@@ -479,6 +493,8 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     }
     else if (indexPath.section == 3) {
         CODExamDetailViewController *detailVC = [[CODExamDetailViewController alloc] init];
+        CODDectateExampleModel *model = self.listArray[indexPath.row];
+        detailVC.exampId = kFORMAT(@"%@", @(model.examId));
         [self.navigationController pushViewController:detailVC animated:YES];
     }
 }

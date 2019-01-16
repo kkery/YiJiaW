@@ -8,6 +8,7 @@
 
 #import "CODCollectViewController.h"
 #import "CODCompanyListViewController.h"
+#import "CODNewHouseViewController.h"
 
 @interface CODCollectViewController ()
 
@@ -73,7 +74,7 @@
         CODCompanyListViewController *childVC = [[CODCompanyListViewController alloc] init];
         return childVC;
     } else {
-        CODCompanyListViewController *childVC = [[CODCompanyListViewController alloc] init];
+        CODNewHouseViewController *childVC = [[CODNewHouseViewController alloc] init];
         return childVC;
     }
 }

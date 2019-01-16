@@ -82,7 +82,7 @@
 - (void)commonInitialization {
     // Setup defaults
     [self setBackgroundColor:[UIColor clearColor]];
-    _badgeBackgroundColor = CODHexColor(0xFF0000);
+    _badgeBackgroundColor = CODHexColor(0xFB5B1C);
     _badgeTextColor = [UIColor whiteColor];
     _badgeTextFont = [UIFont boldSystemFontOfSize:12];
 }

@@ -51,7 +51,6 @@
         [button setTitleColor:CODColorTheme forState:UIControlStateNormal];
         [button setTitle:@"确  定" forState:UIControlStateNormal];
         [button addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
-        [button SetLayWithCor:22 andLayerWidth:1 andLayerColor:CODColorTheme];
         button;
     });
     [self.view addSubview:self.actionButton];
@@ -125,7 +124,7 @@
     self.statusImageView.image = statusImage;
     self.statusLabel.text = describe;
     
-    [self.actionButton setTitleColor:color forState:1];
+    [self.actionButton setTitleColor:color forState:UIControlStateNormal];
     [self.actionButton SetLayWithCor:22 andLayerWidth:1 andLayerColor:color];
 }
 

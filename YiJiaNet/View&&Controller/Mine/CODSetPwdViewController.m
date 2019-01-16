@@ -171,7 +171,7 @@
                 make.right.equalTo(cell.contentView).offset(-15);
             }];
         }
-        cell.textLabel.text = @[@"旧密码", @"新密码", @"确认新密码"][indexPath.row];
+        cell.textLabel.text = @[@"旧密码", @"新密码", @"确认密码"][indexPath.row];
 
         return cell;
 
@@ -234,7 +234,7 @@
         //    type    string    是    2（1：设置登录密码 2：修改）
         
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        params[@"user_id"] = get(CODLoginTokenKey);
+        params[@"user_id"] = COD_USERID;
         params[@"old_pwd"] = self.oldField.text;
         params[@"new_pwd"] = self.newPwdField.text;
         params[@"new_again_pwd"] = self.confirmNewPwdField.text;
@@ -262,7 +262,7 @@
         }
         
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        params[@"user_id"] = get(CODLoginTokenKey);
+        params[@"user_id"] = COD_USERID;
         params[@"new_pwd"] = self.pwdField.text;
         params[@"new_again_pwd"] = self.confirmPwdField.text;
         params[@"type"] = @"1";

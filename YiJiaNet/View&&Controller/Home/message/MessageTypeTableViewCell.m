@@ -7,6 +7,7 @@
 //
 
 #import "MessageTypeTableViewCell.h"
+#import "UIView+COD.h"
 
 @interface MessageTypeTableViewCell ()
 
@@ -14,8 +15,7 @@
 @property (nonatomic, strong) UILabel *titleLable;
 @property (nonatomic, strong) UILabel *detailLable;
 
-@property (nonatomic, strong) UIBadgeView *badgeView;
-
+@property (nonatomic, strong) UILabel *badgeView;
 
 @end
 
@@ -23,7 +23,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
+
         self.backgroundColor = [UIColor whiteColor];
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -36,7 +36,7 @@
         self.titleLable = ({
             UILabel *label = [[UILabel alloc] init];
             label.textColor = CODColor333333;
-            label.font = kFont(16);
+            label.font = kFont(17);
             label;
         });
         [self.contentView addSubview:self.titleLable];
@@ -49,12 +49,6 @@
             label;
         });
         [self.contentView addSubview:self.detailLable];
-        
-        self.badgeView = ({
-            UIBadgeView *view = [[UIBadgeView alloc] init];
-            view;
-        });
-        [self.contentView addSubview:self.badgeView];
 
         [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(40, 40));
@@ -69,30 +63,60 @@
             make.centerY.offset(0);
             make.right.equalTo(self.contentView.mas_right).offset(-10);
         }];
-        [self.badgeView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(35, 35));
-            make.centerY.offset(0);
-            make.right.equalTo(self.contentView.mas_right).offset(-10);
-        }];
     }
     return self;
 }
 
-- (void)configureWithModel:(NSDictionary *)model {
-    self.titleLable.text = [model objectForKey:@"title"];
-    self.iconImageView.image = kGetImage([model objectForKey:@"icon"]);
-    self.detailLable.text = @"暂无数据";
+- (void)setType:(MessageType)type{
+    _type = type;
+    NSString *imageName, *titleStr;
+    switch (_type) {
+        case MessageTypeSystem:
+            imageName = @"message_system";
+            titleStr = @"系统消息";
+            break;
+        case MessageTypeOrder:
+            imageName = @"message_appointment";
+            titleStr = @"预约消息";
+            break;
+        case MessageTypeActivity:
+            imageName = @"message_appointment";
+            titleStr = @"活动消息";
+            break;
+        default:
+            break;
+    }
+    self.iconImageView.image = [UIImage imageNamed:imageName];
+    self.titleLable.text = titleStr;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    NSString *badgeTip = @"";
+    if (_unreadCount > 0) {
+        if (_unreadCount > 99) {
+            badgeTip = @"99+";
+        } else {
+            badgeTip = kFORMAT(@"%@",@(_unreadCount));
+        }
+        self.accessoryType = UITableViewCellAccessoryNone;
+    } else {
+    
+        self.detailLable.text = @"暂无数据";
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    [self.contentView addBadgeTip:badgeTip withCenterPosition:CGPointMake(SCREENWIDTH-25, 40)];
 }
 
 + (CGFloat)heightForRow {
     return 80;
 }
 
-
-- (void)setFrame:(CGRect)frame {
-    frame.origin.y += 10;
-    frame.size.height -= 10;
-    [super setFrame:frame];
-}
+//- (void)setFrame:(CGRect)frame {
+//    frame.origin.y += 10;
+//    frame.size.height -= 10;
+//    [super setFrame:frame];
+//}
 
 @end

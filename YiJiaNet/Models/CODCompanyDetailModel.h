@@ -32,7 +32,7 @@
 /** 好评度 */
 @property (nonatomic,copy) NSString *score;
 /** 案例数量 */
-@property (nonatomic,copy) NSString *cases_number;
+@property (nonatomic,copy) NSString *case_number;
 /** 评论数量 */
 @property (nonatomic,copy) NSString *comment_number;
 /** 是否收藏：0=否；1=是 */

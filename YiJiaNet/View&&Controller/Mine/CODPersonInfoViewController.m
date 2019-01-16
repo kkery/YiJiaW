@@ -10,9 +10,7 @@
 #import "GetImage.h"
 #import "BRDatePickerView.h"
 #import "UIImageView+WebCache.h"
-//#import "SelectDatapickView.h"//选择时间
-
-
+#import "CODUnbindPhoneViewController.h"
 #import "SetNickNameViewController.h"
 
 @interface CODPersonInfoViewController () <GetImageDelegate>
@@ -73,7 +71,7 @@
 
 - (void)loadData {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"user_id"] = get(CODLoginTokenKey);
+    params[@"user_id"] = COD_USERID;
     
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=user_info" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
@@ -100,7 +98,7 @@
             if ([self.imfoDic[@"birthday"] integerValue] == 0) {
                 [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"未设置")];
             } else {
-                [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"%@",[NSString getDateStringWithTimeInterval:self.imfoDic[@"birthday"] DataFormatterString:@"YYYY-MM-dd"])];
+                [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"%@",self.imfoDic[@"birthday"])];
             }
             if (kStringIsEmpty(self.imfoDic[@"mobile"])) {
                 [arr replaceObjectAtIndex:1 withObject:kFORMAT(@"未设置")];
@@ -185,7 +183,6 @@
     if (indexPath.section == 0) {
          [GETIMAGE showActionSheetInFatherViewController:self delegate:self];
     }
-    
     else {
         if (indexPath.row == 0) {
             SetNickNameViewController* setNickVC = [[SetNickNameViewController alloc] init];
@@ -195,9 +192,8 @@
             };
             [self.navigationController pushViewController:setNickVC animated:YES];
         } else if (indexPath.row == 1) {
-            SetNickNameViewController* setNickVC = [[SetNickNameViewController alloc] init];
-            setNickVC.titleStr = @"手机号";
-            [self.navigationController pushViewController:setNickVC animated:YES];
+            CODUnbindPhoneViewController *phoenVC = [[CODUnbindPhoneViewController alloc] init];
+            [self.navigationController pushViewController:phoenVC animated:YES];
         } else if (indexPath.row == 2) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -229,7 +225,7 @@
             if ([self.imfoDic[@"birthday"] integerValue] == 0) {
                 defaultValue = @"";
             } else {
-                defaultValue = kFORMAT(@"%@",[NSString getDateStringWithTimeInterval:self.imfoDic[@"birthday"] DataFormatterString:@"YYYY-MM-dd"]);
+                defaultValue = kFORMAT(@"%@",self.imfoDic[@"birthday"]);
             }
             [BRDatePickerView showDatePickerWithTitle:@"出生日期" dateType:BRDatePickerModeYMD defaultSelValue:defaultValue minDate:minDate maxDate:maxDate isAutoSelect:NO themeColor:CODColorTheme resultBlock:^(NSString *selectValue) {
                 NSDateFormatter *format = [[NSDateFormatter alloc] init];
@@ -241,8 +237,6 @@
             }];
         }
     }
-    
-    
 }
 
 #pragma mark - Update data

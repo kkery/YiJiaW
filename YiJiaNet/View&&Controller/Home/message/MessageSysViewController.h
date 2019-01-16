@@ -9,5 +9,5 @@
 #import "CODBaseViewController.h"
 
 @interface MessageSysViewController : CODBaseViewController
-
+@property(nonatomic, assign) NSInteger type;
 @end

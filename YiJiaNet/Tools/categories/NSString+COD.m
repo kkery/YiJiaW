@@ -195,4 +195,12 @@
     
     return decodeString;
 }
+
+- (CGFloat)getHeightWithFont:(UIFont *)font constrainedToSize:(CGSize)size{
+    return [self getSizeWithFont:font constrainedToSize:size].height;
+}
+- (CGFloat)getWidthWithFont:(UIFont *)font constrainedToSize:(CGSize)size{
+    return [self getSizeWithFont:font constrainedToSize:size].width;
+}
+
 @end

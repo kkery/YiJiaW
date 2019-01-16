@@ -11,13 +11,15 @@
 #import "MJRefresh.h"
 #import "CODBaseWebViewController.h"
 #import "CODDecorateTableViewCell.h"
+#import "ImageBrowserViewController.h"
+#import "CODCompanyDetailViewController.h"
 
 static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 
-@interface CODCompanyListViewController () <UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
+@interface CODCompanyListViewController () <UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, MJRefreshEXDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
@@ -26,6 +28,7 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.dataArray = [NSMutableArray array];
     // configure view
     self.tableView = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -46,12 +49,9 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     }];
     
     // data
-    [self loadData];
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(LoadMoreData)];
-    
-    //    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:YES delegate:self animation:YES];
-    //    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
+    [self loadDataWithPage:1 andIsHeader:YES];
+    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:NO delegate:self animation:YES];
+    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
     
     [self.view addSubview:self.tableView];
 }
@@ -59,45 +59,105 @@ static NSString * const kCODDecorateTableViewCell = @"CODDecorateTableViewCell";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-#pragma mark - Net load
-- (void)loadData
-{
-    [self.tableView.mj_header endRefreshing];
+#pragma mark - Refresh
+-(void)onRefreshing:(id)control {
+    [self loadDataWithPage:1 andIsHeader:YES];
 }
 
-- (void)LoadMoreData
-{
-    [self.tableView.mj_footer endRefreshing];
+-(void)onLoadingMoreData:(id)control pageNum:(NSNumber *)pageNum {
+    [self loadDataWithPage:pageNum.integerValue andIsHeader:NO];
+}
+
+#pragma mark - Data
+-(void)loadDataWithPage:(NSInteger)pageNum andIsHeader:(BOOL)isHeader {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"type"] = @(1);//1装修公司 2新房 3二手房 4长租房
+    params[@"latitude"] = [CODGlobal sharedGlobal].latitude;
+    params[@"longitude"] = [CODGlobal sharedGlobal].longitude;
+    params[@"page"] = @(pageNum);
+    params[@"pagesize"] = @(CODRequstPageSize);
+    
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=collect&a=indexs" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODDectateListModel class] json:object[@"data"][@"result"]];
+                [self.dataArray removeAllObjects];
+                [self.dataArray addObjectsFromArray:models];
+            } else {
+                [self.tableView endFooterRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODDectateListModel class] json:object[@"data"][@"result"]];
+                [self.dataArray addObjectsFromArray:models];
+            }
+            if (self.dataArray.count == [object[@"data"][@"pageCount"] integerValue]) {
+                [self.tableView noMoreData];
+            }
+            self.tableView.mj_footer.hidden = (self.dataArray.count == 0);
+            [self.tableView reloadData];
+        } else {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+            } else  {
+                [self.tableView endFooterRefreshWithChangePageIndex:NO];
+            }
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            self.tableView.mj_footer.hidden = YES;
+        }
+    } failed:^(NSError *error) {
+        if (isHeader) {
+            [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+        }else
+        {
+            [self.tableView endFooterRefreshWithChangePageIndex:NO];
+        }
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+        self.tableView.mj_footer.hidden = YES;
+    }];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    //    return 10;
-    tableView.mj_footer.hidden = (self.dataArray.count == 0);
-    return self.dataArray.count;
-    
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CODDecorateTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODDecorateTableViewCell forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell configureWithModel:self.dataArray[indexPath.row]];
+    
+    CODDectateListModel *model = self.dataArray[indexPath.row];
+    [cell configureWithModel:model];
+    cell.corverImageView.singleTap = ^(NSUInteger index) {
+        if ([UIViewController getCurrentVC]) {
+            [ImageBrowserViewController show:[UIViewController getCurrentVC] type:PhotoBroswerVCTypeModal index:index imagesBlock:^NSArray *{
+                return model.images;
+            }];
+        }
+    };
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [CODDecorateTableViewCell heightForRow];
+    CODDectateListModel *model = self.dataArray[indexPath.row];
+    
+    if (model.images.count > 0) {
+        return [CODDecorateTableViewCell heightForRow];
+    } else {
+        return 90;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
-    [self.navigationController pushViewController:webVC animated:YES];
+    CODCompanyDetailViewController *detailVC = [[CODCompanyDetailViewController alloc] init];
+    detailVC.companyId = [(CODDectateListModel *)self.dataArray[indexPath.row] compId];
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 #pragma mark - EmptyDataSet

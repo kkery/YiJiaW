@@ -52,12 +52,18 @@ id get(NSString *key){
     AFHTTPSessionManager *manger = [AFHTTPSessionManager manager];
     manger.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
     [manger POST:[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi] parameters:[self GetDic:params] constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        
-        for (NSString *keyName in imageDatas) {
-            
-            UIImage *image = imageDatas[keyName];
-            NSData *data=UIImageJPEGRepresentation(image, .3);
-            [formData appendPartWithFileData:data name:keyName fileName:@"test.jpg" mimeType:@"image/jpg"];
+        // 多图上传
+        if ([[imageDatas allKeys] containsObject:@"img"] && [imageDatas[@"img"] isKindOfClass:[NSArray class]]) {
+            [imageDatas[@"img"] enumerateObjectsUsingBlock:^(UIImage * _Nonnull image, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSData *data = UIImageJPEGRepresentation(image, 0.3);
+                [formData appendPartWithFileData:data name:[NSString stringWithFormat:@"img%ld",idx] fileName:@"test.jpg" mimeType:@"image/jpg"];
+            }];
+        } else {// 单张图上传
+            for (NSString *keyName in imageDatas) {
+                UIImage *image = imageDatas[keyName];
+                NSData *data=UIImageJPEGRepresentation(image, .3);
+                [formData appendPartWithFileData:data name:keyName fileName:@"test.jpg" mimeType:@"image/jpg"];
+            }
         }
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -74,11 +80,11 @@ id get(NSString *key){
     dic[@"appId"] = @"ios";
     dic[@"timestamp"] = [self GetCurrentTime];
     dic[@"version"] = @"1.0";
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:CODTokenParameterKey] length] != 0) {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:CODLoginTokenKey] length] != 0) {
         
-        dic[@"token"] = [[NSUserDefaults standardUserDefaults] objectForKey:CODTokenParameterKey];
+        dic[@"token"] = [[NSUserDefaults standardUserDefaults] objectForKey:CODLoginTokenKey];
     }
-    
+
     dic[@"sign"] = [self Signature:dic];
     
     NSLog(@"%@",dic);

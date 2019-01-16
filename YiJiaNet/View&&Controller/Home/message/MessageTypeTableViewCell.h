@@ -8,9 +8,17 @@
 
 #import "CODBaseTableViewCell.h"
 #import "UIBadgeView.h"
+
+typedef NS_ENUM(NSInteger, MessageType) {
+    MessageTypeSystem = 0,
+    MessageTypeOrder,
+    MessageTypeActivity,
+};
+
 @interface MessageTypeTableViewCell : CODBaseTableViewCell
-@property (nonatomic, strong, readonly) UIBadgeView *badgeView;
-@property (nonatomic, strong, readonly) UILabel *detailLable;
+
+@property (nonatomic, assign) MessageType type;
+@property (nonatomic, assign) NSInteger unreadCount;
 
 - (void)configureWithModel:(NSDictionary *)model;
 

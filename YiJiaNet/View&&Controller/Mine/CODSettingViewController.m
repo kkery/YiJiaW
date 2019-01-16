@@ -64,12 +64,29 @@
     // data
     NSString *vers = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     self.version = [NSString stringWithFormat:@"V%.1f",  [vers floatValue]];
+    
+    [self loadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)loadData {
+//    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//    params[@"type"] = @"1";//1 隐私协议 2 服务协议 3：注册协议 4：关于我们
+//    [[CODNetWorkManager shareManager] AFPostData:@"m=App&c=Setting&a=about" Parameters:params ImageDatas:self.ImgDic AndSucess:^(id object) {
+//        if ([object[@"code"] integerValue] == 200) {
+//
+//        } else {
+//            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+//        }
+//    } failed:^(NSError *error) {
+//        [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+//    }];
+}
+
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -111,15 +128,15 @@
         CODSetPwdViewController *VC = [[CODSetPwdViewController alloc] init];
         [self.navigationController pushViewController:VC animated:YES];
     } else if (indexPath.row == 1) {
-        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
+        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:@"http://yjw.0791jr.com/app.php?m=App&c=Setting&a=service&type=2"];
         webView.webTitleString = @"服务条款";
         [self.navigationController pushViewController:webView animated:YES];
     } else if (indexPath.row == 2) {
-        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
+        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:@"http://yjw.0791jr.com/app.php?m=App&c=Setting&a=privacy&type=1"];
         webView.webTitleString = @"隐私政策";
         [self.navigationController pushViewController:webView animated:YES];
     } else if (indexPath.row == 3) {
-        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
+        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:@"http://yjw.0791jr.com/app.php?m=App&c=Setting&a=abouts&type=4"];
         webView.webTitleString = @"关于我们";
         [self.navigationController pushViewController:webView animated:YES];
     } else if (indexPath.row == 4) {

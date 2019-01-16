@@ -139,6 +139,9 @@ if (compare == NSOrderedDescending || compare == NSOrderedSame) {\
 } else {\
 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFORMAT(@"telprompt://%@",PhNumStr)]];\
 }
+
+#define kBadgeTipStr @"waimianbian"
+
 /**
  *  字体适配 我在PCH文件定义了一个方法
  */

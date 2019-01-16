@@ -255,10 +255,11 @@
     params[@"real_name"] = self.nameField.text;
     params[@"id_number"] = self.identifierField.text;
     params[@"mobile"] = self.telField.text;
-    [[CODNetWorkManager shareManager] AFPostData:@"m=App&c=Settinxxg&a=approve" Parameters:params ImageDatas:self.ImgDic AndSucess:^(id object) {
+    [[CODNetWorkManager shareManager] AFPostData:@"m=App&c=Setting&a=approve" Parameters:params ImageDatas:self.ImgDic AndSucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
             [SVProgressHUD cod_showWithSuccessInfo:@"提交认证成功"];
             [kNotiCenter postNotificationName:CODRefeshMineNotificationName object:nil userInfo:nil];
+            [self.navigationController popViewControllerAnimated:YES];
         } else {
             [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
         }

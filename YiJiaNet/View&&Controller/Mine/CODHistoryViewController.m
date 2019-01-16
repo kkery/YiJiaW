@@ -7,12 +7,15 @@
 //
 
 #import "CODHistoryViewController.h"
-#import "CODCompanyListViewController.h"
+#import "CODHisCompChildController.h"
+#import "CODNewHouseViewController.h"
 
 @interface CODHistoryViewController ()
 
 @property(nonatomic,strong) NSArray *titlesArr;
 @property(nonatomic,strong) UIButton *editButton;
+
+@property(nonatomic,assign) NSInteger curentIndex;
 
 @end
 
@@ -56,7 +59,19 @@
 -(void)deleteAction {
     [self showAlertWithTitle:@"确定清空足迹吗" andMesage:nil andCancel:^(id cancel) {
     } Determine:^(id determine) {
-        [SVProgressHUD cod_showWithSuccessInfo:@"清空足迹成功"];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"user_id"] = COD_USERID;
+        params[@"type"] = @(self.selectIndex+1);
+        [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=Setting&a=delete" andParameters:params Sucess:^(id object) {
+            if ([object[@"code"] integerValue] == 200) {
+                [SVProgressHUD cod_showWithSuccessInfo:@"清空足迹成功"];
+                [kNotiCenter postNotificationName:CODDeleteHistotyNotificationName object:nil userInfo:nil];
+            } else {
+                [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+            }
+        } failed:^(NSError *error) {
+            [SVProgressHUD cod_showWithErrorInfo:@"网络错误，请重试"];
+        }];
     }];
 }
 
@@ -77,10 +92,10 @@
 -(UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index {
     NSString *titles = self.titles[index];
     if ([titles isEqualToString:@"装修公司"]) {
-        CODCompanyListViewController *childVC = [[CODCompanyListViewController alloc] init];
+        CODHisCompChildController *childVC = [[CODHisCompChildController alloc] init];
         return childVC;
     } else {
-        CODCompanyListViewController *childVC = [[CODCompanyListViewController alloc] init];
+        CODNewHouseViewController *childVC = [[CODNewHouseViewController alloc] init];
         return childVC;
     }
 }

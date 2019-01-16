@@ -12,10 +12,14 @@ target 'YiJiaNet' do
     pod 'YYKit'
     pod 'MBProgressHUD'
     pod 'NJKWebViewProgress'
-    pod 'SDCycleScrollView','~> 1.75'
+    
+    #pod 'SDCycleScrollView'
     #pod 'BRPickerView'
     pod 'EAIntroView', '2.6.4'#新版有大问题，不能升级
     pod 'UICKeyChainStore', '~> 1.0'
     #pod 'HYBUnicodeReadable', '~> 1.1'
+    pod 'PPBadgeView'
+    pod 'YeeBadgeView', '~> 0.0.3'
+    pod 'TZImagePickerController'
 end
 

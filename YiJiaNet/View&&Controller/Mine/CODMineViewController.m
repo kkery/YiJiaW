@@ -19,6 +19,7 @@
 #import "CODMineMeasureViewController.h"
 #import "CODOwnerViewController.h"
 #import "CODAuthenViewController.h"
+#import "CODAuthenInfoViewController.h"
 #import "CODAuthenStatusViewController.h"
 #import "CODSettingViewController.h"
 #import "CODHistoryViewController.h"
@@ -56,6 +57,7 @@ static CGFloat const kWhiteBackViewHeight = 124;
 @implementation CODMineViewController
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CODRefeshMineNotificationName object:nil];
 }
 
 - (void)viewDidLoad {
@@ -290,8 +292,8 @@ static CGFloat const kWhiteBackViewHeight = 124;
 #pragma mark - Data
 - (void)loadUserInfo {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"user_id"] = get(CODLoginTokenKey);
-    
+    params[@"user_id"] = COD_USERID;
+
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=user_info" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
             
@@ -375,11 +377,14 @@ static CGFloat const kWhiteBackViewHeight = 124;
         CODFeedViewController *feedVC = [[CODFeedViewController alloc] init];
         [self.navigationController pushViewController:feedVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"客服中心"]) {
-        [self alertVcTitle:nil message:@"拨打10086" leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+        [self alertVcTitle:nil message:kFORMAT(@"是否拨打%@", get(CODServiceTelKey)) leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
         } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
-            dispatch_async(dispatch_get_main_queue(), ^{;
-                NSMutableString * str = [[NSMutableString alloc] initWithFormat:@"tel://%@",@"10086"];
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (@available(iOS 10.0, *)) {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)] options:@{} completionHandler:nil];
+                } else {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)]];
+                }
             });
         }];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"推荐给好友"]) {
@@ -425,9 +430,8 @@ static CGFloat const kWhiteBackViewHeight = 124;
             CODAuthenViewController *authenVC = [[CODAuthenViewController alloc] init];
             [self.navigationController pushViewController:authenVC animated:YES];
         } else if (AuthenStatus == 1) {
-            CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
-            webView.webTitleString = @"实名认证";
-            [self.navigationController pushViewController:webView animated:YES];
+            CODAuthenInfoViewController *authenInfoVC = [[CODAuthenInfoViewController alloc] init];
+            [self.navigationController pushViewController:authenInfoVC animated:YES];
         } else {
             CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
             authenVC.status = AuthenStatus;

@@ -8,16 +8,13 @@
 
 #import "CODFeedViewController.h"
 #import "CODTextView.h"
-
+#import "MBProgressHUD+COD.h"
 static CGFloat const kMaxLimit = 200;
 
 @interface CODFeedViewController () <UITextViewDelegate>
 
-/** 建议输入框*/
 @property (nonatomic, strong) CODTextView *inputTextView;
 @property (nonatomic, strong) UILabel *countLab;
-
-@property (nonatomic, copy) NSString *content;
 
 @end
 
@@ -73,30 +70,27 @@ static CGFloat const kMaxLimit = 200;
     }];
 }
 
--(void)exitAction {
-    
-    NSMutableDictionary *params = [NSMutableDictionary new];
-    if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
-        params[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
+- (void)exitAction {
+    if (kStringIsEmpty(self.inputTextView.text)) {
+        [SVProgressHUD cod_showWithErrorInfo:@"内容不能为空"];
+        return;
     }
-    params[@"content"] = self.content;
-//    [[HJNetWorkQuery shareManger] AFrequestData:@"App,Setting,option" HttpMethod:@"POST" parames:params comPletionResult:^(id result) {
-//        if ([result[@"code"] integerValue] == 200) {
-//
-//            [self showSuccessText:@"反馈成功"];
-//            [self NavAllBackClicked];
-//        } else {
-//            [self showErrorText:result[@"message"]];
-//        }
-//    } AndError:^(NSError *error) {
-//        [self showErrorText:@"网络异常，请重试!"];
-//    }];
-    [SVProgressHUD cod_showWithSuccessInfo:@"提交成功\n感谢您对益家网的信任与支持\n我们将尽快为您解决"];
-//    [self.navigationController popViewControllerAnimated:YES];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"content"] = self.inputTextView.text;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=Setting&a=option" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            [MBProgressHUD cod_showSuccessWithTitle:@"提交成功" detail:@"感谢您对益家网的信任与支持\n我们将尽快为您解决" toView:self.view];
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
-- (void)textViewDidChange:(UITextView *)textView
-{
+- (void)textViewDidChange:(UITextView *)textView {
     if (textView.text.length > kMaxLimit)
     {
         textView.text = [textView.text substringToIndex:kMaxLimit];
@@ -104,8 +98,7 @@ static CGFloat const kMaxLimit = 200;
     self.countLab.text = [NSString stringWithFormat:@"%lu/%@", (unsigned long)textView.text.length, @(kMaxLimit)];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     NSString *str = [NSString stringWithFormat:@"%@%@", textView.text, text];
     if (str.length > kMaxLimit)
     {
@@ -124,6 +117,4 @@ static CGFloat const kMaxLimit = 200;
     }
     return YES;
 }
-
-
 @end

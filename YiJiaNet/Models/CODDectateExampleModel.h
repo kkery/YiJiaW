@@ -26,5 +26,6 @@
 @property (nonatomic,copy) NSString *decorate_fare;
 @property (nonatomic,copy) NSString *merchants_logo;
 @property (nonatomic,copy) NSString *introduction;
+@property (nonatomic,assign) NSInteger imgs_num;
 
 @end
