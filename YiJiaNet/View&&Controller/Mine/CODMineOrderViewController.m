@@ -141,7 +141,7 @@ static NSString * const kCODMineOrderTableViewCell = @"CODMineOrderTableViewCell
 
 #pragma mark - EmptyDataSet
 -(UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
-    return kGetImage(@"icon_data_no");
+    return kGetImage(@"footprint_icon_no");
 }
 
 -(NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {

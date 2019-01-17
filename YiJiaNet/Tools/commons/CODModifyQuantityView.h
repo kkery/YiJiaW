@@ -24,4 +24,6 @@ typedef void(^CODModifyQuantityViewQuantityChangeBlock)(NSUInteger quantity);
 
 @property (nonatomic, copy) CODModifyQuantityViewQuantityChangeBlock quantityChangeBlock;
 
+- (void)resetAmount;
+
 @end

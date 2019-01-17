@@ -65,7 +65,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"算报价";
+    self.title = @"装修报价预算";
     self.view.backgroundColor = CODColorTheme;
     
     self.resultDic = [NSDictionary dictionary];
@@ -146,6 +146,7 @@
     
     UITextField *sizeLabel = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor333333 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"我家的面积"];
     [sizeLabel modifyPlaceholdFont:kFont(14) andColor:CODColor999999];
+    sizeLabel.keyboardType = UIKeyboardTypeDecimalPad;
     self.sizeTF = sizeLabel;
     [sizeView addSubview:sizeLabel];
 //
@@ -164,6 +165,7 @@
     modifyView1.quantityChangeBlock = ^(NSUInteger quantity) {
         self.shiValue = quantity;
     };
+    self.ModifyViewOne = modifyView1;
     [jiajianView1 addSubview:modifyView1];
     // 厅
     UIView *jiajianView2 = [[UIView alloc] init];
@@ -175,6 +177,7 @@
     modifyView2.quantityChangeBlock = ^(NSUInteger quantity) {
         self.tingValue = quantity;
     };
+    self.ModifyViewTwo = modifyView2;
     [jiajianView2 addSubview:modifyView2];
     // 厨
     UIView *jiajianView3 = [[UIView alloc] init];
@@ -186,6 +189,7 @@
     modifyView3.quantityChangeBlock = ^(NSUInteger quantity) {
         self.weiValue = quantity;
     };
+    self.ModifyViewThree = modifyView3;
     [jiajianView3 addSubview:modifyView3];
     // 卫
     UIView *jiajianView4 = [[UIView alloc] init];
@@ -197,10 +201,11 @@
     modifyView4.quantityChangeBlock = ^(NSUInteger quantity) {
         self.yangtValue = quantity;
     };
+    self.ModifyViewFour = modifyView4;
     [jiajianView4 addSubview:modifyView4];
     
     // 电话号码框
-    UITextField *phoneTextField = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor333333 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"您的电话号码"];
+    UITextField *phoneTextField = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor333333 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"请输入手机号码、报价结果将发送至手机"];
     [phoneTextField modifyPlaceholdFont:kFont(14) andColor:CODColor999999];
     phoneTextField.backgroundColor = CODHexColor(0xF2F2F2);
     phoneTextField.layer.cornerRadius = 5;
@@ -478,16 +483,16 @@
 }
 
 - (void)commitBtnAction {
-    if (kStringIsEmpty(self.hourseValue)) {
+    if (kStringIsEmpty(self.houseNameTF.text)) {
         [SVProgressHUD cod_showWithErrorInfo:@"请填写所在小区名称"];
         return;
     }if (kStringIsEmpty(self.fullAdressName)) {
         [SVProgressHUD cod_showWithErrorInfo:@"请选择所在城市"];
         return;
-    }if (kStringIsEmpty(self.sizeValue)) {
+    }if (kStringIsEmpty(self.sizeTF.text)) {
         [SVProgressHUD cod_showWithErrorInfo:@"请填写面积"];
         return;
-    }if (kStringIsEmpty(self.phoneValue)) {
+    }if (kStringIsEmpty(self.phoneTF.text)) {
         [SVProgressHUD cod_showWithErrorInfo:@"请填写手机号码"];
         return;
     }
@@ -522,11 +527,11 @@
     params[@"province"] = self.provinceValue;
     params[@"city"] = self.cityValue;
     params[@"area"] = self.areaValue;
-    params[@"house_acreage"] = self.hourseValue;
     params[@"house_type"] = [NSString stringWithFormat:@"%@室%@厅%@卫%@阳台",@(self.shiValue),@(self.tingValue),@(self.weiValue),@(self.yangtValue)];
     params[@"house_acreage"] = self.sizeValue;
     params[@"mobile"] = self.phoneValue;
     params[@"house_name"] = self.hourseValue;
+    params[@"type"] = @(1);//0或不传 预约, 1报价
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=ordered" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
             
@@ -545,6 +550,18 @@
 }
 
 - (void)againAction {
+    // 清空输入信息
+    self.houseNameTF.text = @"";
+    self.sizeTF.text = @"";
+    self.phoneTF.text = @"";
+    self.fullAdressName = @"";
+    self.mCitylabel.text = @"您所在的城市";
+    
+    [self.ModifyViewOne resetAmount];
+    [self.ModifyViewTwo resetAmount];
+    [self.ModifyViewThree resetAmount];
+    [self.ModifyViewFour resetAmount];
+    
     self.backBorderViewOne.hidden = NO;
     self.backBorderViewTwo.hidden = YES;
 }

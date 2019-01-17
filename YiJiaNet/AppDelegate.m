@@ -11,7 +11,10 @@
 #import <EAIntroView/EAIntroView.h>
 #import <UMShare/UMShare.h>// 友盟
 #import <UMCommon/UMCommon.h>
-@interface AppDelegate ()<EAIntroDelegate>
+
+@interface AppDelegate ()<EAIntroDelegate, CLLocationManagerDelegate>
+
+@property (nonatomic, strong) CLLocationManager *locationManager;// 定位
 
 @end
 
@@ -20,18 +23,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
-    
-    [UMConfigure initWithAppkey:UMAPPKey channel:@"App Store"];
-
-    /* 设置分享到QQ互联的appID
-     * U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。
-     */
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:QQAppID appSecret:nil redirectURL:nil];
-    
-    /* 设置微信的appKey和appSecret */
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:weChatID appSecret:weChatSecret redirectURL:@"http://mobile.umeng.com/social"];
 
     // 判断QQ、微信设备上是否安装
     if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
@@ -43,7 +34,13 @@
     // 设置全局UI
     [[UITextField appearance] setTintColor:CODColorTheme];//设置UITextField的光标颜色
     [[UITextView appearance] setTintColor:CODColorTheme];//设置UITextView的光标颜色
+    
+    // 启动服务
+    [self performSelector:@selector(startService:) withObject:launchOptions afterDelay:0];
+
     // root
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
     CODMainTabBarController *mainTabBarController = [[CODMainTabBarController alloc] init];
     self.window.rootViewController = mainTabBarController;
     [self.window makeKeyAndVisible];
@@ -67,6 +64,78 @@
         [self showGuide];
     }
     return YES;
+}
+
+#pragma mark - Service
+- (void)startService:(NSDictionary *)launchOptions {
+    //    NSLog(@"start service begin");
+    // 地理位置服务
+    if ([CLLocationManager locationServicesEnabled]) {
+        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {// iOS 8
+            [self.locationManager performSelector:@selector(requestWhenInUseAuthorization)];
+        }
+        [self.locationManager startUpdatingLocation];
+    } else {
+        CODLogObject(@"location services not enabled");
+        [SVProgressHUD cod_showWithErrorInfo:@"定位服务未开启，请检查手机设置"];
+    }
+    // 友盟推送
+    [UMConfigure initWithAppkey:UMAPPKey channel:@"App Store"];
+    // qq相关
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:QQAppID appSecret:nil redirectURL:nil];
+    // 微信相关
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:weChatID appSecret:weChatSecret redirectURL:@"http://mobile.umeng.com/social"];
+    
+    // 定位城市
+    // [self locateCity];
+    //  NSLog(@"start service end");
+}
+
+#pragma mark - Accessors
+- (CLLocationManager *)locationManager {
+    if (_locationManager == nil) {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        //设置定位精度
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        //每隔多少米定位一次（这里的设置为每隔百米)
+        self.locationManager.distanceFilter = kCLLocationAccuracyHundredMeters;
+    }
+    return _locationManager;
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"location error = %@", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    [self.locationManager stopUpdatingLocation];
+    CLLocation *currentLocation = [locations lastObject];
+    NSLog(@"location:{lat:%f; lon:%f; accuracy:%f}", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude, currentLocation.horizontalAccuracy);
+    [[NSUserDefaults standardUserDefaults] setFloat:currentLocation.coordinate.latitude forKey:CODLatitudeKey];
+    [[NSUserDefaults standardUserDefaults] setFloat:currentLocation.coordinate.longitude forKey:CODLongitudeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    //获取当前所在的城市名
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    //根据经纬度反向地理编译出地址信息
+    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *array, NSError *error) {
+        if (array.count > 0) {
+            CLPlacemark *placemark = [array objectAtIndex:0];
+            NSString *currCity = placemark.locality;
+            if (!currCity) {
+                //四大直辖市的城市信息无法通过locality获得，只能通过获取省份的方法来获得（如果city为空，则可知为直辖市）
+                currCity = placemark.administrativeArea;
+            }
+            NSLog(@"currCity:%@", currCity);
+//            [[NSUserDefaults standardUserDefaults] setObject:currCity forKey:CODCityNameKey];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:CODSwitchCityNotificationName object:nil];
+        } else if (error == nil && array.count == 0) {
+            NSLog(@"No results were returned.");
+        } else {
+            NSLog(@"An error occurred = %@", error);
+        }
+    }];
 }
 
 #pragma mark - Guide

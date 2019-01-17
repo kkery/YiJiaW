@@ -135,10 +135,11 @@ _Pragma("clang diagnostic pop")\
 //打电话
 #define kCall(PhNumStr) NSComparisonResult compare = [[UIDevice currentDevice].systemVersion compare:@"10.0"];\
 if (compare == NSOrderedDescending || compare == NSOrderedSame) {\
-[[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFORMAT(@"telprompt://%@",PhNumStr)] options:@{} completionHandler:nil];\
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFORMAT(@"tel://%@",PhNumStr)] options:@{} completionHandler:nil];\
 } else {\
-[[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFORMAT(@"telprompt://%@",PhNumStr)]];\
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFORMAT(@"tel://%@",PhNumStr)]];\
 }
+
 
 #define kBadgeTipStr @"waimianbian"
 

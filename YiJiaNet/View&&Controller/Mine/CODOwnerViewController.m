@@ -101,7 +101,7 @@
 
 #pragma mark - EmptyDataSet
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
-    return kGetImage(@"icon_data_no");
+    return kGetImage(@"owner_icon_no");
 }
 
 - (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {

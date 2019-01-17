@@ -224,8 +224,8 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
         self.currentSelectCity = self.locationCity;
     } else {
         self.currentSelectCity = self.titleArr[indexPath.section][indexPath.row];
-        [kUserCenter setObject:kFORMAT(@"%@",self.allMessageArr[indexPath.row][@"latitude"]) forKey:CODCityDefaultLatitudeKey];
-        [kUserCenter setObject:kFORMAT(@"%@",self.allMessageArr[indexPath.row][@"longitude"]) forKey:CODCityDefaultLongitudeKey];
+        [kUserCenter setObject:kFORMAT(@"%@",self.allMessageArr[indexPath.row][@"latitude"]) forKey:CODLatitudeKey];
+        [kUserCenter setObject:kFORMAT(@"%@",self.allMessageArr[indexPath.row][@"longitude"]) forKey:CODLongitudeKey];
     }
     
 //    if (self.SelectCity) {
@@ -233,7 +233,7 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
 //        self.SelectCity(self.currentSelectCity);
 //    }
     
-    [kUserCenter setObject:self.currentSelectCity forKey:CODCityDefaultNameKey];
+    [kUserCenter setObject:self.currentSelectCity forKey:CODCityNameKey];
     [kUserCenter synchronize];
     
     [kNotiCenter postNotificationName:CODSwitchCityNotificationName object:nil];
@@ -264,7 +264,6 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
     }
 }
 #pragma mark - CoreLocation Delegate
-
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 
 {
@@ -273,8 +272,8 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
     //此处locations存储了持续更新的位置坐标值，取最后一个值为最新位置，如果不想让其持续更新位置，则在此方法中获取到一个值之后让locationManager stopUpdatingLocation
     CLLocation *currentLocation = [locations lastObject];
     NSLog(@"location:{lat:%f; lon:%f; accuracy:%f}", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude, currentLocation.horizontalAccuracy);
-    [kUserCenter setObject:kFORMAT(@"%f",currentLocation.coordinate.latitude) forKey:CODCityDefaultLatitudeKey];
-    [kUserCenter setObject:kFORMAT(@"%f",currentLocation.coordinate.longitude) forKey:CODCityDefaultLongitudeKey];
+    [kUserCenter setObject:kFORMAT(@"%f",currentLocation.coordinate.latitude) forKey:CODLatitudeKey];
+    [kUserCenter setObject:kFORMAT(@"%f",currentLocation.coordinate.longitude) forKey:CODLongitudeKey];
 
     //获取当前所在的城市名
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];

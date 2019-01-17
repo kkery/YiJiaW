@@ -105,7 +105,7 @@
     [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:model.merchants_logo] placeholderImage:kGetImage(@"place_default_avatar")];
     self.nameLabel.text = model.house_areas;
     self.introLabel.text = model.introduction;
-    self.priceLabel.text = model.decorate_fare;
+    self.priceLabel.text = kFORMAT(@"￥%@", model.decorate_fare);
 }
 
 

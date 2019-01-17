@@ -55,10 +55,10 @@ static NSString * const CODCustomerServicePhone = @"10086";// 客服电话
 static NSInteger const CODRequstPageSize = 10;// 默认每页数量
 
 // 城市
-static NSString * const CODCityDefaultName = @"南昌";// 城市名称
-static NSString * const CODCityDefaultNameKey = @"CODCityDefaultName";
-static NSString * const CODCityDefaultLatitudeKey = @"CODCityDefaultLatitude";//纬度
-static NSString * const CODCityDefaultLongitudeKey = @"CODCityDefaultLongitude";//经度
+static NSString * const CODCityDefaultName = @"南昌";// 默认城市
+static NSString * const CODCityNameKey = @"CODCityName";
+static NSString * const CODLatitudeKey = @"CODLatitude";// 纬度，地球坐标
+static NSString * const CODLongitudeKey = @"CODLongitude";// 经度，地球坐标
 
 // 本地存储key
 static NSString * const CODLoginTokenKey = @"CODDeviceToken";// 设备令牌

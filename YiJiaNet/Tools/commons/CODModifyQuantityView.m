@@ -217,4 +217,8 @@ static NSUInteger const kMaxQuantity = 100;// 默认最大数量
     return YES;
 }
 
+- (void)resetAmount {
+    self.quantity = 0;
+}
+
 @end

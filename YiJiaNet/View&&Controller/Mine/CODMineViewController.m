@@ -260,7 +260,7 @@ static CGFloat const kWhiteBackViewHeight = 124;
         make.top.equalTo(self.backHeaderImgaeView.mas_bottom).offset(-30);
         make.height.equalTo(@(kWhiteBackViewHeight));
     }];
-    NSArray *items = @[@{@"title":@"我的预约",@"icon":@"my_amount"}, @{@"title":@"我的量房",@"icon":@"my_appointment"},@{@"title":@"我是业主",@"icon":@"my_owner-1"}];
+    NSArray *items = @[@{@"title":@"我的预约",@"icon":@"my_appointment"}, @{@"title":@"我的量房",@"icon":@"my_amount"},@{@"title":@"我是业主",@"icon":@"my_owner-1"}];
     CGFloat item_width = (SCREENWIDTH-24) / items.count;
     for (NSInteger i = 0; i<items.count; i++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -277,6 +277,10 @@ static CGFloat const kWhiteBackViewHeight = 124;
 }
 
 - (void)itemBtnAction:(UIButton *)btn {
+    if (!COD_LOGGED) {
+        [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+        return;
+    }
     if (btn.tag == 100) {
         CODMineOrderViewController *VC = [[CODMineOrderViewController alloc] init];
         [self.navigationController pushViewController:VC animated:YES];
@@ -365,15 +369,31 @@ static CGFloat const kWhiteBackViewHeight = 124;
 //    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的收藏"]) {
+        if (!COD_LOGGED) {
+            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            return;
+        }
         CODCollectViewController *collectVC = [[CODCollectViewController alloc] init];
         [self.navigationController pushViewController:collectVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"消息中心"]) {
+        if (!COD_LOGGED) {
+            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            return;
+        }
         CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的足迹"]) {
+        if (!COD_LOGGED) {
+            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            return;
+        }
         CODHistoryViewController *historyVC = [[CODHistoryViewController alloc] init];
         [self.navigationController pushViewController:historyVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"意见反馈"]) {
+        if (!COD_LOGGED) {
+            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            return;
+        }
         CODFeedViewController *feedVC = [[CODFeedViewController alloc] init];
         [self.navigationController pushViewController:feedVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"客服中心"]) {
@@ -381,9 +401,9 @@ static CGFloat const kWhiteBackViewHeight = 124;
         } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (@available(iOS 10.0, *)) {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)] options:@{} completionHandler:nil];
+                    kCall(kFORMAT(@"%@",get(CODServiceTelKey)));
                 } else {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)]];
+                    // Fallback on earlier versions
                 }
             });
         }];

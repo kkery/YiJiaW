@@ -130,7 +130,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
 
 #pragma mark - EmptyDataSet
 -(UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
-    return kGetImage(@"icon_data_no");
+    return kGetImage(@"headlines_icon_no");
 }
 
 -(NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {

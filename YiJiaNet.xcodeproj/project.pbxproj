@@ -102,6 +102,8 @@
 		6E5B4DE221EC8B3B00BF66A9 /* CODNewHouseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B4DE121EC8B3B00BF66A9 /* CODNewHouseViewController.m */; };
 		6E5B4DE521EC965100BF66A9 /* CODExampTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B4DE421EC965100BF66A9 /* CODExampTableViewCell.m */; };
 		6E92815A21D4DAE2006CC8B8 /* UINavigationBar+COD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92815921D4DAE2006CC8B8 /* UINavigationBar+COD.m */; };
+		6E9D112A21F071EC00FC9EBC /* CODComentSuccViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9D112921F071EC00FC9EBC /* CODComentSuccViewController.m */; };
+		6E9D112D21F0791C00FC9EBC /* ServicePathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9D112C21F0791C00FC9EBC /* ServicePathView.m */; };
 		6E9FAD1721EC22DC00C60DA5 /* CODExampDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9FAD1621EC22DB00C60DA5 /* CODExampDetailModel.m */; };
 		6E9FAD1A21EC235700C60DA5 /* CODMerchantModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9FAD1921EC235700C60DA5 /* CODMerchantModel.m */; };
 		6EA69EED21E618DC008FC890 /* CODDectateListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA69EEC21E618DC008FC890 /* CODDectateListModel.m */; };
@@ -423,6 +425,10 @@
 		6E5B4DE421EC965100BF66A9 /* CODExampTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODExampTableViewCell.m; sourceTree = "<group>"; };
 		6E92815821D4DAE2006CC8B8 /* UINavigationBar+COD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+COD.h"; sourceTree = "<group>"; };
 		6E92815921D4DAE2006CC8B8 /* UINavigationBar+COD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+COD.m"; sourceTree = "<group>"; };
+		6E9D112821F071EC00FC9EBC /* CODComentSuccViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODComentSuccViewController.h; sourceTree = "<group>"; };
+		6E9D112921F071EC00FC9EBC /* CODComentSuccViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODComentSuccViewController.m; sourceTree = "<group>"; };
+		6E9D112B21F0791C00FC9EBC /* ServicePathView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServicePathView.h; sourceTree = "<group>"; };
+		6E9D112C21F0791C00FC9EBC /* ServicePathView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServicePathView.m; sourceTree = "<group>"; };
 		6E9FAD0D21EC1C1400C60DA5 /* CODExampDetailModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODExampDetailModel.h; sourceTree = "<group>"; };
 		6E9FAD1621EC22DB00C60DA5 /* CODExampDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CODExampDetailModel.m; sourceTree = "<group>"; };
 		6E9FAD1821EC235700C60DA5 /* CODMerchantModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODMerchantModel.h; sourceTree = "<group>"; };
@@ -1115,6 +1121,8 @@
 				6EA7200F21DC52F800629A1B /* CommonImageCollectVW.m */,
 				6E19C26F21EF1CEE0036731B /* CODPublishCommentViewController.h */,
 				6E19C27021EF1CEE0036731B /* CODPublishCommentViewController.m */,
+				6E9D112821F071EC00FC9EBC /* CODComentSuccViewController.h */,
+				6E9D112921F071EC00FC9EBC /* CODComentSuccViewController.m */,
 			);
 			path = comment;
 			sourceTree = "<group>";
@@ -1514,6 +1522,8 @@
 				6EF104F021E0615D00CF673B /* CODMineOrderViewController.m */,
 				6E19C26621EEE2040036731B /* CODOrderDetailViewController.h */,
 				6E19C26721EEE2040036731B /* CODOrderDetailViewController.m */,
+				6E9D112B21F0791C00FC9EBC /* ServicePathView.h */,
+				6E9D112C21F0791C00FC9EBC /* ServicePathView.m */,
 				6E19C26921EF0F080036731B /* CODInsetTableViewCell.h */,
 				6E19C26A21EF0F080036731B /* CODInsetTableViewCell.m */,
 				6E19C26021EEDAD40036731B /* CODMineOrderTableViewCell.h */,
@@ -2001,6 +2011,7 @@
 				6E13FC7E21D35BA8008318F3 /* LocationCityCollectionViewCell.m in Sources */,
 				6EEEA06721DEF455004EA7F0 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				6E13FC6B21D3173F008318F3 /* SwitchCityCollecHeadView.m in Sources */,
+				6E9D112A21F071EC00FC9EBC /* CODComentSuccViewController.m in Sources */,
 				6EA7204321DCC9E700629A1B /* WRCustomNavigationBar.m in Sources */,
 				6E2A3AC421DDFDC9002BE8A0 /* XWXStoreDetailsItemVw.m in Sources */,
 				6EEEA06821DEF455004EA7F0 /* UIWebView+AFNetworking.m in Sources */,
@@ -2012,6 +2023,7 @@
 				6EBF873821CCFBD9003E7E25 /* CODBaseWebViewController.m in Sources */,
 				6EBF871A21CCDDAF003E7E25 /* CODForgetPwdViewController.m in Sources */,
 				6E1A7CA121D07C74002FCAC6 /* UIView+BlockGesture.m in Sources */,
+				6E9D112D21F0791C00FC9EBC /* ServicePathView.m in Sources */,
 				6EBF872821CCE454003E7E25 /* SVRadialGradientLayer.m in Sources */,
 				6E92815A21D4DAE2006CC8B8 /* UINavigationBar+COD.m in Sources */,
 				6EF104F421E061D900CF673B /* CODMineMeasureViewController.m in Sources */,
@@ -2286,8 +2298,11 @@
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PREFIX_HEADER = "/Users/kuang/Desktop/益家网/YiJiaNet/YiJiaNet/YiJiaNet.pch";
 				INFOPLIST_FILE = YiJiaNet/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/UMSocial/SocialLibraries/WeChat",
@@ -2326,8 +2341,11 @@
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PREFIX_HEADER = "/Users/kuang/Desktop/益家网/YiJiaNet/YiJiaNet/YiJiaNet.pch";
 				INFOPLIST_FILE = YiJiaNet/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/UMSocial/SocialLibraries/WeChat",
@@ -2353,7 +2371,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z4WTHEZWDM;
 				INFOPLIST_FILE = YiJiaNetTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = JRui.YiJiaNetTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2368,7 +2390,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z4WTHEZWDM;
 				INFOPLIST_FILE = YiJiaNetTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = JRui.YiJiaNetTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2382,7 +2408,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z4WTHEZWDM;
 				INFOPLIST_FILE = YiJiaNetUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = JRui.YiJiaNetUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2396,7 +2426,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z4WTHEZWDM;
 				INFOPLIST_FILE = YiJiaNetUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = JRui.YiJiaNetUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

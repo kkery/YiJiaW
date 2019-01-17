@@ -95,7 +95,7 @@
             } else if ([self.imfoDic[@"sex"] isEqualToString:@"2"]) {
                 [arr replaceObjectAtIndex:2 withObject:@"女"];
             }
-            if ([self.imfoDic[@"birthday"] integerValue] == 0) {
+            if (kStringIsEmpty(self.imfoDic[@"birthday"])) {
                 [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"未设置")];
             } else {
                 [arr replaceObjectAtIndex:3 withObject:kFORMAT(@"%@",self.imfoDic[@"birthday"])];
@@ -222,7 +222,7 @@
             NSDate *maxDate = [NSDate date];
             NSString *defaultValue;
 
-            if ([self.imfoDic[@"birthday"] integerValue] == 0) {
+            if ([self.imfoDic[@"birthday"] isEqualToString:@"未设置"] || kStringIsEmpty(self.imfoDic[@"birthday"])) {
                 defaultValue = @"";
             } else {
                 defaultValue = kFORMAT(@"%@",self.imfoDic[@"birthday"]);

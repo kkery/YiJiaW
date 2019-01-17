@@ -8,12 +8,16 @@
 
 #import "CODMineMeasureViewController.h"
 #import "UIScrollView+EmptyDataSet.h"
+#import "CODMineOrderTableViewCell.h"
+#import "CODMeasureDetailViewController.h"
 #import "MJRefresh.h"
 
-@interface CODMineMeasureViewController () <UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
+static NSString * const kCODMineOrderTableViewCell = @"CODMineOrderTableViewCell";
+
+@interface CODMineMeasureViewController () <UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, MJRefreshEXDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
@@ -23,6 +27,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"我的量房";
+    self.dataArray = [NSMutableArray array];
     // configure view
     self.tableView = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -30,9 +35,9 @@
         tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         tableView.dataSource = self;
         tableView.delegate = self;
+        [tableView registerClass:[CODMineOrderTableViewCell class] forCellReuseIdentifier:kCODMineOrderTableViewCell];
         tableView.emptyDataSetSource = self;
         tableView.emptyDataSetDelegate = self;
-        tableView.tableFooterView = [UIView new];
         tableView;
     });
     [self.view addSubview:self.tableView];
@@ -42,14 +47,9 @@
     }];
     
     // data
-    [self loadData];
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(LoadMoreData)];
-    
-    //    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:YES delegate:self animation:YES];
-    //    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
-    
-    [self.view addSubview:self.tableView];
+    [self loadDataWithPage:1 andIsHeader:YES];
+    [self.tableView addHeaderWithHeaderClass:nil beginRefresh:NO delegate:self animation:YES];
+    [self.tableView addFooterWithFooterClass:nil automaticallyRefresh:YES delegate:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,70 +58,98 @@
 }
 
 #pragma mark - Refresh
--(void)onRefreshing:(id)control
-{
-    [self loadData];
-}
--(void)onLoadingMoreData:(id)control pageNum:(NSNumber *)pageNum
-{
-    [self loadData];
+-(void)onRefreshing:(id)control {
+    [self loadDataWithPage:1 andIsHeader:YES];
 }
 
-#pragma mark - Net load
-- (void)loadData
-{
-    [self.tableView.mj_header endRefreshing];
+-(void)onLoadingMoreData:(id)control pageNum:(NSNumber *)pageNum {
+    [self loadDataWithPage:pageNum.integerValue andIsHeader:NO];
 }
 
-- (void)LoadMoreData
-{
-    [self.tableView.mj_footer endRefreshing];
+#pragma mark - Data
+-(void)loadDataWithPage:(NSInteger)pageNum andIsHeader:(BOOL)isHeader {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    params[@"status"] = @(3);//2预约 3量房
+    params[@"page"] = @(pageNum);
+    params[@"pagesize"] = @(CODRequstPageSize);
+    
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=Setting&a=appoint" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODOrderModel class] json:object[@"data"][@"list"]];
+                [self.dataArray removeAllObjects];
+                [self.dataArray addObjectsFromArray:models];
+            } else {
+                [self.tableView endFooterRefreshWithChangePageIndex:YES];
+                NSArray *models = [NSArray modelArrayWithClass:[CODOrderModel class] json:object[@"data"][@"list"]];
+                [self.dataArray addObjectsFromArray:models];
+            }
+            if (self.dataArray.count == [object[@"data"][@"pageCount"] integerValue]) {
+                [self.tableView noMoreData];
+            }
+            [self.tableView reloadData];
+        } else {
+            if (isHeader) {
+                [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+            } else  {
+                [self.tableView endFooterRefreshWithChangePageIndex:NO];
+            }
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        if (isHeader) {
+            [self.tableView endHeaderRefreshWithChangePageIndex:NO];
+        }else
+        {
+            [self.tableView endFooterRefreshWithChangePageIndex:NO];
+        }
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    //    return 10;
-    tableView.mj_footer.hidden = (self.dataArray.count == 0);
-    return self.dataArray.count;
-    
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    self.tableView.mj_footer.hidden = (self.dataArray.count == 0);
+    return self.dataArray.count;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString * kBaseCellID = @"cellID";
-    CODBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kBaseCellID];
-    if (!cell) {
-        cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBaseCellID];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.backgroundColor = [UIColor whiteColor];
-    }
-    cell.textLabel.text = @"test";
+    CODMineOrderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCODMineOrderTableViewCell forIndexPath:indexPath];
+    CODOrderModel *model = self.dataArray[indexPath.row];
+    [cell configureWithModel:model type:@"量房"];
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 44;
+    return [CODMineOrderTableViewCell heightForRow];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    CODOrderModel *model = self.dataArray[indexPath.row];
+    CODMeasureDetailViewController *detailVC = [[CODMeasureDetailViewController alloc] init];
+    detailVC.merchantId = model.merchant_id;
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 #pragma mark - EmptyDataSet
-- (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
-    return kGetImage(@"icon_data_no");
+-(UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
+    return kGetImage(@"room_icon_no");
 }
 
-- (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {
-    return [[NSAttributedString alloc] initWithString:@"还没有量房，到别处逛逛吧~" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15],NSForegroundColorAttributeName: CODHexColor(0x555555)}];
+-(NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {
+    return [[NSAttributedString alloc] initWithString:@"还没有量房，到别处逛一逛吧~" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15],NSForegroundColorAttributeName: CODHexColor(0x555555)}];
 }
 
-- (BOOL)emptyDataSetShouldAllowScroll:(UIScrollView *)scrollView {
+-(BOOL)emptyDataSetShouldAllowScroll:(UIScrollView *)scrollView {
     return YES;
 }
-
 @end

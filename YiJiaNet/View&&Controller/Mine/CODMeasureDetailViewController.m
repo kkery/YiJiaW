@@ -9,6 +9,8 @@
 #import "CODMeasureDetailViewController.h"
 #import "CODInsetTableViewCell.h"
 #import "CODPublishCommentViewController.h"
+#import "ServicePathView.h"
+
 @interface CODMeasureDetailViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -18,10 +20,16 @@
 @property (nonatomic, strong) NSDictionary *infoDic;
 
 @property (nonatomic, strong) UIButton *commentBtn;
+@property (nonatomic, strong) ServicePathView *pathView;
 
 @end
 
 @implementation CODMeasureDetailViewController
+- (ServicePathView *)pathView {
+    if (!_pathView) {
+        _pathView = [[ServicePathView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH-24, 90)];
+    } return _pathView;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -92,7 +100,7 @@
             self.compDic = object[@"data"][@"res"];
             self.infoDic = object[@"data"][@"list"];
             //已评价
-            if ([[self.infoDic objectForKey:@"status"] integerValue] == 6) {
+            if ([[self.infoDic objectForKey:@"status"] integerValue] == 4) {
                 self.commentBtn.hidden = YES;
                 self.tableView.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-KTabBarNavgationHeight);
             } else {
@@ -115,7 +123,8 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
+//    return 6;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -251,43 +260,43 @@
         return cell;
     }
     
-    else if (indexPath.row == 3) {
-        static NSString * kServiceFlowCellID = @"serviceFlowCellID";
-        CODInsetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kServiceFlowCellID];
-        if (!cell) {
-            cell = [[CODInsetTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kServiceFlowCellID];
-            
-            UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, SCREENWIDTH-40, 17)];
-            titleLabel.textColor = CODColor333333;
-            titleLabel.font = kFont(16);
-            titleLabel.text = @"量房图纸";
-            [cell.contentView addSubview:titleLabel];
-            UIImageView *lineIcon = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 3, 17)];
-            lineIcon.image = kGetImage(@"amount_title");
-            [cell.contentView addSubview:lineIcon];
-        }
-        
-        return cell;
-    }
-    
-    else if (indexPath.row == 4) {
-        static NSString * kServiceFlowCellID = @"serviceFlowCellID";
-        CODInsetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kServiceFlowCellID];
-        if (!cell) {
-            cell = [[CODInsetTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kServiceFlowCellID];
-            
-            UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, SCREENWIDTH-40, 17)];
-            titleLabel.textColor = CODColor333333;
-            titleLabel.font = kFont(16);
-            titleLabel.text = @"量房报告";
-            [cell.contentView addSubview:titleLabel];
-            UIImageView *lineIcon = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 3, 17)];
-            lineIcon.image = kGetImage(@"amount_title");
-            [cell.contentView addSubview:lineIcon];
-        }
-        
-        return cell;
-    }
+//    else if (indexPath.row == 3) {
+//        static NSString * kServiceFlowCellID = @"serviceFlowCellID";
+//        CODInsetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kServiceFlowCellID];
+//        if (!cell) {
+//            cell = [[CODInsetTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kServiceFlowCellID];
+//
+//            UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, SCREENWIDTH-40, 17)];
+//            titleLabel.textColor = CODColor333333;
+//            titleLabel.font = kFont(16);
+//            titleLabel.text = @"量房图纸";
+//            [cell.contentView addSubview:titleLabel];
+//            UIImageView *lineIcon = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 3, 17)];
+//            lineIcon.image = kGetImage(@"amount_title");
+//            [cell.contentView addSubview:lineIcon];
+//        }
+//
+//        return cell;
+//    }
+//
+//    else if (indexPath.row == 4) {
+//        static NSString * kServiceFlowCellID = @"serviceFlowCellID";
+//        CODInsetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kServiceFlowCellID];
+//        if (!cell) {
+//            cell = [[CODInsetTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kServiceFlowCellID];
+//
+//            UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, SCREENWIDTH-40, 17)];
+//            titleLabel.textColor = CODColor333333;
+//            titleLabel.font = kFont(16);
+//            titleLabel.text = @"量房报告";
+//            [cell.contentView addSubview:titleLabel];
+//            UIImageView *lineIcon = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 3, 17)];
+//            lineIcon.image = kGetImage(@"amount_title");
+//            [cell.contentView addSubview:lineIcon];
+//        }
+//
+//        return cell;
+//    }
     
     else {
         static NSString * kServiceFlowCellID = @"serviceFlowCellID";
@@ -304,6 +313,12 @@
             UIImageView *lineIcon = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 3, 17)];
             lineIcon.image = kGetImage(@"amount_title");
             [cell.contentView addSubview:lineIcon];
+            
+            [cell.contentView addSubview:self.pathView];
+            [self.pathView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.bottom.offset(0);
+                make.top.equalTo(titleLabel.mas_bottom).offset(20);
+            }];
         }
         
         return cell;
@@ -318,11 +333,13 @@
         return 120+15;
     } else if (indexPath.row == 2) {
         return 180+15;
-    } else if (indexPath.row == 2) {
-        return 156+15;
-    } else if (indexPath.row == 2) {
-        return 156+15;
-    } else {
+    }
+//    else if (indexPath.row == 3) {
+//        return 156+15;
+//    } else if (indexPath.row == 4) {
+//        return 156+15;
+//    }
+    else {
         return 150+15;
     }
 }

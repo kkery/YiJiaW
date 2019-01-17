@@ -26,13 +26,13 @@
 
 #pragma mark - City
 - (NSString *)currentCityName {// 当前城市名称
-    return [[NSUserDefaults standardUserDefaults] objectForKey:CODCityDefaultNameKey] ?: CODCityDefaultName;
+    return [[NSUserDefaults standardUserDefaults] objectForKey:CODCityNameKey] ?: CODCityDefaultName;
 }
 - (NSString *)longitude {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:CODCityDefaultLatitudeKey];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:CODLatitudeKey];
 }
 - (NSString *)latitude {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:CODCityDefaultLongitudeKey];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:CODLongitudeKey];
 }
 
 + (BOOL)logged {

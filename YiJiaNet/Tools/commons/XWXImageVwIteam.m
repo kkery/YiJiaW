@@ -26,7 +26,7 @@
 //        self.clipsToBounds = YES;
         
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteBtn setImage:[UIImage imageNamed:@"technician_error"] forState:UIControlStateNormal];
+        [_deleteBtn setImage:[UIImage imageNamed:@"evaluation_error"] forState:UIControlStateNormal];
         [self addSubview:_deleteBtn];
         
     }

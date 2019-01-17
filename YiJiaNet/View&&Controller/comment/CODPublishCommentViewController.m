@@ -12,7 +12,7 @@
 #import "ChoosePhotos.h"
 #import "XWXImageVwIteam.h"
 #import "ImageBrowserViewController.h"
-
+#import "CODComentSuccViewController.h"
 CGFloat const kLineImageCount = 4;
 
 @interface CODPublishCommentViewController () <UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate,ChoosePhotosDelegate>
@@ -312,30 +312,21 @@ CGFloat const kLineImageCount = 4;
 {
     if ([self.parDic[@"score"] isEqualToString:@"0"]) {
         [SVProgressHUD cod_showWithErrorInfo:@"请选择星级"];
-
     } else {
         // 发表
         self.parDic[@"content"] = self.textVw.text;
         self.parDic[@"user_id"] = COD_USERID;
-        self.parDic[@"id"] = COD_USERID;
+        self.parDic[@"id"] = self.paramId;
 
-        if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
-            self.parDic[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
-        }
-        
         [SVProgressHUD cod_showWithStatu:@"评价发布中..."];
-        
-        
         NSMutableDictionary *imgDic = [[NSMutableDictionary alloc]init];
         imgDic[@"img"] = self.SelectPhoto;
         
         [[CODNetWorkManager shareManager] AFPostData:@"m=App&c=Setting&a=evaluation" Parameters:self.parDic ImageDatas:imgDic AndSucess:^(id object) {
             if ([object[@"code"] integerValue] == 200) {
                 [SVProgressHUD cod_showWithSuccessInfo:@"评价成功"];
-                if (self.refreshBlock) {
-                    self.refreshBlock();
-                }
-                [self.navigationController popViewControllerAnimated:YES];
+                CODComentSuccViewController *succeVC = [[CODComentSuccViewController alloc] init];
+                [self.navigationController pushViewController:succeVC animated:YES];
             } else {
                 [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
             }

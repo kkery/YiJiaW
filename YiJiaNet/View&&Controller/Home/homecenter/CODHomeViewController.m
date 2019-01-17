@@ -128,8 +128,9 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     params[@"city"] = [CODGlobal sharedGlobal].currentCityName;
     params[@"page"] = @(pageNum);
     params[@"pagesize"] = @(CODRequstPageSize);
-    
+    [SVProgressHUD cod_showStatu];
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=index" andParameters:params Sucess:^(id object) {
+        [SVProgressHUD cod_dismis];
         if ([object[@"code"] integerValue] == 200) {
             // 电话
             save(object[@"data"][@"tel"], CODServiceTelKey);
@@ -165,7 +166,6 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
             if (self.listArray.count == [object[@"data"][@"pageCount"] integerValue]) {
                 [self.tableView noMoreData];
             }
-            self.tableView.mj_footer.hidden = (self.listArray.count == 0);
             [self.tableView reloadData];
             
             if (self.listArray.count > 0) {
@@ -175,16 +175,23 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
                 self.placeholderView.hidden = NO;
                 self.tableView.hidden = YES;
             }
-        } else {
+        }
+        
+        else {
+            self.placeholderView.hidden = NO;
+            self.tableView.hidden = YES;
             if (isHeader) {
                 [self.tableView endHeaderRefreshWithChangePageIndex:NO];
             } else  {
                 [self.tableView endFooterRefreshWithChangePageIndex:NO];
             }
+            if ([object[@"code"] integerValue] == 405) {
+            }
             [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
-            self.tableView.mj_footer.hidden = YES;
         }
     } failed:^(NSError *error) {
+        self.placeholderView.hidden = NO;
+        self.tableView.hidden = YES;
         if (isHeader) {
             [self.tableView endHeaderRefreshWithChangePageIndex:NO];
         }else
@@ -192,7 +199,6 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
             [self.tableView endFooterRefreshWithChangePageIndex:NO];
         }
         [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
-        self.tableView.mj_footer.hidden = YES;
     }];
 }
 
@@ -213,7 +219,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
         self.cityButton = [[AutoScrollLabel alloc] initWithFrame:CGRectMake(0, 0, 44, CODNavigationBarHeight)];
         self.cityButton.textColor = CODColor333333;
         self.cityButton.font = XFONT_SIZE(14);
-        self.cityButton.text = [CODGlobal sharedGlobal].currentCityName;
+        self.cityButton.text = kStringIsEmpty([CODGlobal sharedGlobal].currentCityName) ? @"定位中~" : [CODGlobal sharedGlobal].currentCityName;
         [view addSubview:self.cityButton];
         
         UIImageView *arrowImaView = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.cityButton.frame)+2, CGRectGetMidY(self.cityButton.frame)-3, 8, 6)];
@@ -344,7 +350,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 
 - (SDCycleScrollView *)bannerView {
     if (!_bannerView) {
-        _bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*kBannerRadio) delegate:nil placeholderImage:[UIImage imageNamed:@"placeholder"]];
+        _bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*kBannerRadio) delegate:nil placeholderImage:[UIImage imageNamed:@"place_comper_detail"]];
         _bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
         _bannerView.currentPageDotImage = [UIImage cod_imageWithColor:[UIColor whiteColor] size:CGSizeMake(25, 3)];
         _bannerView.pageDotImage = [UIImage cod_imageWithColor:CODHexaColor(0xffffff, 0.3) size:CGSizeMake(25, 3)];
@@ -426,6 +432,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     } else if (section == 2) {
         return 1;
     } else {
+        self.tableView.mj_footer.hidden = (self.listArray.count == 0);
         return self.listArray.count;
     }
 }
@@ -570,16 +577,25 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     } rightTitle:@"拨打" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (@available(iOS 10.0, *)) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)] options:@{} completionHandler:nil];
+                kCall(kFORMAT(@"%@",get(CODServiceTelKey)));
             } else {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:get(CODServiceTelKey)]];
+                // Fallback on earlier versions
             }
         });
     }];
 }
 - (void)msgAction {
-    CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
-    [self.navigationController pushViewController:messageVC animated:YES];
+    if (COD_LOGGED) {
+        CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
+        [self.navigationController pushViewController:messageVC animated:YES];
+    } else {
+        CODLoginViewController *loginViewController = [[CODLoginViewController alloc] init];
+        loginViewController.loginBlock = ^{
+            CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
+            [self.navigationController pushViewController:messageVC animated:YES];
+        };
+        [self.navigationController pushViewController:loginViewController animated:YES];
+    }
 }
 
 @end

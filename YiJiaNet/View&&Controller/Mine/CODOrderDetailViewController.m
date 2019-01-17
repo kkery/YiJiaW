@@ -8,7 +8,7 @@
 
 #import "CODOrderDetailViewController.h"
 #import "CODInsetTableViewCell.h"
-
+#import "ServicePathView.h"
 @interface CODOrderDetailViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -17,9 +17,17 @@
 @property (nonatomic, strong) NSDictionary *compDic;
 @property (nonatomic, strong) NSDictionary *infoDic;
 
+@property (nonatomic, strong) ServicePathView *pathView;
+
 @end
 
 @implementation CODOrderDetailViewController
+
+- (ServicePathView *)pathView {
+    if (!_pathView) {
+        _pathView = [[ServicePathView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH-24, 90)];
+    } return _pathView;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -227,14 +235,16 @@
             lineIcon.image = kGetImage(@"amount_title");
             [cell.contentView addSubview:lineIcon];
             
-           
+            [cell.contentView addSubview:self.pathView];
+            [self.pathView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(cell.contentView);
+            }];
         }
-        
-        
-        
         return cell;
     }
 }
+
+
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

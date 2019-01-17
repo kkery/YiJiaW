@@ -82,6 +82,7 @@ static CGFloat const kMaxLimit = 200;
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=Setting&a=option" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
             [MBProgressHUD cod_showSuccessWithTitle:@"提交成功" detail:@"感谢您对益家网的信任与支持\n我们将尽快为您解决" toView:self.view];
+            [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
             [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
         }

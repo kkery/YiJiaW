@@ -36,7 +36,7 @@ static NSString * const kCell = @"MessageTypeTableViewCell";
     
     self.dataArray = @[@{@"title":@"系统消息",@"icon":@"message_system"},
                        @{@"title":@"预约消息",@"icon":@"message_appointment"},
-                       @{@"title":@"活动消息",@"icon":@"message_appointment"}];
+                       @{@"title":@"活动消息",@"icon":@"message_activity"}];
     
     // configure view
     self.tableView = ({
