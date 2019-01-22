@@ -59,7 +59,7 @@
 
 -(BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     if ([viewController.tabBarItem.title isEqualToString:@"金服"]) {
-        [SVProgressHUD cod_showWithErrorInfo:@"金服功能暂未开放，敬请期待..."];
+        [SVProgressHUD cod_showWithInfo:@"金服功能暂未开放，敬请期待..."];
         return NO;
     } else {
         return YES;

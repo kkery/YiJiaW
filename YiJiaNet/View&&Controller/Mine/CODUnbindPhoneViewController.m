@@ -136,15 +136,15 @@
 //解绑
 -(void)confirmBtnAction {
 //    if (self.telNumTextField.text.length == 0) {
-//        [SVProgressHUD cod_showWithErrorInfo:@"请输入手机号"];
+//        [SVProgressHUD cod_showWithInfo:@"请输入手机号"];
 //        return;
 //    }
 //    if (![self.telNumTextField.text cod_isPhone]) {
-//        [SVProgressHUD cod_showWithErrorInfo:@"请输入正确格式的手机号"];
+//        [SVProgressHUD cod_showWithInfo:@"请输入正确格式的手机号"];
 //        return;
 //    }
     if (self.verificationTextField.text.length == 0) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请输入验证码"];
+        [SVProgressHUD cod_showWithInfo:@"请输入验证码"];
         return;
     }
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -170,11 +170,11 @@
 -(void)GetYZMBtnClicked:(UIButton*)sender {
     
 //    if (self.telNumTextField.text.length == 0) {
-//        [SVProgressHUD cod_showWithErrorInfo:@"请输入手机号"];
+//        [SVProgressHUD cod_showWithInfo:@"请输入手机号"];
 //        return;
 //    }
     if (![self.telNumTextField.text cod_isPhone]) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请输入正确格式的手机号"];
+        [SVProgressHUD cod_showWithInfo:@"请输入正确格式的手机号"];
         return;
     }
     [SVProgressHUD cod_showStatu];

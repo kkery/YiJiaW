@@ -125,6 +125,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     CODHotModel *hot = self.dataArray[indexPath.row];
     CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:hot.url];
+    webVC.webTitleString = @"益家头条";
     [self.navigationController pushViewController:webVC animated:YES];
 }
 

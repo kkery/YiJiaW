@@ -71,7 +71,7 @@ static GetImage *getImage = nil;
             imagePC.delegate = self;
             [_fatherViewController presentViewController:imagePC animated:YES completion:nil];
         } else {
-            [SVProgressHUD cod_showWithErrorInfo:@"无法调用相机"];
+            [SVProgressHUD cod_showWithInfo:@"无法调用相机"];
         }
 }
 
@@ -85,7 +85,7 @@ static GetImage *getImage = nil;
         imagePC.allowsEditing = YES;
         [_fatherViewController presentViewController:imagePC animated:YES completion:nil];
     } else {
-        [SVProgressHUD cod_showWithErrorInfo:@"暂无相册资源"];
+        [SVProgressHUD cod_showWithInfo:@"暂无相册资源"];
 
     }
     

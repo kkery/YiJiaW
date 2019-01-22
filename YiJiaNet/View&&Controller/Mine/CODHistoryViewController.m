@@ -42,14 +42,22 @@
     [self wr_setNavBarShadowImageHidden:NO];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_app_return"] style:UIBarButtonItemStyleDone target:self action:@selector(cod_returnAction)];
 
-    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [editBtn setTitle:@"清空足迹" forState:UIControlStateNormal];
-    editBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [editBtn setTitleColor:CODColor333333 forState:UIControlStateNormal];
-    [editBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
-    editBtn.size = CGSizeMake(60, 44);
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
-    self.editButton = editBtn;
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itmWithTitle:@"清空足迹" SelectTitle:@"清空足迹" Font:XFONT_SIZE(14) textColor:CODColor333333 selectedTextColor:CODColor333333 target:self action:@selector(deleteAction)];
+
+//    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [editBtn setTitle:@"清空足迹" forState:UIControlStateNormal];
+//    editBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+//    [editBtn setTitleColor:CODColor333333 forState:UIControlStateNormal];
+//    [editBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
+//    editBtn.size = CGSizeMake(80, 44);
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
+//    self.editButton = editBtn;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //YES,透明效果view不会偏移 NO,导航栏不透明,view会向下偏移64px
+    self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void)cod_returnAction {

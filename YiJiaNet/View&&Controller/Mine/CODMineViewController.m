@@ -65,13 +65,10 @@ static CGFloat const kWhiteBackViewHeight = 124;
     
     [kNotiCenter addObserver:self selector:@selector(refeshMineNotification) name:CODRefeshMineNotificationName object:nil];
 
-//    self.title = @"我的";
     self.navigationItem.leftBarButtonItem = nil;
     
     // configure view
     [self configureView];
-    
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.messageButton];
     
     // data
     self.dataSource = @[
@@ -86,6 +83,7 @@ static CGFloat const kWhiteBackViewHeight = 124;
 //    if (COD_LOGGED) {
 //        [self loadUserInfo];
 //    }
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(pullRefeshUserInfo)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -106,7 +104,15 @@ static CGFloat const kWhiteBackViewHeight = 124;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
+}
 
+- (void)pullRefeshUserInfo {
+    [self.tableView.mj_header endRefreshing];
+    if (COD_LOGGED) {
+        [self loadUserInfo];
+    } else {
+        [SVProgressHUD cod_showWithInfo:@"未登录，请先登录"];
+    }
 }
 
 - (void)refeshMineNotification {
@@ -117,6 +123,24 @@ static CGFloat const kWhiteBackViewHeight = 124;
     [self configureTableView];
     [self configureHeaderView];
     [self configureThreeItemView];
+}
+
+#pragma mark - Data
+- (void)loadUserInfo {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"user_id"] = COD_USERID;
+    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=user_info" andParameters:params Sucess:^(id object) {
+        if ([object[@"code"] integerValue] == 200) {
+            
+            save(object[@"data"][@"info"], CODUserInfoKey);
+            [self updateTableHeaderViewInfo];
+            
+        } else {
+            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
+        }
+    } failed:^(NSError *error) {
+        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
+    }];
 }
 
 - (void)configureTableView {
@@ -278,7 +302,7 @@ static CGFloat const kWhiteBackViewHeight = 124;
 
 - (void)itemBtnAction:(UIButton *)btn {
     if (!COD_LOGGED) {
-        [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+        [SVProgressHUD cod_showWithInfo:@"未登录,请先登录"];
         return;
     }
     if (btn.tag == 100) {
@@ -291,25 +315,6 @@ static CGFloat const kWhiteBackViewHeight = 124;
         CODOwnerViewController *VC = [[CODOwnerViewController alloc] init];
         [self.navigationController pushViewController:VC animated:YES];
     }
-}
-
-#pragma mark - Data
-- (void)loadUserInfo {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"user_id"] = COD_USERID;
-
-    [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=user_info" andParameters:params Sucess:^(id object) {
-        if ([object[@"code"] integerValue] == 200) {
-            
-            save(object[@"data"][@"info"], CODUserInfoKey);
-            [self updateTableHeaderViewInfo];
-            
-        } else {
-            [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
-        }
-    } failed:^(NSError *error) {
-        [SVProgressHUD cod_showWithErrorInfo:@"网络异常，请重试!"];
-    }];
 }
 
 #pragma mark - Update Data
@@ -370,28 +375,28 @@ static CGFloat const kWhiteBackViewHeight = 124;
     
     if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的收藏"]) {
         if (!COD_LOGGED) {
-            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            [SVProgressHUD cod_showWithInfo:@"未登录,请先登录"];
             return;
         }
         CODCollectViewController *collectVC = [[CODCollectViewController alloc] init];
         [self.navigationController pushViewController:collectVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"消息中心"]) {
         if (!COD_LOGGED) {
-            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            [SVProgressHUD cod_showWithInfo:@"未登录,请先登录"];
             return;
         }
         CODMessageViewController *messageVC = [[CODMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"我的足迹"]) {
         if (!COD_LOGGED) {
-            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            [SVProgressHUD cod_showWithInfo:@"未登录,请先登录"];
             return;
         }
         CODHistoryViewController *historyVC = [[CODHistoryViewController alloc] init];
         [self.navigationController pushViewController:historyVC animated:YES];
     } else if ([self.dataSource[indexPath.row][@"title"] isEqualToString:@"意见反馈"]) {
         if (!COD_LOGGED) {
-            [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+            [SVProgressHUD cod_showWithInfo:@"未登录,请先登录"];
             return;
         }
         CODFeedViewController *feedVC = [[CODFeedViewController alloc] init];
@@ -411,8 +416,8 @@ static CGFloat const kWhiteBackViewHeight = 124;
         XWXShareView *shareView = [[XWXShareView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
         
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"分享标题", @"share_title",
-                             @"分享内容", @"share_content",
+                             @"益家网", @"share_title",
+                             @"找不到房子信息，下载益家网APP", @"share_content",
                              nil ];
         shareView.dic = dic;
 
@@ -427,7 +432,7 @@ static CGFloat const kWhiteBackViewHeight = 124;
         CODSettingViewController *setVC = [[CODSettingViewController alloc] init];
         [self.navigationController pushViewController:setVC animated:YES];
     } else {
-        [SVProgressHUD cod_showWithErrorInfo:@"未登录,请先登录"];
+        [SVProgressHUD cod_showWithInfo:@"未登录,请先登录"];
     }
 }
 - (void)gotoPersonInfo {

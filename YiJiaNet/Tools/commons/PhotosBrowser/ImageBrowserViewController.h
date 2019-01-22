@@ -1,9 +1,9 @@
 //
 //  ImageBrowserViewController.h
-//  ImageBrowser
+//  YiJiaNet
 //
-//  Created by 汤文洪 on 16/9/1.
-//  Copyright © 2016年 汤文洪. All rights reserved.
+//  Created by KUANG on 2018/12/29.
+//  Copyright © 2018年 JIARUI. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

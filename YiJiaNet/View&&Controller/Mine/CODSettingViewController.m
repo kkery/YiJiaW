@@ -128,7 +128,8 @@
         CODSetPwdViewController *VC = [[CODSetPwdViewController alloc] init];
         [self.navigationController pushViewController:VC animated:YES];
     } else if (indexPath.row == 1) {
-        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:@"http://yjw.0791jr.com/app.php?m=App&c=Setting&a=service&type=2"];
+//        @"https://sports.qq.com"
+        CODBaseWebViewController *webView = [[CODBaseWebViewController alloc] initWithUrlString:@"http://yjw.0791jr.com/app.php?m=App&c=Setting&a=privacy&type=2"];
         webView.webTitleString = @"服务条款";
         [self.navigationController pushViewController:webView animated:YES];
     } else if (indexPath.row == 2) {
@@ -143,7 +144,6 @@
     } else if (indexPath.row == 5) {
         [self clearCache];
     }
-    
 }
 
 - (void)logout {

@@ -10,7 +10,7 @@ target 'YiJiaNet' do
     pod 'DZNEmptyDataSet'
     pod 'IQKeyboardManager'
     pod 'YYKit'
-    pod 'MBProgressHUD'
+    #pod 'MBProgressHUD'
     pod 'NJKWebViewProgress'
     
     #pod 'SDCycleScrollView'
@@ -21,5 +21,6 @@ target 'YiJiaNet' do
     pod 'PPBadgeView'
     pod 'YeeBadgeView', '~> 0.0.3'
     pod 'TZImagePickerController'
+    pod 'AMapLocation'#高德定位
 end
 

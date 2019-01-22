@@ -83,7 +83,7 @@
 -(void)confirmAction
 {
     if (kStringIsEmpty(self.nickNameTextFile.text)) {
-        [SVProgressHUD cod_showWithErrorInfo:@"内容不能为空"];
+        [SVProgressHUD cod_showWithInfo:@"内容不能为空"];
         return;
     }
     if (self.doneBlock) {

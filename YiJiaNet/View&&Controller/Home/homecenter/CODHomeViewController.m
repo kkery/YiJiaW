@@ -17,6 +17,8 @@
 #import "CODAnnouncementCell.h"
 #import "CODExampleTableViewCell.h"
 #import "CODFindDecorateViewController.h"
+#import "CODAllDecorateViewController.h"// 装修公司
+#import "CODExampleListViewController.h"// 效果图
 #import "CODSecondHorseViewController.h"
 #import "CODNewHorseViewController.h"
 #import "SwitchCityViewController.h"
@@ -71,10 +73,21 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 
 @implementation CODHomeViewController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CODLocationNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CODSwitchCityNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CODLoginNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CODMsgUnreadNotificationName object:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchCity) name:CODSwitchCityNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(LocationNotification) name:CODLocationNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchCityNotification) name:CODSwitchCityNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:CODLoginNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:CODMsgUnreadNotificationName object:nil];
+    
     self.title = @"首页";
     self.navigationItem.leftBarButtonItem = nil;
     
@@ -101,13 +114,51 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
              [self.msgBtn ShowBadgeView];
          }
     }];
-
-    [self loadDataWithPage:1 andIsHeader:YES];
+    // data
+//    [self loadDataWithPage:1 andIsHeader:YES];
+   
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    //更新地理位置
+}
+
+#pragma mark - Data
+- (void)refreshData {
+    [self loadDataWithPage:1 andIsHeader:YES];
+}
+
+#pragma mark - Notification
+- (void)LocationNotification {
+    // 检测定位权限
+    if([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        self.placeholderView.hidden = NO;
+        self.tableView.hidden = YES;
+        [self alertLocation];
+    } else {
+        self.placeholderView.hidden = YES;
+        self.tableView.hidden = NO;
+        [self refreshData];
+    }
+    self.cityButton.text = kStringIsEmpty([CODGlobal sharedGlobal].currentCityName) ? @"定位中~" : [CODGlobal sharedGlobal].currentCityName;
+}
+
+- (void)switchCityNotification {
+    [SVProgressHUD cod_showStatu];
+    self.cityButton.text = kStringIsEmpty([CODGlobal sharedGlobal].currentCityName) ? @"定位中~" : [CODGlobal sharedGlobal].currentCityName;
+    [self refreshData];
+}
+
+- (void)alertLocation {
+    [self alertVcTitle:@"定位服务未开启" message:@"请到设置->隐私->定位服务中开启定位服务，益家网需要知道您的位置才能提供更好的服务~" leftTitle:@"取消" leftTitleColor:CODColor666666 leftClick:^(id leftClick) {
+    } rightTitle:@"去开启" righttextColor:CODColorTheme andRightClick:^(id rightClick) {
+        NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        if ([[UIApplication sharedApplication] canOpenURL:settingsURL])
+        {
+            [[UIApplication sharedApplication] openURL:settingsURL];
+        }
+    }];
 }
 
 #pragma mark - Refresh
@@ -128,7 +179,6 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     params[@"city"] = [CODGlobal sharedGlobal].currentCityName;
     params[@"page"] = @(pageNum);
     params[@"pagesize"] = @(CODRequstPageSize);
-    [SVProgressHUD cod_showStatu];
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=index" andParameters:params Sucess:^(id object) {
         [SVProgressHUD cod_dismis];
         if ([object[@"code"] integerValue] == 200) {
@@ -166,15 +216,8 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
             if (self.listArray.count == [object[@"data"][@"pageCount"] integerValue]) {
                 [self.tableView noMoreData];
             }
+            self.tableView.hidden = NO;
             [self.tableView reloadData];
-            
-            if (self.listArray.count > 0) {
-                self.placeholderView.hidden = YES;
-                self.tableView.hidden = NO;
-            } else {
-                self.placeholderView.hidden = NO;
-                self.tableView.hidden = YES;
-            }
         }
         
         else {
@@ -371,7 +414,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
                 CODFindDecorateViewController *vc = [[CODFindDecorateViewController alloc] init];
                 [self.navigationController pushViewController:vc animated:YES];
             } else {
-                [SVProgressHUD cod_showWithErrorInfo:@"该功能暂未开放，敬请期待..."];
+                [SVProgressHUD cod_showWithInfo:@"该功能暂未开放，敬请期待..."];
             }
         }];
     }
@@ -388,12 +431,15 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
                 [self calcuQuoteAction];
             } else if ([str isEqualToString:@"效果图"]) {
                 @strongify(self);
-                CODEffectPicViewController *VC = [[CODEffectPicViewController alloc] init];
-                [self.navigationController pushViewController:VC animated:YES];
+                CODExampleListViewController *exampleListVV = [[CODExampleListViewController alloc] init];
+                exampleListVV.companyId = @"";
+                [self.navigationController pushViewController:exampleListVV animated:YES];
             } else {
                 @strongify(self);
-//                CODCompanyViewController *VC = [[CODCompanyViewController alloc] init];
-//                [self.navigationController pushViewController:VC animated:YES];
+                CODAllDecorateViewController *allDecoratVC = [[CODAllDecorateViewController alloc] init];
+                allDecoratVC.title = @"装修公司";
+                allDecoratVC.decoratType = 0;
+                [self.navigationController pushViewController:allDecoratVC animated:YES];
             }
         };
     }
@@ -531,21 +577,6 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     return nil;
 }
 
-#pragma mark - Switch city
-- (void)switchCity {
-   
-    self.cityButton.text = [CODGlobal sharedGlobal].currentCityName;
-    
-    [self loadDataWithPage:1 andIsHeader:YES];
-    
-//    if ([self.cityButton.text isEqualToString:@"南昌市"]) {
-//        self.placeholderView.hidden = NO;
-//        self.tableView.hidden = YES;
-//    } else {
-//        self.placeholderView.hidden = YES;
-//        self.tableView.hidden = NO;
-//    }
-}
 #pragma mark - Action
 - (void)locationAction {
     SwitchCityViewController *cityVC = [[SwitchCityViewController alloc] init];

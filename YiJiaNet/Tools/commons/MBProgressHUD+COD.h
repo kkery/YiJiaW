@@ -12,4 +12,6 @@
 
 + (void)cod_showSuccessWithTitle:(NSString *)title detail:(NSString *)detail toView:(UIView *)view;
 
++ (void)cod_showSuccessWithTitle:(NSString *)title detail:(NSString *)detail delay:(NSTimeInterval)delay toView:(UIView *)view;
+
 @end

@@ -258,7 +258,7 @@ CGFloat const kLineImageCount = 4;
 -(void)AddPhotosBtnClicked
 {
     if (self.SelectPhoto.count >= 9) {
-        [SVProgressHUD cod_showWithErrorInfo:@"最多只能上传9张图片!"];
+        [SVProgressHUD cod_showWithInfo:@"最多只能上传9张图片!"];
     }else{
         ChoosePhotos *cp = [ChoosePhotos SharedChoseImg];
         cp.ExistSelectPhotos = self.SelectPhoto;
@@ -311,7 +311,7 @@ CGFloat const kLineImageCount = 4;
 - (void)FaBuBtnAction
 {
     if ([self.parDic[@"score"] isEqualToString:@"0"]) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请选择星级"];
+        [SVProgressHUD cod_showWithInfo:@"请选择星级"];
     } else {
         // 发表
         self.parDic[@"content"] = self.textVw.text;

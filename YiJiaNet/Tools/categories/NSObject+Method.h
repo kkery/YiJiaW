@@ -26,7 +26,7 @@
 +(UIViewController *)getCurrentVC;
 /** 获取当前屏幕中present出来的viewcontroller */
 +(UIViewController *)getPresentedViewController;
-
++ (UIViewController *)presentingVC;
 @end
 
 

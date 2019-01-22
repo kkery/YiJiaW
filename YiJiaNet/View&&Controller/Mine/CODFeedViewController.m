@@ -72,7 +72,7 @@ static CGFloat const kMaxLimit = 200;
 
 - (void)exitAction {
     if (kStringIsEmpty(self.inputTextView.text)) {
-        [SVProgressHUD cod_showWithErrorInfo:@"内容不能为空"];
+        [SVProgressHUD cod_showWithInfo:@"内容不能为空"];
         return;
     }
     
@@ -81,8 +81,10 @@ static CGFloat const kMaxLimit = 200;
     params[@"content"] = self.inputTextView.text;
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=Setting&a=option" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
-            [MBProgressHUD cod_showSuccessWithTitle:@"提交成功" detail:@"感谢您对益家网的信任与支持\n我们将尽快为您解决" toView:self.view];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            [MBProgressHUD cod_showSuccessWithTitle:@"提交成功" detail:@"感谢您对益家网的信任与支持\n我们将尽快为您解决" delay:1.5 toView:[UIApplication sharedApplication].keyWindow];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            });
         } else {
             [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
         }

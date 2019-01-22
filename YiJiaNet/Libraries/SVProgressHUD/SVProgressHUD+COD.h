@@ -9,17 +9,19 @@
 #import "SVProgressHUD.h"
 
 @interface SVProgressHUD (COD)
+
 +(void)cod_showWithSuccessInfo:(NSString *)info;
 
 +(void)cod_showWithErrorInfo:(NSString *)info;
 
-+(void)cod_showWithTips:(NSString *)tips icon:(UIImage *)icon;
-
++(void)cod_showWithInfo:(NSString *)info;
 
 +(void)cod_showStatu;
+
 +(void)cod_showWithStatu:(NSString *)info;
 
 +(void)cod_dismis;
 
 +(void)cod_dismisWithDelay:(NSTimeInterval)timeInterVal;
+
 @end

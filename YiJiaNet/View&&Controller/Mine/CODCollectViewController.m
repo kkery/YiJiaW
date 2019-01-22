@@ -41,6 +41,12 @@
     [self wr_setNavBarShadowImageHidden:NO];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //YES,透明效果view不会偏移 NO,导航栏不透明,view会向下偏移64px
+    self.navigationController.navigationBar.translucent = YES;
+}
+
 - (void)cod_returnAction {
     [self.navigationController popViewControllerAnimated:YES];
 }

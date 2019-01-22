@@ -10,6 +10,8 @@
 #import "UIScrollView+EmptyDataSet.h"
 #import "MJRefresh.h"
 #import "CODBaseWebViewController.h"
+#import "CODAuthenStatusViewController.h"
+#import "CODOrderDetailViewController.h"
 #import "CODMessageModel.h"
 
 static NSString * const kCell = @"CODHotTableViewCell";
@@ -26,7 +28,14 @@ static NSString * const kCell = @"CODHotTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.title = @"系统消息";
+    if (self.type == 1) {
+        self.title = @"系统消息";
+    } else {
+        self.title = @"预约消息";
+    }
+    
+    [kNotiCenter postNotificationName:CODMsgUnreadNotificationName object:nil];
+
     // configure view
     self.tableView = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -142,7 +151,7 @@ static NSString * const kCell = @"CODHotTableViewCell";
         [cell.contentView addSubview:subTitleLabel];
     }
     
-    CODMessageModel *message = [self.dataArray objectAtIndex:indexPath.row];
+    CODMessageModel *message = [self.dataArray objectAtIndex:indexPath.section];
     UILabel *titleLabel = (UILabel *)[cell.contentView viewWithTag:1];
     UILabel *subTitleLabel = (UILabel *)[cell.contentView viewWithTag:2];
     
@@ -159,8 +168,37 @@ static NSString * const kCell = @"CODHotTableViewCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:CODDetaultWebUrl];
-//    [self.navigationController pushViewController:webVC animated:YES];
+    
+    CODMessageModel *message = self.dataArray[indexPath.section ];
+    if (self.type == 1) {// 系统消息
+        // 1成功 2失败
+        if([message.data rangeOfString:@"实名认证成功"].location != NSNotFound) {
+            CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
+            authenVC.status = 1;
+            [self.navigationController pushViewController:authenVC animated:YES];
+        }
+        else if([message.data rangeOfString:@"实名认证失败"].location != NSNotFound)
+        {
+            CODAuthenStatusViewController *authenVC = [[CODAuthenStatusViewController alloc] init];
+            authenVC.status = 2;
+            [self.navigationController pushViewController:authenVC animated:YES];
+        }
+        else
+        {
+            CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:message.url];
+            [self.navigationController pushViewController:webVC animated:YES];
+        }
+    }
+    else if (self.type == 2) { // 预约消息
+        CODOrderDetailViewController *detailVC = [[CODOrderDetailViewController alloc] init];
+        detailVC.merchantId = message.data_id;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }
+    else // 活动消息
+    {
+        CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:message.url];
+        [self.navigationController pushViewController:webVC animated:YES];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

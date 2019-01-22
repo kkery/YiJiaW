@@ -63,8 +63,8 @@ typedef void(^EvaluateViewDidChooseStar)(StarEvaluationView *starview,NSUInteger
 /**************重写*************/
 - (void)drawRect:(CGRect)rect {
     
-    UIImage *norImage = self.NorImg ? self.NorImg : [UIImage imageNamed:@"decorate_collection"];
-    UIImage *selImage = self.SelImg ? self.SelImg : [UIImage imageNamed:@"decorate_collection_fill"];
+    UIImage *norImage = self.NorImg ? self.NorImg : [UIImage imageNamed:@"evaluation_score"];
+    UIImage *selImage = self.SelImg ? self.SelImg : [UIImage imageNamed:@"evaluation_score_fill"];
     // 图片没间隙自己画
     CGContextRef context = UIGraphicsGetCurrentContext();
     // 默认间隙为星星一半

@@ -20,8 +20,9 @@
 @property(nonatomic, strong) UIView *backBorderViewOne;
 
 @property(nonatomic, strong) UITextField *houseNameTF;
-@property(nonatomic, strong) UITextField *sizeTF;
 @property(nonatomic, strong) UITextField *phoneTF;
+@property(nonatomic, strong) UITextField *sizeTF;
+@property(nonatomic, strong) UITextField *cityTF;
 
 @property(nonatomic, strong) CODModifyQuantityView *ModifyViewOne;
 @property(nonatomic, strong) CODModifyQuantityView *ModifyViewTwo;
@@ -130,12 +131,18 @@
     }];
     [self.backBorderViewOne addSubview:cityView];
     
-    UILabel *cityLabel = [UILabel GetLabWithFont:XFONT_SIZE(14) andTitleColor:CODColor666666 andTextAligment:NSTextAlignmentLeft andBgColor:nil andlabTitle:@"您所在的城市"];
-    [cityView addSubview:cityLabel];
-    self.mCitylabel = cityLabel;
+//    UILabel *cityLabel = [UILabel GetLabWithFont:XFONT_SIZE(14) andTitleColor:CODColor666666 andTextAligment:NSTextAlignmentLeft andBgColor:nil andlabTitle:@"您所在的城市"];
+//    [cityView addSubview:cityLabel];
+//    self.mCitylabel = cityLabel;
+    
+    UITextField *cityTextField = [UITextField getTextfiledWithTitle:nil andTitleColor:CODColor333333 andFont:kFont(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"您所在的城市"];
+    [cityTextField modifyPlaceholdFont:kFont(14) andColor:CODColor999999];
+    cityTextField.userInteractionEnabled = NO;
+    self.cityTF = cityTextField;
+    [cityView addSubview:cityTextField];
     
     UIImageView *arrowImgView = [[UIImageView alloc] init];
-    arrowImgView.image = kGetImage(@"decorate_screening");
+    arrowImgView.image = kGetImage(@"home_top_location");
     [cityView addSubview:arrowImgView];
     // 面积
     UIView *sizeView = [[UIView alloc] init];
@@ -213,6 +220,7 @@
     phoneTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 10)];
     phoneTextField.leftViewMode = UITextFieldViewModeAlways;
     phoneTextField.keyboardType = UIKeyboardTypeNumberPad;
+    [phoneTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     self.phoneTF = phoneTextField;
     [self.backBorderViewOne addSubview:phoneTextField];
     // 提交按钮
@@ -247,7 +255,7 @@
         make.width.equalTo(@(itmeWidth));
         make.height.equalTo(@44);
     }];
-    [cityLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [cityTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.offset(10);
         make.right.offset(-30);
         make.centerY.equalTo(cityView);
@@ -256,7 +264,7 @@
     [arrowImgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.offset(-15);
         make.centerY.equalTo(cityView);
-        make.size.mas_equalTo(CGSizeMake(10, 8));
+        make.size.mas_equalTo(CGSizeMake(6, 4));
     }];
     [sizeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(nameTextField.mas_bottom).offset(10);
@@ -467,7 +475,7 @@
     [self.sizeTF resignFirstResponder];
     [self.phoneTF resignFirstResponder];
 
-    NSArray *defaultSelArr = nil;
+    NSArray *defaultSelArr = [[kUserCenter objectForKey:CODLocationAdressKey] componentsSeparatedByString:@","];
     NSArray *dataSource = nil;//为空，则是使用框架自带城市数据
     [BRAddressPickerView showAddressPickerWithShowType:BRAddressPickerModeArea dataSource:dataSource defaultSelected:defaultSelArr isAutoSelect:NO themeColor:CODColorTheme resultBlock:^(BRProvinceModel *province, BRCityModel *city, BRAreaModel *area) {
         self.fullAdressName = [NSString stringWithFormat:@"%@%@%@",province.name, city.name, area.name];
@@ -476,41 +484,40 @@
         self.areaValue = area.name;
         CODLogObject(self.fullAdressName);
         NSString *selectValue = [NSString stringWithFormat:@"%@%@",city.name, area.name];
-        self.mCitylabel.textColor =CODColor333333;
-        self.mCitylabel.text = selectValue;
+        self.cityTF.text = selectValue;
     } cancelBlock:^{
     }];
 }
 
 - (void)commitBtnAction {
     if (kStringIsEmpty(self.houseNameTF.text)) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请填写所在小区名称"];
+        [SVProgressHUD cod_showWithInfo:@"请填写所在小区名称"];
         return;
     }if (kStringIsEmpty(self.fullAdressName)) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请选择所在城市"];
+        [SVProgressHUD cod_showWithInfo:@"请选择所在城市"];
         return;
     }if (kStringIsEmpty(self.sizeTF.text)) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请填写面积"];
+        [SVProgressHUD cod_showWithInfo:@"请填写面积"];
         return;
     }if (kStringIsEmpty(self.phoneTF.text)) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请填写手机号码"];
+        [SVProgressHUD cod_showWithInfo:@"请填写手机号码"];
         return;
     }
-    //地理编码
-    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
-    [geocoder geocodeAddressString:self.fullAdressName completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-        if (error!=nil || placemarks.count==0) {
-            CODLogObject(error);
-        }
-        //创建placemark对象
-        CLPlacemark *placemark = [placemarks firstObject];
-        //经度
-        self.longitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.longitude];
-        //纬度
-        self.latitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.latitude];
-        
-        NSLog(@"经度：%@，纬度：%@",self.longitude,self.latitude);
-    }];
+//    //地理编码
+//    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+//    [geocoder geocodeAddressString:self.fullAdressName completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+//        if (error!=nil || placemarks.count==0) {
+//            CODLogObject(error);
+//        }
+//        //创建placemark对象
+//        CLPlacemark *placemark = [placemarks firstObject];
+//        //经度
+//        self.longitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.longitude];
+//        //纬度
+//        self.latitude = [NSString stringWithFormat:@"%f",placemark.location.coordinate.latitude];
+//
+//        NSLog(@"经度：%@，纬度：%@",self.longitude,self.latitude);
+//    }];
     
     [SVProgressHUD cod_showWithStatu:@"正在估价，请稍后..."];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -522,8 +529,8 @@
 - (void)uploadData {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"user_id"] = COD_USERID;
-    params[@"longitude"] = self.longitude;
-    params[@"latitude"] = self.latitude;
+    params[@"longitude"] = [CODGlobal sharedGlobal].longitude;
+    params[@"latitude"] = [CODGlobal sharedGlobal].latitude;
     params[@"province"] = self.provinceValue;
     params[@"city"] = self.cityValue;
     params[@"area"] = self.areaValue;
@@ -555,7 +562,7 @@
     self.sizeTF.text = @"";
     self.phoneTF.text = @"";
     self.fullAdressName = @"";
-    self.mCitylabel.text = @"您所在的城市";
+    self.cityTF.text = @"";
     
     [self.ModifyViewOne resetAmount];
     [self.ModifyViewTwo resetAmount];
@@ -584,6 +591,15 @@
     self.cailiaoPriceLable.textAlignment = NSTextAlignmentCenter;
 
     self.intoLable.text = dic[@"house_info"];
+}
+
+
+- (void)textFieldDidChange:(UITextField *)textField {
+    if (textField == self.phoneTF) {
+        if (textField.text.length > 11) {
+            textField.text = [textField.text substringToIndex:11];
+        }
+    }
 }
 
 @end

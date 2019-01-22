@@ -23,14 +23,16 @@
 static NSString * const CODServerDomain = @"http://yjw.0791jr.com/app.php?";// 嘉瑞生产环境
 //static NSString * const CODServerDomain = @"http://yijia.test/app.php?";// 本地测试环境
 
-// !!!友盟!!!
-static NSString * const QQAppKey = @"oSmTnXo7aX05gwco";
-static NSString * const QQAppID = @"1107047598";
+// !!!第三方平台!!!
+static NSString * const AMapApiKey = @"638fda40d439fb2c305ecce9cf2ab2e3";
 
-static NSString * const weChatID = @"wx69bd0632a8c89037";
-static NSString * const weChatSecret = @"08ec84d07176d90fcd2f6ec617e5b1c9";
+static NSString * const QQAppKey = @"a941009835873148e016b37cab2c995b";
+static NSString * const QQAppID = @"101545772";
 
-static NSString * const UMAPPKey = @"5b7ccfa18f4a9d0368000011";
+static NSString * const weChatID = @"wx6c1d14b201c7e196";
+static NSString * const weChatSecret = @"ff3ce516dacb0d649a5bcba1cdb04f7d";
+
+static NSString * const UMAPPKey = @"5c403991f1f55693c900151d";
 // !!!签名key!!!
 static NSString * const CODServerSignKey = @"2fa7b1d74a82e202cdedd153fcc91249";
 // !!!后台接口版本!!!
@@ -57,6 +59,7 @@ static NSInteger const CODRequstPageSize = 10;// 默认每页数量
 // 城市
 static NSString * const CODCityDefaultName = @"南昌";// 默认城市
 static NSString * const CODCityNameKey = @"CODCityName";
+static NSString * const CODLocationAdressKey = @"CODLocationAdress";
 static NSString * const CODLatitudeKey = @"CODLatitude";// 纬度，地球坐标
 static NSString * const CODLongitudeKey = @"CODLongitude";// 经度，地球坐标
 
@@ -67,10 +70,12 @@ static NSString * const CODServiceTelKey = @"CODServiceTel";// 用户信息key
 
 // 通知
 static NSString * const CODLoginNotificationName = @"CODLoginNotification";// 登录通知
-static NSString * const CODMessageUnreadCountNotificationName = @"CODMessageUnreadCountNotification";// 消息未读个数通知
+static NSString * const CODMsgUnreadNotificationName = @"CODMsgUnreadNotification";// 消息未读红点通知
 static NSString * const CODAlixpayNotificationName = @"CODAlixpayNotification";// 阿里无线支付通知
 static NSString * const CODWxpayNotificationName = @"CODWxpayNotification";// 微信支付通知
 static NSString * const CODSwitchCityNotificationName = @"CODSwitchCityNotification";// 切换城市通知
+static NSString * const CODLocationNotificationName = @"CODLocationNotification";// 定位通知（成功or失败）
+
 static NSString * const CODLoginCompletionNotificationName = @"CODLoginCompletionNotification";// 登录完成通知
 static NSString * const CODRefeshMineNotificationName = @"CODLoginCompletionNotification";// 个人信息刷新通知
 static NSString * const CODDeleteHistotyNotificationName= @"CODDeleteHistotyNotification";// 删除足迹通知

@@ -56,6 +56,7 @@
 }
 
 - (void)backRoot {
+    [self.navigationController.tabBarController setSelectedIndex:0];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 /*

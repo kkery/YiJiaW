@@ -21,12 +21,18 @@
     [SVProgressHUD showErrorWithStatus:info];
 }
 
-+(void)cod_showWithTips:(NSString *)tips icon:(UIImage *)icon {
-    [SVProgressHUD setBackgroundColor:CODHexaColor(0x000000, 0.5)];
-    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
-    [SVProgressHUD cod_dismisWithDelay:3.0];
-    [SVProgressHUD showImage:icon status:tips];
++(void)cod_showWithInfo:(NSString *)info {
+    [SVProgressHUD setStyle];
+    [SVProgressHUD cod_dismisWithDelay:1.0];
+    [SVProgressHUD showInfoWithStatus:info];
 }
+
+//+(void)cod_showWithTips:(NSString *)tips icon:(UIImage *)icon {
+//    [SVProgressHUD setBackgroundColor:CODHexaColor(0x000000, 0.5)];
+//    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
+//    [SVProgressHUD cod_dismisWithDelay:3.0];
+//    [SVProgressHUD showImage:icon status:tips];
+//}
 
 +(void)cod_showStatu
 {

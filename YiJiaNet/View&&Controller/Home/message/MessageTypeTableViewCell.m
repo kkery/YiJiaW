@@ -80,7 +80,7 @@
             titleStr = @"预约消息";
             break;
         case MessageTypeActivity:
-            imageName = @"message_appointment";
+            imageName = @"message_activity";
             titleStr = @"活动消息";
             break;
         default:
@@ -102,7 +102,7 @@
         self.accessoryType = UITableViewCellAccessoryNone;
     } else {
     
-        self.detailLable.text = @"暂无数据";
+//        self.detailLable.text = @"暂无数据";
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     

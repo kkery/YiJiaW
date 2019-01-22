@@ -106,7 +106,7 @@
 -(void)createBtn:(NSInteger)buttonIndex andArr:(NSArray*) appListArr {
     if (buttonIndex == 0) { //百度
         if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"baidumap://"]]) {
-            [SVProgressHUD cod_showWithErrorInfo:@"您未安装百度地图"];
+            [SVProgressHUD cod_showWithInfo:@"您未安装百度地图"];
             return;
         }
         //火星位置转化百度位置
@@ -128,7 +128,7 @@
         
     } else {//高德
         if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"iosamap://"]]) {
-            [SVProgressHUD cod_showWithErrorInfo:@"您未安装高德地图"];
+            [SVProgressHUD cod_showWithInfo:@"您未安装高德地图"];
             return;
         }
 

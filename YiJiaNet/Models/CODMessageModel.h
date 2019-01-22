@@ -22,5 +22,9 @@
 @property (nonatomic,copy) NSString *data;
 /** 对应数据id */
 @property (nonatomic,copy) NSString *data_id;//若为预约消息/活动消息，这根据data_id跳转到对应的页面
+/** 活动图片 */
+@property (nonatomic,copy) NSString *img;
+/** 活动地址 */
+@property (nonatomic,copy) NSString *url;
 
 @end

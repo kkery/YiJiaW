@@ -7,15 +7,14 @@
 //
 
 #import "CODBaseWebViewController.h"
-#import "NJKWebViewProgressView.h"
-#import "NJKWebViewProgress.h"
+#import <WebKit/WebKit.h>
 
-@interface CODBaseWebViewController () <UIWebViewDelegate, NJKWebViewProgressDelegate>
+@interface CODBaseWebViewController () <WKNavigationDelegate>
 
 @property (nonatomic, strong) NSURL *url;
-@property (nonatomic, strong) UIWebView *webView;
-@property (nonatomic, strong) NJKWebViewProgressView *webViewProgressView;
-@property (nonatomic, strong) NJKWebViewProgress *webViewProgress;
+@property (nonatomic, strong) WKWebView *webView;
+
+@property (nonatomic, strong) UIProgressView *progressView;
 
 @property (nonatomic, strong) UIBarButtonItem *backItem;
 @property (nonatomic, strong) UIBarButtonItem *fixedSpaceItem;
@@ -27,7 +26,7 @@
 @implementation CODBaseWebViewController
 
 - (void)dealloc {
-    _webView.delegate = nil;
+    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
 }
 
 - (instancetype)initWithUrlString:(NSString *)urlString {
@@ -42,12 +41,15 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.navigationItem.title = self.webTitleString ?: @"详情";
     
-    [self addLeftBarButtonItemsWithClose:NO];
+    [super viewDidLoad];
+    
+    self.navigationItem.title = self.webTitleString ?: @"详情";
+    [self updateNavigationItems];
+//    [self addLeftBarButtonItemsWithClose:NO];
     
     [self configureView];
+    
     [self loadData];
 }
 
@@ -56,7 +58,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [self.webViewProgress reset];
     [super viewWillDisappear:animated];
 }
 
@@ -69,14 +70,25 @@
 
 #pragma mark - configure view
 - (void)configureView {
-    self.webViewProgress.webViewProxyDelegate = nil;
-    self.webViewProgress.progressDelegate = nil;
-    self.webView.delegate = nil;
-    
     self.webView = ({
-        UIWebView *webView = [[UIWebView alloc] init];
-        webView.scalesPageToFit = YES;
-        webView.contentMode = UIViewContentModeScaleAspectFit;
+        //设置网页的配置文件
+        WKWebViewConfiguration * Configuration = [[WKWebViewConfiguration alloc]init];
+        //允许视频播放
+        Configuration.allowsAirPlayForMediaPlayback = YES;
+        // 允许在线播放
+        Configuration.allowsInlineMediaPlayback = YES;
+        // 允许可以与网页交互，选择视图
+        Configuration.selectionGranularity = YES;
+        // web内容处理池
+        Configuration.processPool = [[WKProcessPool alloc] init];
+        // 是否支持记忆读取
+        Configuration.suppressesIncrementalRendering = YES;
+        
+        WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:Configuration];
+        webView.opaque = NO;
+        webView.multipleTouchEnabled = YES;
+        webView.navigationDelegate = self;
+        [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
         webView;
     });
     [self.view addSubview:self.webView];
@@ -85,35 +97,22 @@
         make.edges.equalTo(self.view);
     }];
     
-    self.webViewProgress = ({
-        NJKWebViewProgress *webViewProgress = [[NJKWebViewProgress alloc] init];
-        webViewProgress.webViewProxyDelegate = self;
-        webViewProgress.progressDelegate = self;
-        webViewProgress;
+    self.progressView = ({
+        UIProgressView *progressView = [[UIProgressView alloc] init];
+        progressView.tintColor = CODColorTheme;
+        progressView.trackTintColor = [UIColor whiteColor];
+        progressView;
     });
-    self.webView.delegate = self.webViewProgress;
+    [self.view addSubview:self.progressView];
     
-//    self.webViewProgressView = ({
-//        NJKWebViewProgressView *webViewProgressView = [[NJKWebViewProgressView alloc] init];
-//        webViewProgressView;
-//    });
-//    [self.view addSubview:self.webViewProgressView];
-//
-//    [self.webViewProgressView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.view.mas_top);
-//        make.left.right.equalTo(self.view);
-//        make.height.equalTo(@2);
-//    }];
+    [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top);
+        make.left.right.equalTo(self.view);
+        make.height.equalTo(@2);
+    }];
 }
 
-- (void)addLeftBarButtonItemsWithClose:(BOOL)close {
-    if (close) {
-        self.navigationItem.leftBarButtonItems = @[self.backItem,self.fixedSpaceItem,self.closeItem];
-    }
-    else {
-        self.navigationItem.leftBarButtonItems = @[self.backItem];
-    }
-}
+
 
 #pragma mark - Accessors
 - (UIBarButtonItem *)backItem {
@@ -178,43 +177,99 @@
     return _closeItem;
 }
 
+#pragma mark - WKNavigationDelegate
+
+#pragma mark ================ WKNavigationDelegate ================
+
+//这个是网页加载完成，导航的变化
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
+    /*
+     主意：这个方法是当网页的内容全部显示（网页内的所有图片必须都正常显示）的时候调用（不是出现的时候就调用），，否则不显示，或则部分显示时这个方法就不调用。
+     */
+    
+//    self.title = self.webView.title;
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+}
+
+//开始加载
+-(void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation{
+    //开始加载的时候，让加载进度条显示
+    self.progressView.hidden = NO;
+}
+
+//内容返回时调用
+-(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{}
+
+//服务器请求跳转的时候调用
+-(void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation{}
+
+//服务器开始请求的时候调用
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    
+    if ([webView.URL.absoluteString hasPrefix:@"https://itunes.apple.com"]) {
+        [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
+        decisionHandler(WKNavigationActionPolicyCancel);
+    } else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
+    
+    [self updateNavigationItems];
+    
+//    decisionHandler(WKNavigationActionPolicyAllow);
+}
+
+// 内容加载失败时候调用
+-(void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error{
+    NSLog(@"页面加载超时");
+}
+
+//跳转失败的时候调用
+-(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{}
+
+//进度条
+-(void)webViewWebContentProcessDidTerminate:(WKWebView *)webView{}
+
+#pragma mark - WKWebView Progress
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (object == self.webView && [keyPath isEqualToString:@"estimatedProgress"]) {
+        CGFloat newprogress = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
+        self.progressView.alpha = 1.0f;
+        [self.progressView setProgress:newprogress animated:YES];
+        if (newprogress >= 1.0f) {
+            [UIView animateWithDuration:0.3f delay:0.3f options:UIViewAnimationOptionCurveEaseOut animations:^{
+                self.progressView.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+                [self.progressView setProgress:0 animated:NO];
+            }];
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
 #pragma mark - Return action
+-(void)updateNavigationItems{
+    if (self.webView.canGoBack) {
+        self.navigationItem.leftBarButtonItems = @[self.backItem,self.fixedSpaceItem,self.closeItem];
+    } else {
+//        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+//        [self.navigationItem setLeftBarButtonItems:@[self.customBackBarItem]];
+        self.navigationItem.leftBarButtonItems = @[self.backItem];
+    }
+}
+
 - (void)closeAction {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)goBackAction {
     if ([self.webView canGoBack]) {
-        [self addLeftBarButtonItemsWithClose:YES];
         [self.webView goBack];
-        [self.navigationController popViewControllerAnimated:YES];
     }
     else {
         [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-//#pragma mark - NJKWebViewProgressDelegate
-//- (void)webViewProgress:(NJKWebViewProgress *)webViewProgress updateProgress:(float)progress {
-//    [self.webViewProgressView setProgress:progress animated:YES];
-//}
-
-#pragma mark - UIWebViewDelegate
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-//    NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    NSLog(@"网页加载失败");
-}
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    
-    return YES;
 }
 
 @end

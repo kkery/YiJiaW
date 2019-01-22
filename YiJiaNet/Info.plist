@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>zh_CN</string>
+	<key>CFBundleDisplayName</key>
+	<string>益家网</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -21,11 +23,13 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLIconFile</key>
+			<string></string>
 			<key>CFBundleURLName</key>
-			<string>weiXin</string>
+			<string>WeChat</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx69bd0632a8c89037</string>
+				<string>wx6c1d14b201c7e196</string>
 			</array>
 		</dict>
 		<dict>
@@ -35,7 +39,7 @@
 			<string>qq</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>tencent1107047598</string>
+				<string>tencent101545772</string>
 			</array>
 		</dict>
 		<dict>
@@ -112,8 +116,6 @@
 	<string>益家网请求访问您的麦克风,用于录取视频</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>益家网请求访问您的相册以更换头像和上传图片</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

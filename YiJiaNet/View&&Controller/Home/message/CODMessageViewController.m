@@ -11,7 +11,7 @@
 #import "MJRefresh.h"
 #import "CODBaseWebViewController.h"
 #import "MessageSysViewController.h"
-#import "MessageOrderViewController.h"
+#import "MessageActViewController.h"
 #import "UIView+YeeBadge.h"
 #import "UIView+COD.h"
 
@@ -143,10 +143,16 @@ static NSString * const kCell = @"MessageTypeTableViewCell";
         msgVC.type = 2;
         [self.navigationController pushViewController:msgVC animated:YES];
     } else {
-        MessageSysViewController *msgVC = [[MessageSysViewController alloc] init];
-        msgVC.type = 3;
+        MessageActViewController *msgVC = [[MessageActViewController alloc] init];
+//        msgVC.type = 3;
         [self.navigationController pushViewController:msgVC animated:YES];
     }
 }
 
+
+- (void)cod_returnAction {
+//    [kNotiCenter postNotificationName:CODMsgUnreadNotificationName object:nil];
+
+    [super cod_returnAction];
+}
 @end

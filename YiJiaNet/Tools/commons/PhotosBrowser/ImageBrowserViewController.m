@@ -1,13 +1,13 @@
 //
 //  ImageBrowserViewController.m
-//  ImageBrowser
+//  YiJiaNet
 //
-//  Created by 汤文洪 on 16/9/1.
-//  Copyright © 2016年 汤文洪. All rights reserved.
+//  Created by KUANG on 2018/12/29.
+//  Copyright © 2018年 JIARUI. All rights reserved.
 //
 
 #import "ImageBrowserViewController.h"  
-#import "PhotoView.h"
+#import "CODBrowserPhotoView.h"
 #define WIDTH [UIScreen mainScreen].bounds.size.width
 #define HEIGHT [UIScreen mainScreen].bounds.size.height
 @interface ImageBrowserViewController ()<UIScrollViewDelegate,PhotoViewDelegate>{
@@ -34,7 +34,7 @@
 @property(nonatomic,strong) UIPageControl *pageControl;
 
 /** 记录当前的图片显示视图 */
-@property(nonatomic,strong) PhotoView *photoView;
+@property(nonatomic,strong) CODBrowserPhotoView *photoView;
 
 @end
 
@@ -90,18 +90,18 @@
         return;
     }
     id currentPhotoView = [_subViewArray objectAtIndex:index];
-    if (![currentPhotoView isKindOfClass:[PhotoView class]]) {
+    if (![currentPhotoView isKindOfClass:[CODBrowserPhotoView class]]) {
         //url数组或图片数组
         CGRect frame = CGRectMake(index*_scrollView.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
         
         if ([[self.imagesArray firstObject] isKindOfClass:[UIImage class]]) {
-            PhotoView *photoV = [[PhotoView alloc] initWithFrame:frame withPhotoImage:[self.imagesArray objectAtIndex:index]];
+            CODBrowserPhotoView *photoV = [[CODBrowserPhotoView alloc] initWithFrame:frame withPhotoImage:[self.imagesArray objectAtIndex:index]];
             photoV.delegate = self;
             [self.scrollView insertSubview:photoV atIndex:0];
             [_subViewArray replaceObjectAtIndex:index withObject:photoV];
             self.photoView=photoV;
         }else if ([[self.imagesArray firstObject] isKindOfClass:[NSString class]]){
-            PhotoView *photoV = [[PhotoView alloc] initWithFrame:frame withPhotoUrl:[self.imagesArray objectAtIndex:index]];
+            CODBrowserPhotoView *photoV = [[CODBrowserPhotoView alloc] initWithFrame:frame withPhotoUrl:[self.imagesArray objectAtIndex:index]];
             photoV.delegate = self;
             [self.scrollView insertSubview:photoV atIndex:0];
             [_subViewArray replaceObjectAtIndex:index withObject:photoV];
@@ -231,8 +231,8 @@
     self.pageControl.currentPage = page;
     
     for (UIView *view in scrollView.subviews) {
-        if ([view isKindOfClass:[PhotoView class]]) {
-            PhotoView *photoV=(PhotoView *)[_subViewArray objectAtIndex:page];
+        if ([view isKindOfClass:[CODBrowserPhotoView class]]) {
+            CODBrowserPhotoView *photoV=(CODBrowserPhotoView *)[_subViewArray objectAtIndex:page];
             if (photoV!=self.photoView) {
                 [self.photoView.scrollView setZoomScale:1.0 animated:YES];
                 self.photoView=photoV;
@@ -248,30 +248,20 @@
     [self hideScanImageVC];//隐藏当前显示窗口
 }
 
-/*
 -(void)SaveImageToNativeWithImg:(UIImage *)img{
     if (img==nil) {
-    UIAlertController *failAc = [UIAlertController alertControllerWithTitle:@"提示" message:@"抱歉,获取图片信息失败,无法完成保存图片操作!" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    [failAc addAction:confirmAction];
-    [self presentViewController:failAc animated:YES completion:nil];
-        
-    }else{
-        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定将图片保存到本地?" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *confirmAc = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
+        [SVProgressHUD cod_showWithInfo:@"获取图片信息失败"];
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *saveAction = [UIAlertAction actionWithTitle:@"保存到本地" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             UIImageWriteToSavedPhotosAlbum(img,self,@selector(imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:),nil);
         }];
-        
-        UIAlertAction *CancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-    
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
         }];
-        [ac addAction:CancleAction];
-        [ac addAction:confirmAc];
-        [self presentViewController:ac animated:YES completion:nil];
+        [alert addAction:saveAction];
+        [alert addAction:cancelAction];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -281,14 +271,12 @@
     
     if(!error) {
         message =@"成功保存到相册";
-        [SVProgressHUD TWH_showWithSuccessInfo:message];
+        [SVProgressHUD cod_showWithSuccessInfo:message];
     }else{
-        
         message = [error description];
-        [SVProgressHUD TWH_showWithErrorInfo:message];
+        [SVProgressHUD cod_showWithInfo:message];
     }
 }
-*/
 
 #pragma mark - 懒加载
 -(UIScrollView *)scrollView{

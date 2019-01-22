@@ -230,15 +230,15 @@
 - (void)commitAction {
     
     if (![self.identifierField.text cod_isIdCardNumber]) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请输入正确格式的身份证"];
+        [SVProgressHUD cod_showWithInfo:@"请输入正确格式的身份证"];
         return;
     }
     if (![self.telField.text cod_isPhone]) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请输入正确格式的手机号"];
+        [SVProgressHUD cod_showWithInfo:@"请输入正确格式的手机号"];
         return;
     }
     if (self.imgArr.count < 2) {
-        [SVProgressHUD cod_showWithErrorInfo:@"请上传身份证正反面"];
+        [SVProgressHUD cod_showWithInfo:@"请上传身份证正反面"];
         return;
     }
     
@@ -249,7 +249,7 @@
     if ([kUserCenter objectForKey:@"login_credentials"] != nil) {
         self.parmarDic[@"user_id"] = [kUserCenter objectForKey:@"login_credentials"];
     }
-    
+    [SVProgressHUD cod_showWithStatu:@"正在提交,请稍后"];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"user_id"] = COD_USERID;
     params[@"real_name"] = self.nameField.text;
@@ -259,7 +259,7 @@
         if ([object[@"code"] integerValue] == 200) {
             [SVProgressHUD cod_showWithSuccessInfo:@"提交认证成功"];
             [kNotiCenter postNotificationName:CODRefeshMineNotificationName object:nil userInfo:nil];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
             [SVProgressHUD cod_showWithErrorInfo:object[@"message"]];
         }

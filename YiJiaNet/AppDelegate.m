@@ -11,10 +11,17 @@
 #import <EAIntroView/EAIntroView.h>
 #import <UMShare/UMShare.h>// 友盟
 #import <UMCommon/UMCommon.h>
+#import <AMapFoundationKit/AMapFoundationKit.h>
+#import <AMapLocationKit/AMapLocationKit.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface AppDelegate ()<EAIntroDelegate, CLLocationManagerDelegate>
 
-@property (nonatomic, strong) CLLocationManager *locationManager;// 定位
+@interface AppDelegate ()<EAIntroDelegate, AMapLocationManagerDelegate>
+
+//@property (nonatomic, strong) CLLocationManager *locationManager;// 定位
+
+@property(nonatomic,strong) AMapLocationManager* locationManager;// 定位
+
 
 @end
 
@@ -23,20 +30,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-
-    // 判断QQ、微信设备上是否安装
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
-        [kUserCenter setObject:@"QQ" forKey:klogin_QQ];
-    }
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL  URLWithString:@"weixin://"]]) {
-        [kUserCenter setObject:@"WeChat" forKey:klogin_WeChat];
-    }
-    // 设置全局UI
-    [[UITextField appearance] setTintColor:CODColorTheme];//设置UITextField的光标颜色
-    [[UITextView appearance] setTintColor:CODColorTheme];//设置UITextView的光标颜色
     
     // 启动服务
     [self performSelector:@selector(startService:) withObject:launchOptions afterDelay:0];
+
+    // 设置全局UI
+    [[UITextField appearance] setTintColor:CODColorTheme];//设置UITextField的光标颜色
+    [[UITextView appearance] setTintColor:CODColorTheme];//设置UITextView的光标颜色
 
     // root
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -44,11 +44,7 @@
     CODMainTabBarController *mainTabBarController = [[CODMainTabBarController alloc] init];
     self.window.rootViewController = mainTabBarController;
     [self.window makeKeyAndVisible];
-    // statusBar、NavigationBar
-//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-//    [UINavigationBar appearance].tintColor = [UIColor whiteColor];
-//    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
-//    [[UINavigationBar appearance] setBackgroundImage:[UIImage cod_imageWithColor:CODColorRed] forBarMetrics:UIBarMetricsDefault];
+    
     // 判断QQ、微信设备上是否安装了
     if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
         [kUserCenter setObject:@"QQ" forKey:klogin_QQ];
@@ -70,17 +66,12 @@
 - (void)startService:(NSDictionary *)launchOptions {
     //    NSLog(@"start service begin");
     // 地理位置服务
-    if ([CLLocationManager locationServicesEnabled]) {
-        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {// iOS 8
-            [self.locationManager performSelector:@selector(requestWhenInUseAuthorization)];
-        }
-        [self.locationManager startUpdatingLocation];
-    } else {
-        CODLogObject(@"location services not enabled");
-        [SVProgressHUD cod_showWithErrorInfo:@"定位服务未开启，请检查手机设置"];
-    }
+    [self.locationManager startUpdatingLocation];
+
     // 友盟推送
     [UMConfigure initWithAppkey:UMAPPKey channel:@"App Store"];
+    [[UMSocialManager defaultManager] openLog:YES];
+
     // qq相关
     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:QQAppID appSecret:nil redirectURL:nil];
     // 微信相关
@@ -91,51 +82,61 @@
     //  NSLog(@"start service end");
 }
 
-#pragma mark - Accessors
-- (CLLocationManager *)locationManager {
-    if (_locationManager == nil) {
-        _locationManager = [[CLLocationManager alloc] init];
+#pragma mark - AMapLocationKit
+- (AMapLocationManager *)locationManager {
+    if (!_locationManager) {
+        [AMapServices sharedServices].apiKey = AMapApiKey;
+        _locationManager = [[AMapLocationManager alloc] init];
+        //高德地图注册
         _locationManager.delegate = self;
-        //设置定位精度
-        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        //每隔多少米定位一次（这里的设置为每隔百米)
-        self.locationManager.distanceFilter = kCLLocationAccuracyHundredMeters;
-    }
-    return _locationManager;
+        //设置定位最小更新距离方法如下，单位米
+//        _locationManager.distanceFilter ＝ 200;
+        [_locationManager setLocatingWithReGeocode:YES];
+    }return _locationManager;
 }
 
-#pragma mark - CLLocationManagerDelegate
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+-(void)amapLocationManager:(AMapLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"location error = %@", error);
+    //定位失败 发送通知
+    [kNotiCenter postNotificationName:CODLocationNotificationName object:nil];
+
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    [self.locationManager stopUpdatingLocation];
-    CLLocation *currentLocation = [locations lastObject];
-    NSLog(@"location:{lat:%f; lon:%f; accuracy:%f}", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude, currentLocation.horizontalAccuracy);
-    [[NSUserDefaults standardUserDefaults] setFloat:currentLocation.coordinate.latitude forKey:CODLatitudeKey];
-    [[NSUserDefaults standardUserDefaults] setFloat:currentLocation.coordinate.longitude forKey:CODLongitudeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    //获取当前所在的城市名
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    //根据经纬度反向地理编译出地址信息
-    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *array, NSError *error) {
-        if (array.count > 0) {
-            CLPlacemark *placemark = [array objectAtIndex:0];
-            NSString *currCity = placemark.locality;
-            if (!currCity) {
-                //四大直辖市的城市信息无法通过locality获得，只能通过获取省份的方法来获得（如果city为空，则可知为直辖市）
-                currCity = placemark.administrativeArea;
-            }
-            NSLog(@"currCity:%@", currCity);
-//            [[NSUserDefaults standardUserDefaults] setObject:currCity forKey:CODCityNameKey];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:CODSwitchCityNotificationName object:nil];
-        } else if (error == nil && array.count == 0) {
-            NSLog(@"No results were returned.");
-        } else {
-            NSLog(@"An error occurred = %@", error);
+- (void)amapLocationManager:(AMapLocationManager *)manager didUpdateLocation:(CLLocation *)location reGeocode:(AMapLocationReGeocode *)reGeocode {
+    NSLog(@"高德定位location:{lat:%f; lon:%f; accuracy:%f}", location.coordinate.latitude, location.coordinate.longitude, location.horizontalAccuracy);
+    if (reGeocode) {
+        [kUserCenter setObject:kFORMAT(@"%f",location.coordinate.latitude)  forKey:CODLatitudeKey];
+        [kUserCenter setObject:kFORMAT(@"%f",location.coordinate.longitude) forKey:CODLongitudeKey];
+        if ([kUserCenter objectForKey:CODCityNameKey] == nil) {
+            // 保存定位城市or选择的城市
+            [kUserCenter setObject:kFORMAT(@"%@",reGeocode.city) forKey:CODCityNameKey];
         }
-    }];
+        // 保存定位地址（省市区）
+        [kUserCenter setObject:kFORMAT(@"%@,%@,%@",reGeocode.province, reGeocode.city, reGeocode.district) forKey:CODLocationAdressKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        //定位成功 发送通知
+        [kNotiCenter postNotificationName:CODLocationNotificationName object:nil];
+        NSLog(@"location address:%@", reGeocode.formattedAddress);
+        [self.locationManager stopUpdatingLocation];
+    }
+}
+// 支持所有iOS系统版本回调
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响
+    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url sourceApplication:sourceApplication annotation:annotation];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
+}
+// NOTE: 9.0以后使用新API接口
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响
+    BOOL result = [[UMSocialManager defaultManager]  handleOpenURL:url options:options];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
 }
 
 #pragma mark - Guide
@@ -153,14 +154,11 @@
     
     UIButton *skipButton = ({
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setTitleColor:CODColorButtonNormal forState:UIControlStateNormal];
-        [button setTitleColor:CODColorButtonHighlighted forState:UIControlStateHighlighted];
-        [button setTitle:@"立即体验" forState:UIControlStateNormal];
+        [button setBackgroundColor:CODColorTheme];
+        [button setTitle:@"立即使用" forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:15];
-        button.layer.borderColor = CODColorButtonNormal.CGColor;
-        button.layer.borderWidth = 1;
-        button.layer.cornerRadius = 40*0.5;
-        button.frame = CGRectMake(([UIApplication sharedApplication].keyWindow.bounds.size.width-220)*0.5, [UIApplication sharedApplication].keyWindow.bounds.size.height-75, 220, 40);
+        button.layer.cornerRadius = 44*0.5;
+        button.frame = CGRectMake(([UIApplication sharedApplication].keyWindow.bounds.size.width-125)*0.5, [UIApplication sharedApplication].keyWindow.bounds.size.height-75, 125, 44);
         button;
     });
     intro.skipButton = skipButton;

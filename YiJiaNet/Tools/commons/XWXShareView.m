@@ -263,7 +263,7 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
             // 微信
             [self shareWebPageToPlatformType:UMSocialPlatformType_WechatSession withDic:self.dic];
         }else {
-            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装微信"];
+            [SVProgressHUD cod_showWithInfo:@"您还未安装微信"];
         }
         
     } else if (sender.tag == 101) {
@@ -272,7 +272,7 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
             // 朋友圈
             [self shareWebPageToPlatformType:UMSocialPlatformType_WechatTimeLine withDic:self.dic];
         }else {
-            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装微信"];
+            [SVProgressHUD cod_showWithInfo:@"您还未安装微信"];
         }
         
     } else if (sender.tag == 102) {
@@ -281,7 +281,7 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
             // QQ
             [self shareWebPageToPlatformType:UMSocialPlatformType_QQ withDic:self.dic];
         } else {
-            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装QQ"];
+            [SVProgressHUD cod_showWithInfo:@"您还未安装QQ"];
         }
         
     } else {
@@ -289,7 +289,7 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
             // QQ空间
             [self shareWebPageToPlatformType:UMSocialPlatformType_Qzone withDic:self.dic];
         } else {
-            [SVProgressHUD cod_showWithErrorInfo:@"您还未安装QQ"];
+            [SVProgressHUD cod_showWithInfo:@"您还未安装QQ"];
         }
         
     }
@@ -337,9 +337,9 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页内容对象
-    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:dic[@"share_title"] descr:dic[@"share_content"] thumImage:[UIImage imageNamed:@"AppIcon"]];
+    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:dic[@"share_title"] descr:dic[@"share_content"] thumImage:[UIImage imageNamed:@"icon_logo"]];
     //设置网页地址
-    shareObject.webpageUrl =@"http://cnbitao.com/app.php?m=App&c=Articlew&a=upload";
+    shareObject.webpageUrl =@"http://yjw.0791jr.com/download/index.html";
     //分享消息对象设置分享内容对象
     messageObject.shareObject = shareObject;
     //调用分享接口

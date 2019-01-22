@@ -80,7 +80,7 @@
         [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.corverImageView.mas_bottom).offset(10);
             make.left.equalTo(self.corverImageView.mas_left);
-            make.right.equalTo(self.corverImageView.mas_right);
+            make.right.equalTo(self.iconImageView.mas_left).offset(-10);
             make.height.equalTo(@20);
         }];
         [self.introLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -103,7 +103,7 @@
 - (void)configureWithModel:(CODDectateExampleModel *)model {
     [self.corverImageView sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:kGetImage(@"place_zxal")];
     [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:model.merchants_logo] placeholderImage:kGetImage(@"place_default_avatar")];
-    self.nameLabel.text = model.house_areas;
+    self.nameLabel.text = model.title;
     self.introLabel.text = model.introduction;
     self.priceLabel.text = kFORMAT(@"￥%@", model.decorate_fare);
 }

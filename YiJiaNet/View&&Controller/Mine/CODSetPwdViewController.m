@@ -31,7 +31,6 @@
         _pwdField = [[UITextField alloc] init];
         [_pwdField SetTfTitle:nil andTitleColor:CODColor333333 andFont:XFONT_SIZE(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"请设置6-18位登录密码"];
         [_pwdField modifyPlaceholdFont:XFONT_SIZE(13) andColor:CODColor999999];
-        _pwdField.keyboardType = UIKeyboardTypeNumberPad;
         _pwdField.tintColor = ThemeColor;
     }return _pwdField;
 }
@@ -41,7 +40,6 @@
         _confirmPwdField = [[UITextField alloc] init];
         [_confirmPwdField SetTfTitle:nil andTitleColor:CODColor333333 andFont:XFONT_SIZE(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"请确认密码"];
         [_confirmPwdField modifyPlaceholdFont:XFONT_SIZE(13) andColor:CODColor999999];
-        _confirmPwdField.keyboardType = UIKeyboardTypeNumberPad;
         _confirmPwdField.tintColor = ThemeColor;
     }return _confirmPwdField;
 }
@@ -51,7 +49,6 @@
         _oldField = [[UITextField alloc] init];
         [_oldField SetTfTitle:nil andTitleColor:CODColor333333 andFont:XFONT_SIZE(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"请输入旧手机号码"];
         [_oldField modifyPlaceholdFont:XFONT_SIZE(13) andColor:CODColor999999];
-        _oldField.keyboardType = UIKeyboardTypeNumberPad;
         _oldField.tintColor = ThemeColor;
     }return _oldField;
 }
@@ -61,7 +58,6 @@
         _newPwdField = [[UITextField alloc] init];
         [_newPwdField SetTfTitle:nil andTitleColor:CODColor333333 andFont:XFONT_SIZE(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"请设置6-18位新登录密码"];
         [_newPwdField modifyPlaceholdFont:XFONT_SIZE(13) andColor:CODColor999999];
-        _newPwdField.keyboardType = UIKeyboardTypeNumberPad;
         _newPwdField.tintColor = ThemeColor;
     }return _newPwdField;
 }
@@ -71,7 +67,6 @@
         _confirmNewPwdField = [[UITextField alloc] init];
         [_confirmNewPwdField SetTfTitle:nil andTitleColor:CODColor333333 andFont:XFONT_SIZE(14) andTextAlignment:NSTextAlignmentLeft andPlaceHold:@"请确认新登录密码"];
         [_confirmNewPwdField modifyPlaceholdFont:XFONT_SIZE(13) andColor:CODColor999999];
-        _confirmNewPwdField.keyboardType = UIKeyboardTypeNumberPad;
         _confirmNewPwdField.tintColor = ThemeColor;
     }return _confirmNewPwdField;
 }
@@ -216,15 +211,15 @@
 - (void)confirmAction {
     if (self.status == 1) {// 修改密码
         if (self.oldField.text.length == 0) {
-            [SVProgressHUD cod_showWithErrorInfo:@"请输入旧密码"];
+            [SVProgressHUD cod_showWithInfo:@"请输入旧密码"];
             return;
         }
         if (self.newPwdField.text.length == 0) {
-            [SVProgressHUD cod_showWithErrorInfo:@"请输入新密码"];
+            [SVProgressHUD cod_showWithInfo:@"请输入新密码"];
             return;
         }
         if (![self.confirmNewPwdField.text isEqualToString:self.newPwdField.text]) {
-            [SVProgressHUD cod_showWithErrorInfo:@"确认密码不一致,请核对后提交"];
+            [SVProgressHUD cod_showWithInfo:@"确认密码不一致,请核对后提交"];
             return;
         }
         //    user_id    string    是    用户的id
@@ -253,11 +248,11 @@
     }
     else {// 设置密码
         if (self.pwdField.text.length == 0) {
-            [SVProgressHUD cod_showWithErrorInfo:@"请输入密码"];
+            [SVProgressHUD cod_showWithInfo:@"请输入密码"];
             return;
         }
         if (![self.confirmPwdField.text isEqualToString:self.pwdField.text]) {
-            [SVProgressHUD cod_showWithErrorInfo:@"确认密码不一致,请核对后提交"];
+            [SVProgressHUD cod_showWithInfo:@"确认密码不一致,请核对后提交"];
             return;
         }
         
