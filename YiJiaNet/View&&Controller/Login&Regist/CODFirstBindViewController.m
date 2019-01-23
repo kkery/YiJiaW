@@ -8,7 +8,7 @@
 
 #import "CODFirstBindViewController.h"
 #import "NSString+COD.h"
-
+#import "JPUSHService.h"
 @interface CODFirstBindViewController ()<UITextFieldDelegate>
 
 @property(nonatomic,strong) UITextField* telNumTextField;
@@ -142,10 +142,11 @@
     
     [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=member&a=auth_reg" andParameters:params Sucess:^(id object) {
         if ([object[@"code"] integerValue] == 200) {
-            
+            [JPUSHService setAlias:kFORMAT(@"%@",object[@"data"][@"uid"]) completion:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+                NSLog(@"设置别名------------%@",iAlias);
+            } seq:1];
             [kNotiCenter postNotificationName:CODLoginNotificationName object:nil userInfo:nil];
             save(object[@"data"][@"user_id"], CODLoginTokenKey);
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD cod_showWithSuccessInfo:@"登录成功"];
                 [self.navigationController popToViewController:self.navigationController.viewControllers[0] animated:YES];

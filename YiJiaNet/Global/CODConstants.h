@@ -24,19 +24,17 @@ static NSString * const CODServerDomain = @"http://yjw.0791jr.com/app.php?";// �
 //static NSString * const CODServerDomain = @"http://yijia.test/app.php?";// 本地测试环境
 
 // !!!第三方平台!!!
-static NSString * const AMapApiKey = @"638fda40d439fb2c305ecce9cf2ab2e3";
+static NSString * const CODJPushAppKey = @"47b3d73d20d15c7d43ca53fe";//极光推送
 
-static NSString * const QQAppKey = @"a941009835873148e016b37cab2c995b";
-static NSString * const QQAppID = @"101545772";
+static NSString * const CODAMapApiKey = @"638fda40d439fb2c305ecce9cf2ab2e3";//高德地图
 
-static NSString * const weChatID = @"wx6c1d14b201c7e196";
-static NSString * const weChatSecret = @"ff3ce516dacb0d649a5bcba1cdb04f7d";
+static NSString * const CODUMAPPKey = @"5c403991f1f55693c900151d";//友盟
 
-static NSString * const UMAPPKey = @"5c403991f1f55693c900151d";
-// !!!签名key!!!
-static NSString * const CODServerSignKey = @"2fa7b1d74a82e202cdedd153fcc91249";
-// !!!后台接口版本!!!
-static CGFloat const CODServerInterfaceVersion = 4;
+static NSString * const CODQQAppKey = @"a941009835873148e016b37cab2c995b";//QQ
+static NSString * const CODQQAppID = @"101545772";
+
+static NSString * const CODWeChatID = @"wx6c1d14b201c7e196";//WeChat
+static NSString * const CODWeChatSecret = @"ff3ce516dacb0d649a5bcba1cdb04f7d";
 
 // 单例归档和缓存目录
 static NSString * const CODArchiveDirectory = @"CODArchives";
@@ -47,11 +45,6 @@ static NSString * const CODGuideKey = @"CODGuide3.3";// 需要引导的加上当
 
 // ==========↑↑↑↑↑↑↑↑↑↑========== //
 
-// 应用
-static NSString * const CODAppSchema = @"cutorderuser";// app schema
-static NSString * const CODAppVersionKey = @"CODAppVersion";// 版本
-static NSString * const CODUmengAppKey = @"543b44d0fd98c52dc1001d36";// 友盟
-static NSString * const CODCustomerServicePhone = @"10086";// 客服电话
 
 // 请求参数value
 static NSInteger const CODRequstPageSize = 10;// 默认每页数量

@@ -24,7 +24,7 @@
 static CGFloat const kTopViewHeight = 188;// 顶部图高度
 #define kOffsety 200.f  // 导航栏渐变的判定值
 
-@interface CODExamDetailViewController ()<UITableViewDataSource, UITableViewDelegate, SDCycleScrollViewDelegate, UIWebViewDelegate>
+@interface CODExamDetailViewController ()<UITableViewDataSource, UITableViewDelegate, SDCycleScrollViewDelegate, WKNavigationDelegate>
 /** 导航栏 */
 @property (nonatomic, strong) UILabel *navTitleLabel;
 @property (nonatomic, assign) CGFloat alphaMemory;
@@ -201,14 +201,6 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 
 -(WKWebView *)webView{
     if (!_webView) {
-//        _webView = [[UIWebView alloc]init];
-//        _webView.delegate = self;
-//        _webView.scalesPageToFit = YES;
-//        _webView.backgroundColor = [UIColor clearColor];
-//        _webView.dataDetectorTypes = UIDataDetectorTypeAll;
-//        _webView.scrollView.scrollEnabled = NO;
-//        _webView.opaque = NO;
-        
         WKWebViewConfiguration *wkWebConfig = [[WKWebViewConfiguration alloc] init];
         WKUserContentController *wkUController = [[WKUserContentController alloc] init];
         wkWebConfig.userContentController = wkUController;
@@ -223,15 +215,10 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         _webView.opaque = NO;
         _webView.userInteractionEnabled = NO;
         _webView.scrollView.bounces = NO;
-        _webView.UIDelegate = self;
         _webView.navigationDelegate = self;
         [_webView sizeToFit];
-        // http://yjw.0791jr.com/app.php?m=App&c=Articlew&a=good_info&id=3
-        // https://www.baidu.com
+        // 添加kvo监听网页内容高度
         [_webView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
-//        NSURL *url = [NSURL URLWithString:@"http://yjw.0791jr.com/app.php?m=App&c=Articlew&a=good_info&id=3"];
-//        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-//        [self.webView loadRequest:urlRequest];
         
     }return _webView;
 }
@@ -268,6 +255,8 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             cell.backgroundColor = [UIColor whiteColor];
             
             UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
+            iconImageView.layer.cornerRadius = 25;
+            iconImageView.layer.masksToBounds = YES;
             iconImageView.tag = 1;
             [cell.contentView addSubview:iconImageView];
             
@@ -473,6 +462,10 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 }
 
 - (void)orderAction {
+    if (!COD_LOGGED) {
+        [SVProgressHUD cod_showWithInfo:@"未登录,请先登录"];
+        return;
+    }
     CODOrderPopView *popView = [[CODOrderPopView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
     popView.commitBlock = ^(NSString *fulladdress, NSString *province, NSString *city, NSString *area, NSString *hourse, NSString *phone) {
         //地理编码
@@ -509,6 +502,10 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             [[CODNetWorkManager shareManager] AFRequestData:@"m=App&c=index&a=ordered" andParameters:params Sucess:^(id object) {
                 if ([object[@"code"] integerValue] == 200) {
                     [MBProgressHUD cod_showSuccessWithTitle:@"提交成功" detail:@"我们将尽快为您回电" toView:self.view];
+                    [popView close];
+                } else if ([object[@"code"] integerValue] == 405) {
+                    [popView close];
+                    [SVProgressHUD cod_showWithInfo:object[@"message"]];
                 } else {
                     [SVProgressHUD cod_showWithInfo:object[@"message"]];
                 }
@@ -534,8 +531,17 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
         }];
     }
 }
-#pragma mark - WebView delegate
-#pragma mark - KVO 监听webView高度
+#pragma mark - WKWebView Delegate
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    // 拦截可恶的广告  域名51zhanzhuang.cn ！！！
+    if ([navigationAction.request.URL.absoluteString rangeOfString:@"51zhanzhuang"].location != NSNotFound) {
+        decisionHandler(WKNavigationActionPolicyCancel);
+    }
+    else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
+}
+// 监听webView高度
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"contentSize"]) {
@@ -549,7 +555,6 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 //        self.scrollView.frame = CGRectMake(0, 0, self.view.frame.size.width, height);
 //        self.scrollView.contentSize =CGSizeMake(self.view.frame.size.width, height);
 //        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:0 inSection:3], nil] withRowAnimation:UITableViewRowAnimationNone];
-//
         
          // 方法二
          [_webView evaluateJavaScript:@"document.body.offsetHeight" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
@@ -564,35 +569,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
          
     }
 }
-//- (void)webViewDidFinishLoad:(UIWebView *)webView
-//{
-////        CGFloat height = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue];
-////        // 高度的缩放
-////        CGRect frame = webView.frame;
-////        CGSize fittingSize = [webView sizeThatFits:CGSizeZero];
-////        frame.size = fittingSize;
-////        webView.frame = frame;
-////        self.webViewHeight = height * ((SCREENWIDTH)/(SCREENHEIGHT)) + 20;
-//
-////     如果是加载的URL,可以通过WebView的在webViewDidFinishLoad的加载完成的代理方法中,
-////     通过stringByEvaluatingJavaScriptFromString方法来动态添加js代码：
-////     标签里的scale 值就是页面的初始化页面大小< initial-scale >和可伸缩放大最大< maximum-scale >和最小< minimum-scale >的的倍数。如果还有别的需求可自行设置,如果都为1表示初始化的时候显示为原来大小,可缩放的大小都为原来的大小<即不可缩放>。
-//    NSString *injectionJSString = @"var script = document.createElement('meta');"
-//    "script.name = 'viewport';"
-//    "script.content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\";"
-//    "document.getElementsByTagName('head')[0].appendChild(script);";
-//    [webView stringByEvaluatingJavaScriptFromString:injectionJSString];
-//
-//    CGRect frame = webView.frame;
-//    CGSize fittingSize = [webView sizeThatFits:CGSizeZero];
-//    frame.size = fittingSize;
-//    webView.frame = frame;
-//
-//    NSInteger height = [[webView stringByEvaluatingJavaScriptFromString:
-//                         @"document.body.offsetHeight"] integerValue];
-//    self.webViewHeight = height * ((SCREENWIDTH)/(SCREENHEIGHT))+10;
-//
-//}
+
 #pragma mark - 导航栏设置
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {\
     CGFloat offsetY = scrollView.contentOffset.y;

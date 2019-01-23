@@ -126,10 +126,10 @@
 - (void)configureWithModel:(CODOrderModel *)model type:(NSString *)type {
     if ([type isEqualToString:@"预约"]) {
         self.iconImageView.image = kGetImage(@"amount_appointment");
-        self.timeLabel.text = [NSString stringWithFormat:@"预约时间：%@-%@", model.start_time, model.end_time];
+        self.timeLabel.text = [NSString stringWithFormat:@"预约时间：%@%@", model.start_time, model.end_time];
     } else {
         self.iconImageView.image = kGetImage(@"my_amount");
-        self.timeLabel.text = [NSString stringWithFormat:@"量房时间：%@-%@", model.start_time, model.end_time];
+        self.timeLabel.text = [NSString stringWithFormat:@"量房时间：%@%@", model.start_time, model.end_time];
     }
     [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:kGetImage(@"place_default_avatar")];
     self.nameLabel.text = model.name;

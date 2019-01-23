@@ -106,7 +106,7 @@ static NSString *const MyWalletHeadVwID = @"MyWalletHeadVwIdentifier";
 
 - (AMapLocationManager *)locationManager {
     if (!_locationManager) {
-        [AMapServices sharedServices].apiKey = AMapApiKey;
+        [AMapServices sharedServices].apiKey = CODAMapApiKey;
         _locationManager = [[AMapLocationManager alloc] init];
         //高德地图注册
         _locationManager.delegate = self;

@@ -116,6 +116,10 @@
 	<string>益家网请求访问您的麦克风,用于录取视频</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>益家网请求访问您的相册以更换头像和上传图片</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

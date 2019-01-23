@@ -26,7 +26,6 @@ static NSString * const kMessageActTableViewCell = @"MessageActTableViewCell";
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"活动消息";
-    [kNotiCenter postNotificationName:CODMsgUnreadNotificationName object:nil];
     // configure view
     self.tableView = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -88,7 +87,8 @@ static NSString * const kMessageActTableViewCell = @"MessageActTableViewCell";
             if (self.dataArray.count == [object[@"data"][@"pageCount"] integerValue]) {
                 [self.tableView noMoreData];
             }
-
+            // 取消首页红点通知
+            [kNotiCenter postNotificationName:CODMsgUnreadNotificationName object:nil];
             [self.tableView reloadData];
             
         } else {

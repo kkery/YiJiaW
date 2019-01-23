@@ -52,6 +52,16 @@
 		6E1A7CB221D0D6F7002FCAC6 /* CODFindDecorateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CB121D0D6F7002FCAC6 /* CODFindDecorateViewController.m */; };
 		6E1A7CB521D0D738002FCAC6 /* CODSecondHorseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CB421D0D738002FCAC6 /* CODSecondHorseViewController.m */; };
 		6E1A7CB821D0D748002FCAC6 /* CODNewHorseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CB721D0D748002FCAC6 /* CODNewHorseViewController.m */; };
+		6E1E284221F8083B005DCBAD /* jpush-extension-ios-1.1.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E283D21F8083B005DCBAD /* jpush-extension-ios-1.1.1.a */; };
+		6E1E284321F8083B005DCBAD /* jpush-ios-3.1.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E283E21F8083B005DCBAD /* jpush-ios-3.1.2.a */; };
+		6E1E284421F8083B005DCBAD /* jcore-ios-1.2.6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284121F8083B005DCBAD /* jcore-ios-1.2.6.a */; };
+		6E1E284621F80890005DCBAD /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284521F80890005DCBAD /* CFNetwork.framework */; };
+		6E1E284821F8089B005DCBAD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284721F8089A005DCBAD /* CoreFoundation.framework */; };
+		6E1E284A21F808CA005DCBAD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284921F808CA005DCBAD /* Foundation.framework */; };
+		6E1E284C21F808D2005DCBAD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284B21F808D2005DCBAD /* UIKit.framework */; };
+		6E1E284E21F808DD005DCBAD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284D21F808DD005DCBAD /* Security.framework */; };
+		6E1E285021F8090E005DCBAD /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284F21F8090E005DCBAD /* UserNotifications.framework */; };
+		6E1E285221F8091C005DCBAD /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E285121F8091C005DCBAD /* libresolv.tbd */; };
 		6E229DC521F1803100A91E2A /* UIView+frameAdjust.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E229DC321F1803000A91E2A /* UIView+frameAdjust.m */; };
 		6E229DC821F1AC9A00A91E2A /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E229DC721F1AC9A00A91E2A /* MBProgressHUD.m */; };
 		6E2946A321E48343008F162E /* UMSocialSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6E29468F21E48343008F162E /* UMSocialSDKResources.bundle */; };
@@ -340,6 +350,19 @@
 		6E1A7CB421D0D738002FCAC6 /* CODSecondHorseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSecondHorseViewController.m; sourceTree = "<group>"; };
 		6E1A7CB621D0D748002FCAC6 /* CODNewHorseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODNewHorseViewController.h; sourceTree = "<group>"; };
 		6E1A7CB721D0D748002FCAC6 /* CODNewHorseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODNewHorseViewController.m; sourceTree = "<group>"; };
+		6E1E283D21F8083B005DCBAD /* jpush-extension-ios-1.1.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-extension-ios-1.1.1.a"; sourceTree = "<group>"; };
+		6E1E283E21F8083B005DCBAD /* jpush-ios-3.1.2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-3.1.2.a"; sourceTree = "<group>"; };
+		6E1E283F21F8083B005DCBAD /* JPushNotificationExtensionService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPushNotificationExtensionService.h; sourceTree = "<group>"; };
+		6E1E284021F8083B005DCBAD /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
+		6E1E284121F8083B005DCBAD /* jcore-ios-1.2.6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jcore-ios-1.2.6.a"; sourceTree = "<group>"; };
+		6E1E284521F80890005DCBAD /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		6E1E284721F8089A005DCBAD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		6E1E284921F808CA005DCBAD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6E1E284B21F808D2005DCBAD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		6E1E284D21F808DD005DCBAD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		6E1E284F21F8090E005DCBAD /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		6E1E285121F8091C005DCBAD /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		6E1E285321F80FB3005DCBAD /* YiJiaNet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YiJiaNet.entitlements; sourceTree = "<group>"; };
 		6E229DC321F1803000A91E2A /* UIView+frameAdjust.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+frameAdjust.m"; sourceTree = "<group>"; };
 		6E229DC421F1803000A91E2A /* UIView+frameAdjust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+frameAdjust.h"; sourceTree = "<group>"; };
 		6E229DC621F1AC9900A91E2A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -702,17 +725,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E1E285221F8091C005DCBAD /* libresolv.tbd in Frameworks */,
+				6E1E285021F8090E005DCBAD /* UserNotifications.framework in Frameworks */,
+				6E53865421E4471300253316 /* libz.tbd in Frameworks */,
+				6E1E284E21F808DD005DCBAD /* Security.framework in Frameworks */,
+				6E1E284C21F808D2005DCBAD /* UIKit.framework in Frameworks */,
+				6E1E284A21F808CA005DCBAD /* Foundation.framework in Frameworks */,
+				6E1E284821F8089B005DCBAD /* CoreFoundation.framework in Frameworks */,
+				6E1E284621F80890005DCBAD /* CFNetwork.framework in Frameworks */,
 				6E2946A721E48343008F162E /* libSocialWeChat.a in Frameworks */,
 				6E53865321E4471300253316 /* libc++.tbd in Frameworks */,
+				6E1E284221F8083B005DCBAD /* jpush-extension-ios-1.1.1.a in Frameworks */,
 				6E2946A521E48343008F162E /* UMShare.framework in Frameworks */,
-				6E53865421E4471300253316 /* libz.tbd in Frameworks */,
 				6E2946AA21E48343008F162E /* libWeChatSDK.a in Frameworks */,
 				6E53865521E4471300253316 /* CoreTelephony.framework in Frameworks */,
 				6E53865621E4471300253316 /* SystemConfiguration.framework in Frameworks */,
 				6E2946A621E48343008F162E /* UMCommon.framework in Frameworks */,
+				6E1E284321F8083B005DCBAD /* jpush-ios-3.1.2.a in Frameworks */,
 				6E2946A421E48343008F162E /* UShareUI.framework in Frameworks */,
 				6E53864C21E4465700253316 /* libsqlite3.tbd in Frameworks */,
 				6E2946AC21E48343008F162E /* TencentOpenAPI.framework in Frameworks */,
+				6E1E284421F8083B005DCBAD /* jcore-ios-1.2.6.a in Frameworks */,
 				6E53864E21E4466A00253316 /* CoreGraphics.framework in Frameworks */,
 				384585868D1759D641132291 /* libPods-YiJiaNet.a in Frameworks */,
 				6E2946AB21E48343008F162E /* libSocialQQ.a in Frameworks */,
@@ -892,6 +925,18 @@
 				6E1A7CA421D08213002FCAC6 /* AutoScrollLabel.h */,
 			);
 			path = "跑马灯";
+			sourceTree = "<group>";
+		};
+		6E1E283C21F8083B005DCBAD /* JPush */ = {
+			isa = PBXGroup;
+			children = (
+				6E1E284121F8083B005DCBAD /* jcore-ios-1.2.6.a */,
+				6E1E283D21F8083B005DCBAD /* jpush-extension-ios-1.1.1.a */,
+				6E1E283E21F8083B005DCBAD /* jpush-ios-3.1.2.a */,
+				6E1E283F21F8083B005DCBAD /* JPushNotificationExtensionService.h */,
+				6E1E284021F8083B005DCBAD /* JPUSHService.h */,
+			);
+			path = JPush;
 			sourceTree = "<group>";
 		};
 		6E29468D21E48343008F162E /* UMSocial */ = {
@@ -1333,6 +1378,7 @@
 		6EE5F85C21CB808B00630E68 /* YiJiaNet */ = {
 			isa = PBXGroup;
 			children = (
+				6E1E285321F80FB3005DCBAD /* YiJiaNet.entitlements */,
 				6EE5F89621CB874300630E68 /* Global */,
 				6EE5F89021CB85D200630E68 /* Libraries */,
 				6EE5F89221CB85F600630E68 /* Models */,
@@ -1383,6 +1429,7 @@
 		6EE5F89021CB85D200630E68 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				6E1E283C21F8083B005DCBAD /* JPush */,
 				6EEEA03D21DEF455004EA7F0 /* AFNetworking */,
 				6E07139821E0A6EA00E9C8F3 /* BRPickerView */,
 				6E2946AD21E49F41008F162E /* MJRefresh_EX */,
@@ -1776,6 +1823,13 @@
 		EE1E6C799FD19C434A599D2E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6E1E285121F8091C005DCBAD /* libresolv.tbd */,
+				6E1E284F21F8090E005DCBAD /* UserNotifications.framework */,
+				6E1E284D21F808DD005DCBAD /* Security.framework */,
+				6E1E284B21F808D2005DCBAD /* UIKit.framework */,
+				6E1E284921F808CA005DCBAD /* Foundation.framework */,
+				6E1E284721F8089A005DCBAD /* CoreFoundation.framework */,
+				6E1E284521F80890005DCBAD /* CFNetwork.framework */,
 				6E53865121E4471200253316 /* CoreTelephony.framework */,
 				6E53864F21E4471200253316 /* libc++.tbd */,
 				6E53865021E4471200253316 /* libz.tbd */,
@@ -1858,6 +1912,11 @@
 				TargetAttributes = {
 					6EE5F85921CB808B00630E68 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					6EE5F87121CB808B00630E68 = {
 						CreatedOnToolsVersion = 9.3;
@@ -2336,6 +2395,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = YiJiaNet/YiJiaNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 97BU98TSGK;
@@ -2365,11 +2425,13 @@
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/Share/SocialLibraries/WeChat",
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/Share/SocialLibraries/WeChat/WechatSDK",
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/Share/SocialLibraries/QQ",
+					"$(PROJECT_DIR)/YiJiaNet/Libraries/JPush",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.JRui.YiJiaNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Debug;
@@ -2380,6 +2442,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = YiJiaNet/YiJiaNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 97BU98TSGK;
@@ -2409,11 +2472,13 @@
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/Share/SocialLibraries/WeChat",
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/Share/SocialLibraries/WeChat/WechatSDK",
 					"$(PROJECT_DIR)/YiJiaNet/Libraries/Share/SocialLibraries/QQ",
+					"$(PROJECT_DIR)/YiJiaNet/Libraries/JPush",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.JRui.YiJiaNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Release;

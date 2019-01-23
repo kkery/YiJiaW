@@ -33,8 +33,6 @@ static NSString * const kCell = @"CODHotTableViewCell";
     } else {
         self.title = @"预约消息";
     }
-    
-    [kNotiCenter postNotificationName:CODMsgUnreadNotificationName object:nil];
 
     // configure view
     self.tableView = ({
@@ -99,6 +97,10 @@ static NSString * const kCell = @"CODHotTableViewCell";
             if (self.dataArray.count == [object[@"data"][@"pageCount"] integerValue]) {
                 [self.tableView noMoreData];
             }
+            
+            // 取消首页红点通知
+            [kNotiCenter postNotificationName:CODMsgUnreadNotificationName object:nil];
+
             [self.tableView reloadData];
             
         } else {

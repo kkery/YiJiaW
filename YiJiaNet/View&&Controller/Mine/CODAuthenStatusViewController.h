@@ -10,5 +10,5 @@
 
 @interface CODAuthenStatusViewController : CODBaseViewController
 
-@property (nonatomic, assign) NSInteger status;
+@property (nonatomic, assign) NSInteger status;// 0认证中 1成功 2失败 3未认证
 @end

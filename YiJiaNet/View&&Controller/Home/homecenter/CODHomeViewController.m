@@ -68,7 +68,6 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
 /** 占位图*/
 @property(nonatomic,strong) CQPlaceholderView* placeholderView;
 
-
 @end
 
 @implementation CODHomeViewController
@@ -94,7 +93,6 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
     self.banners = [NSArray array];
     self.lineNews = [NSArray array];
     self.lineNewsIcon = [NSArray array];
-
     self.listArray = [NSMutableArray array];
     
     [self configureNavgationView];

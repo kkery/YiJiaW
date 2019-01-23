@@ -201,11 +201,17 @@
 //内容返回时调用
 -(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{}
 
-//服务器请求跳转的时候调用
--(void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation{}
+//请求跳转的时候调用
+-(void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation{
+    
+}
 
-//服务器开始请求的时候调用
+//开始请求的时候调用
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    // 拦截可恶的广告  域名51zhanzhuang.cn ！！！
+    if ([navigationAction.request.URL.absoluteString rangeOfString:@"51zhanzhuang"].location != NSNotFound) {
+        decisionHandler(WKNavigationActionPolicyCancel);
+    }
     
     if ([webView.URL.absoluteString hasPrefix:@"https://itunes.apple.com"]) {
         [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
@@ -215,8 +221,6 @@
     }
     
     [self updateNavigationItems];
-    
-//    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 // 内容加载失败时候调用

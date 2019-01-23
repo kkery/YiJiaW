@@ -30,6 +30,9 @@
 /** cell */
 @property(nonatomic,strong) TWHImgTitleBtn *imgVwBtn;
 
+@property(nonatomic,assign) BOOL hasQQ;
+@property(nonatomic,assign) BOOL hasWechat;
+
 @end
 
 @implementation XWXShareView
@@ -129,6 +132,13 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
 {
     if (self = [super initWithFrame:frame]) {
         
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
+            self.hasQQ = YES;
+        }
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL  URLWithString:@"weixin://"]]) {
+            self.hasWechat = YES;
+        }
+        
         self.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT);
         self.backgroundColor = [UIColor clearColor];
         [self creatUI];
@@ -210,10 +220,7 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
     self.imgVwBtn.BtnStyle = ImgTop;
     self.imgVwBtn.Space  = 10.0;
     self.imgVwBtn.tag = 100+indexPath.item;
-    [self.imgVwBtn SetBtnTitle:@[@"微信",@"微信朋友圈",@"QQ好友",@"QQ空间"][indexPath.item] andTitleColor:[UIColor blackColor] andFont:kFont(14) andBgColor:[UIColor whiteColor] andBgImg:nil andImg:@[kGetImage(@"share_weixin"),kGetImage(@"share_pengyouquan"),kGetImage(@"share_qq"),kGetImage(@"share_qqkongjian")][indexPath.item] andClickEvent:@selector(imgVwBtnClicked:) andAddVC:self];
-    [self.imgVwBtn setImage:@[kGetImage(@"share_weixin"),kGetImage(@"share_pengyouquan"),kGetImage(@"share_qq"),kGetImage(@"share_qqkongjian")][indexPath.item] forState:1];
-
-
+    [self.imgVwBtn SetBtnTitle:@[@"微信",@"QQ",@"微信朋友圈",@"QQ空间"][indexPath.item] andTitleColor:[UIColor blackColor] andFont:kFont(14) andBgColor:[UIColor whiteColor] andBgImg:nil andImg:@[kGetImage(@"share_weixin"),kGetImage(@"share_qq"),kGetImage(@"share_pengyouquan"),kGetImage(@"share_qqkongjian")][indexPath.item] andClickEvent:@selector(imgVwBtnClicked:) andAddVC:self];
     [cell addSubview:self.imgVwBtn];
     [self.imgVwBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.offset(0);
@@ -259,7 +266,7 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
 - (void)imgVwBtnClicked:(TWHImgTitleBtn *)sender
 {
     if (sender.tag == 100) {
-        if ([kUserCenter objectForKey:klogin_WeChat] != nil) {
+        if (self.hasWechat) {
             // 微信
             [self shareWebPageToPlatformType:UMSocialPlatformType_WechatSession withDic:self.dic];
         }else {
@@ -267,25 +274,23 @@ static NSString *const ShopingBeanItemID = @"shopingBeanItemIdentifier";
         }
         
     } else if (sender.tag == 101) {
-        
-        if ([kUserCenter objectForKey:klogin_WeChat] != nil) {
-            // 朋友圈
-            [self shareWebPageToPlatformType:UMSocialPlatformType_WechatTimeLine withDic:self.dic];
-        }else {
-            [SVProgressHUD cod_showWithInfo:@"您还未安装微信"];
-        }
-        
-    } else if (sender.tag == 102) {
-        
-        if ([kUserCenter objectForKey:klogin_QQ] != nil) {
+        if (self.hasQQ) {
             // QQ
             [self shareWebPageToPlatformType:UMSocialPlatformType_QQ withDic:self.dic];
         } else {
             [SVProgressHUD cod_showWithInfo:@"您还未安装QQ"];
         }
         
+    } else if (sender.tag == 102) {
+        if (self.hasWechat) {
+            // 朋友圈
+            [self shareWebPageToPlatformType:UMSocialPlatformType_WechatTimeLine withDic:self.dic];
+        }else {
+            [SVProgressHUD cod_showWithInfo:@"您还未安装微信"];
+        }
+        
     } else {
-        if ([kUserCenter objectForKey:klogin_QQ] != nil) {
+        if (self.hasQQ) {
             // QQ空间
             [self shareWebPageToPlatformType:UMSocialPlatformType_Qzone withDic:self.dic];
         } else {

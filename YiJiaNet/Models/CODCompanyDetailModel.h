@@ -13,8 +13,10 @@
 
 @interface CODCompanyDetailModel : CODBaseModel
 
-/** 商户id */
+/** id */
 @property (nonatomic,copy) NSString *companyId;
+/** 商户id */
+@property (nonatomic,copy) NSString *merchant_id;
 /** 公司名称 */
 @property (nonatomic,copy) NSString *name;
 /** 公司logo */

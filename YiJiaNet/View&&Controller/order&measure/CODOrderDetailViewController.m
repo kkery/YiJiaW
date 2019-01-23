@@ -112,7 +112,7 @@
         }
         
         UILabel *orderTimeLab = (UILabel *)[cell.contentView viewWithTag:1];
-        orderTimeLab.text = [NSString stringWithFormat:@"%@-%@", self.compDic[@"start_time"], self.compDic[@"end_time"]];
+        orderTimeLab.text = [NSString stringWithFormat:@"%@%@", self.compDic[@"start_time"], self.compDic[@"end_time"]];
         return cell;
     }
     
@@ -152,6 +152,7 @@
             addressLable.textColor = CODColor666666;
             addressLable.font = [UIFont systemFontOfSize:12];
             addressLable.tag = 3;
+            addressLable.numberOfLines = 2;
             addrImg.centerY = addressLable.centerY;
             [cell.contentView addSubview:addressLable];
         }
@@ -184,25 +185,39 @@
             lineIcon.image = kGetImage(@"amount_title");
             [cell.contentView addSubview:lineIcon];
             
-            UILabel *horseNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, CGRectGetMaxY(titleLabel.frame)+20, SCREENWIDTH-40, 20)];
+            UILabel *horseNameLabel1 = [UILabel GetLabWithFont:kFont(15) andTitleColor:CODColor666666 andTextAligment:0 andBgColor:nil andlabTitle:@"小区名称:"];
+            horseNameLabel1.frame = CGRectMake(12, CGRectGetMaxY(titleLabel.frame)+20, 70, 20);
+            [cell.contentView addSubview:horseNameLabel1];
+            UILabel *sizeLab1 = [UILabel GetLabWithFont:kFont(15) andTitleColor:CODColor666666 andTextAligment:0 andBgColor:nil andlabTitle:@"房屋面积:"];
+            sizeLab1.frame = CGRectMake(12, CGRectGetMaxY(horseNameLabel1.frame)+10, 70, 20);
+            [cell.contentView addSubview:sizeLab1];
+            UILabel *styleLab1 = [UILabel GetLabWithFont:kFont(15) andTitleColor:CODColor666666 andTextAligment:0 andBgColor:nil andlabTitle:@"房屋户型:"];
+            styleLab1.frame = CGRectMake(12, CGRectGetMaxY(sizeLab1.frame)+10, 70, 20);
+            [cell.contentView addSubview:styleLab1];
+            UILabel *hourAddrLab1 = [UILabel GetLabWithFont:kFont(15) andTitleColor:CODColor666666 andTextAligment:0 andBgColor:nil andlabTitle:@"量房地址:"];
+            hourAddrLab1.frame = CGRectMake(12, CGRectGetMaxY(styleLab1.frame)+10, 70, 20);
+            [cell.contentView addSubview:hourAddrLab1];
+           
+            
+            UILabel *horseNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(92, CGRectGetMaxY(titleLabel.frame)+20, SCREENWIDTH-125, 20)];
             horseNameLabel.textColor = CODColor333333;
             horseNameLabel.tag = 1;
             horseNameLabel.font = kFont(15);
             [cell.contentView addSubview:horseNameLabel];
             
-            UILabel *sizeLab = [[UILabel alloc] initWithFrame:CGRectMake(12, CGRectGetMaxY(horseNameLabel.frame)+10, SCREENWIDTH-40, 20)];
+            UILabel *sizeLab = [[UILabel alloc] initWithFrame:CGRectMake(92, CGRectGetMaxY(horseNameLabel.frame)+10, SCREENWIDTH-125, 20)];
             sizeLab.textColor = CODColor333333;
             sizeLab.tag = 2;
             sizeLab.font = kFont(15);
             [cell.contentView addSubview:sizeLab];
             
-            UILabel *styleLab = [[UILabel alloc] initWithFrame:CGRectMake(12, CGRectGetMaxY(sizeLab.frame)+10, SCREENWIDTH-40, 20)];
+            UILabel *styleLab = [[UILabel alloc] initWithFrame:CGRectMake(92, CGRectGetMaxY(sizeLab.frame)+10, SCREENWIDTH-125, 20)];
             styleLab.textColor = CODColor333333;
             styleLab.tag = 3;
             styleLab.font = kFont(15);
             [cell.contentView addSubview:styleLab];
             
-            UILabel *hourAddrLab = [[UILabel alloc] initWithFrame:CGRectMake(12, CGRectGetMaxY(styleLab.frame)+10, SCREENWIDTH-40, 20)];
+            UILabel *hourAddrLab = [[UILabel alloc] initWithFrame:CGRectMake(92, CGRectGetMaxY(styleLab.frame)+10, SCREENWIDTH-125, 20)];
             hourAddrLab.textColor = CODColor333333;
             hourAddrLab.tag = 4;
             hourAddrLab.font = kFont(15);
@@ -214,10 +229,10 @@
         UILabel *styleLab = (UILabel *)[cell.contentView viewWithTag:3];
         UILabel *hourAddrLab = (UILabel *)[cell.contentView viewWithTag:4];
         
-        horseNameLabel.text = kFORMAT(@"小区名称：%@",self.infoDic[@"house_name"]);
-        sizeLab.text = kFORMAT(@"房屋面积：%@",self.infoDic[@"house_acreage"]);
-        styleLab.text = kFORMAT(@"房屋户型：%@",self.infoDic[@"house_type"]);
-        hourAddrLab.text = kFORMAT(@"量房地址：%@",self.infoDic[@"address"]);
+        horseNameLabel.text = self.infoDic[@"house_name"];
+        sizeLab.text = self.infoDic[@"house_acreage"];
+        styleLab.text = self.infoDic[@"house_type"];
+        hourAddrLab.text = self.infoDic[@"address"];
         
         return cell;
     }

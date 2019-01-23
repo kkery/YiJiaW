@@ -58,10 +58,6 @@ _Pragma("clang diagnostic pop")\
 // 是否是iPhoneX
 #define k_iOS_11 @available(iOS 11.0, *)
 
-// QQ WeChat
-#define klogin_QQ @"Login_QQ"
-#define klogin_WeChat @"Login_WeChat"
-
 //Usedefault
 #define kUserCenter [NSUserDefaults standardUserDefaults]
 #define kNotiCenter [NSNotificationCenter defaultCenter]

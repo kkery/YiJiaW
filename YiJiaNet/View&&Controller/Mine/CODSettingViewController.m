@@ -10,6 +10,7 @@
 #import "CODForgetPwdViewController.h"
 #import "UIViewController+COD.h"
 #import "CODSetPwdViewController.h"
+#import "JPUSHService.h"
 
 @interface CODSettingViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -147,11 +148,18 @@
 }
 
 - (void)logout {
+    [JPUSHService getAlias:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+        NSLog(@"当前别名------------%@",iAlias);
+    } seq:1];
     [self showAlertWithTitle:@"确定退出登录吗" andMesage:nil andCancel:^(id cancel) {
     } Determine:^(id determine) {
         // 清除登录凭证
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:CODLoginTokenKey];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:CODUserInfoKey];
+        // 移除极光推送的信息
+        [JPUSHService deleteAlias:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+            NSLog(@"删除别名------------%@",iAlias);
+        } seq:1];
         [self.navigationController popViewControllerAnimated:YES];
     }];
 }

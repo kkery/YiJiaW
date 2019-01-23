@@ -22,9 +22,6 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
-//        self.selectionStyle = UITableViewCellAccessoryNone;
-        
         self.corverImageView = ({
             UIImageView *imageView = [[UIImageView alloc] init];
             imageView.layer.cornerRadius = 5;
