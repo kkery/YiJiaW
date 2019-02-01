@@ -37,7 +37,7 @@ id get(NSString *key){
 {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-    NSLog(@"BaseUrl = %@",[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi]);
+//    NSLog(@"BaseUrl = %@",[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi]);
     [manager POST:[NSString stringWithFormat:@"%@%@",CODServerDomain,hexfApi] parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         CODLogObject(responseObject);

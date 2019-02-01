@@ -17,10 +17,10 @@
 #import "CODAnnouncementCell.h"
 #import "CODExampleTableViewCell.h"
 #import "CODFindDecorateViewController.h"
+#import "CODNewHorseViewController.h"
+#import "CODSecondHouseViewController.h"// 二手房
 #import "CODAllDecorateViewController.h"// 装修公司
 #import "CODExampleListViewController.h"// 效果图
-#import "CODSecondHorseViewController.h"
-#import "CODNewHorseViewController.h"
 #import "SwitchCityViewController.h"
 #import "CODCalcuQuoteViewController.h"
 #import "CODEffectPicViewController.h"
@@ -214,6 +214,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
             if (self.listArray.count == [object[@"data"][@"pageCount"] integerValue]) {
                 [self.tableView noMoreData];
             }
+            self.placeholderView.hidden = YES;
             self.tableView.hidden = NO;
             [self.tableView reloadData];
         }
@@ -411,8 +412,18 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
                 @strongify(self);
                 CODFindDecorateViewController *vc = [[CODFindDecorateViewController alloc] init];
                 [self.navigationController pushViewController:vc animated:YES];
+            } else if ([title isEqualToString:@"新房购"]) {
+                @strongify(self);
+                CODNewHorseViewController *vc = [[CODNewHorseViewController alloc] init];
+                [self.navigationController pushViewController:vc animated:YES];
+            } else if ([title isEqualToString:@"二手房"]) {
+                @strongify(self);
+                CODSecondHouseViewController *vc = [[CODSecondHouseViewController alloc] init];
+                [self.navigationController pushViewController:vc animated:YES];
             } else {
-                [SVProgressHUD cod_showWithInfo:@"该功能暂未开放，敬请期待..."];
+                @strongify(self);
+                CODNewHorseViewController *vc = [[CODNewHorseViewController alloc] init];
+                [self.navigationController pushViewController:vc animated:YES];
             }
         }];
     }
@@ -518,7 +529,7 @@ static NSString * const kCODExampleTableViewCell = @"CODExampleTableViewCell";
             cell = [[CODBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kExampleReusableCellID];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UILabel *exampleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 20)];
-            [exampleLabel SetlabTitle:@"— 装修案例 —" andFont:[UIFont systemFontOfSize:16] andTitleColor:CODColor333333 andTextAligment:NSTextAlignmentCenter andBgColor:nil];
+            [exampleLabel SetlabTitle:@"— 装修案例 —" andFont:[UIFont fontWithName:@"PingFang-SC-Bold"size:16] andTitleColor:CODColor333333 andTextAligment:NSTextAlignmentCenter andBgColor:nil];
             [cell.contentView addSubview:exampleLabel];
         }
         return cell;

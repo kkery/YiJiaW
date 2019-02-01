@@ -5,6 +5,7 @@ PODS:
   - DZNEmptyDataSet (1.8.1)
   - EAIntroView (2.6.4)
   - IQKeyboardManager (6.2.0)
+  - JPVideoPlayer (3.1.1)
   - Masonry (1.1.0)
   - MJRefresh (3.1.15.7)
   - NJKWebViewProgress (0.2.3):
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - DZNEmptyDataSet
   - EAIntroView (= 2.6.4)
   - IQKeyboardManager
+  - JPVideoPlayer
   - Masonry
   - MJRefresh
   - NJKWebViewProgress
@@ -53,6 +55,7 @@ SPEC REPOS:
     - DZNEmptyDataSet
     - EAIntroView
     - IQKeyboardManager
+    - JPVideoPlayer
     - Masonry
     - MJRefresh
     - NJKWebViewProgress
@@ -79,6 +82,7 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   EAIntroView: df7dc18da73e1831d06878b9c0e13da78e6bb3ce
   IQKeyboardManager: 6194101620b73af5e67900b8f89707a99de0b804
+  JPVideoPlayer: 234c2fc5c9dfd67b969a5dd8233815eb872472c6
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
   NJKWebViewProgress: f481fd424cb5ecc27eacae11b5397db92fba9a4d
@@ -90,6 +94,6 @@ SPEC CHECKSUMS:
   YeeBadgeView: 001eaa384dd67f2fa201be9ff20edf10d78769b6
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: be12f26c87b52a03cb84775524aad0a54b65a1e5
+PODFILE CHECKSUM: 9bfed6121907f11c62092ed49733c58e42a96618
 
 COCOAPODS: 1.5.3

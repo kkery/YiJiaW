@@ -15,4 +15,6 @@
 - (UIImage *)cod_fixOrientation;
 - (UIImage *)cod_imageWithCornerRadius:(CGFloat)cornerRadius;
 
++ (UIImage *)getThumImageWithVideoURL:(NSString *)videoURL;
+
 @end

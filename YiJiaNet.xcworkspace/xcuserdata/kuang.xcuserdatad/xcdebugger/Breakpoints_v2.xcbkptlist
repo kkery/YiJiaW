@@ -4,65 +4,27 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/order&amp;measure/MeasureDocView.m"
-            timestampString = "569819634.0202399"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "-initWithFrame:"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[MeasureDocView initWithFrame:]"
-                  moduleName = "YiJiaNet"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/order&amp;measure/MeasureDocView.m"
-                  timestampString = "569723704.18133"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "287">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__32-[MeasureDocView initWithFrame:]_block_invoke"
-                  moduleName = "YiJiaNet"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/order&amp;measure/MeasureDocView.m"
-                  timestampString = "569723704.184335"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "39"
-                  endingLineNumber = "39"
-                  offsetFromSymbolStart = "44">
-               </Location>
-            </Locations>
+            scope = "0"
+            stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/order&amp;measure/CODMineMeasureViewController.m"
-            timestampString = "569575700.888719"
+            filePath = "YiJiaNet/View&amp;&amp;Controller/find decorate/CODShopInfoViewController.m"
+            timestampString = "570702512.236787"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -73,29 +35,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/order&amp;measure/CODOrderDetailViewController.m"
-            timestampString = "569932021.525143"
+            filePath = "YiJiaNet/Tools/commons/&#x5916;&#x94fe;&#x5bfc;&#x822a;/JXMapNavigationView.m"
+            timestampString = "570681452.599183"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "CODOrderDetailViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/order&amp;measure/CODMeasureDetailViewController.m"
-            timestampString = "569932021.525227"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "-loadMeasureDetail"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "-showMapNavigationViewFormcurrentLatitude:currentLongitute:TotargetLatitude:targetLongitute:toName:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -105,13 +51,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/Tools/commons/PhotosBrowser/ImageBrowserViewController.m"
-            timestampString = "569830311.585762"
+            filePath = "YiJiaNet/Tools/commons/&#x5916;&#x94fe;&#x5bfc;&#x822a;/JXMapNavigationView.m"
+            timestampString = "570681452.599238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
-            landmarkName = "-SaveImageToNativeWithImg:"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "-createBtn:andArr:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -121,61 +67,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/Login&amp;Regist/CODFirstBindViewController.h"
-            timestampString = "569845949.835477"
+            filePath = "YiJiaNet/Tools/commons/&#x5916;&#x94fe;&#x5bfc;&#x822a;/JXMapNavigationView.m"
+            timestampString = "570681452.599286"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "popToVc"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[CODFirstBindViewController popToVc]"
-                  moduleName = "YiJiaNet"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/Login&amp;Regist/CODFirstBindViewController.h"
-                  timestampString = "569931366.8174109"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "17"
-                  endingLineNumber = "17"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[CODFirstBindViewController setPopToVc:]"
-                  moduleName = "YiJiaNet"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/Login&amp;Regist/CODFirstBindViewController.h"
-                  timestampString = "569931366.819407"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "17"
-                  endingLineNumber = "17"
-                  offsetFromSymbolStart = "49">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/Login&amp;Regist/CODLoginViewController.m"
-            timestampString = "569932021.525377"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "506"
-            endingLineNumber = "506"
-            landmarkName = "-getUserInfoForPlatform:"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "-showMapNavigationViewWithtargetLatitude:targetLongitute:toName:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -185,91 +83,44 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/Base/CODBaseWebViewController.m"
-            timestampString = "569932021.525438"
+            filePath = "YiJiaNet/View&amp;&amp;Controller/new horse /CODNewHsDetailViewController.m"
+            timestampString = "570702512.236982"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
-            landmarkName = "-webView:decidePolicyForNavigationAction:decisionHandler:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/find decorate/CODCompanyDetailViewController.m"
-            timestampString = "569932021.525498"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "400"
-            endingLineNumber = "400"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YiJiaNet/View&amp;&amp;Controller/comment/CommonImageCollectVW.m"
-            timestampString = "569932021.52557"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
+            startingLineNumber = "366"
+            endingLineNumber = "366"
+            landmarkName = "-callAction"
             landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "-[CommonImageCollectVW collectionView:cellForItemAtIndexPath:]"
+                  symbolName = "-[CODNewHsDetailViewController callAction]"
                   moduleName = "YiJiaNet"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/comment/CommonImageCollectVW.m"
-                  timestampString = "569931366.833331"
+                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/new%20horse%20/CODNewHsDetailViewController.m"
+                  timestampString = "570702512.397153"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
-                  offsetFromSymbolStart = "1158">
+                  startingLineNumber = "366"
+                  endingLineNumber = "366"
+                  offsetFromSymbolStart = "31">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__62-[CommonImageCollectVW collectionView:cellForItemAtIndexPath:]_block_invoke"
+                  symbolName = "__42-[CODNewHsDetailViewController callAction]_block_invoke"
                   moduleName = "YiJiaNet"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/comment/CommonImageCollectVW.m"
-                  timestampString = "569931366.83495"
+                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/new%20horse%20/CODNewHsDetailViewController.m"
+                  timestampString = "570702512.399702"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_"
-                  moduleName = "YiJiaNet"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kuang/Desktop/%E7%9B%8A%E5%AE%B6%E7%BD%91/YiJiaNet/YiJiaNet/View&amp;&amp;Controller/comment/CommonImageCollectVW.m"
-                  timestampString = "569931366.836527"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
-                  offsetFromSymbolStart = "16">
+                  startingLineNumber = "367"
+                  endingLineNumber = "367"
+                  offsetFromSymbolStart = "52">
                </Location>
             </Locations>
          </BreakpointContent>

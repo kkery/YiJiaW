@@ -50,8 +50,10 @@
 		6E1A7CAB21D0CC0C002FCAC6 /* HomeFourItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CAA21D0CC0C002FCAC6 /* HomeFourItemView.m */; };
 		6E1A7CAE21D0D605002FCAC6 /* HomeLeftRightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CAD21D0D605002FCAC6 /* HomeLeftRightView.m */; };
 		6E1A7CB221D0D6F7002FCAC6 /* CODFindDecorateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CB121D0D6F7002FCAC6 /* CODFindDecorateViewController.m */; };
-		6E1A7CB521D0D738002FCAC6 /* CODSecondHorseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CB421D0D738002FCAC6 /* CODSecondHorseViewController.m */; };
-		6E1A7CB821D0D748002FCAC6 /* CODNewHorseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A7CB721D0D748002FCAC6 /* CODNewHorseViewController.m */; };
+		6E1D385422018AE70057FF29 /* CODEdgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1D385322018AE70057FF29 /* CODEdgeLabel.m */; };
+		6E1D385A2201924A0057FF29 /* CODNewHsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1D38592201924A0057FF29 /* CODNewHsDetailViewController.m */; };
+		6E1D385D2201967E0057FF29 /* CODHouseDetailIntroCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1D385C2201967E0057FF29 /* CODHouseDetailIntroCell.m */; };
+		6E1D38602201A1E80057FF29 /* CODLouPanInfoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1D385F2201A1E80057FF29 /* CODLouPanInfoViewCell.m */; };
 		6E1E284221F8083B005DCBAD /* jpush-extension-ios-1.1.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E283D21F8083B005DCBAD /* jpush-extension-ios-1.1.1.a */; };
 		6E1E284321F8083B005DCBAD /* jpush-ios-3.1.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E283E21F8083B005DCBAD /* jpush-ios-3.1.2.a */; };
 		6E1E284421F8083B005DCBAD /* jcore-ios-1.2.6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E284121F8083B005DCBAD /* jcore-ios-1.2.6.a */; };
@@ -64,6 +66,10 @@
 		6E1E285221F8091C005DCBAD /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1E285121F8091C005DCBAD /* libresolv.tbd */; };
 		6E229DC521F1803100A91E2A /* UIView+frameAdjust.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E229DC321F1803000A91E2A /* UIView+frameAdjust.m */; };
 		6E229DC821F1AC9A00A91E2A /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E229DC721F1AC9A00A91E2A /* MBProgressHUD.m */; };
+		6E2766C921FAA14600911C51 /* CODDIYGridTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2766C821FAA14600911C51 /* CODDIYGridTableViewCell.m */; };
+		6E27671721FB0CA300911C51 /* CODNewHorseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E27671621FB0CA300911C51 /* CODNewHorseViewController.m */; };
+		6E27671A21FB0CD100911C51 /* CODNewHorseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E27671921FB0CD100911C51 /* CODNewHorseTableViewCell.m */; };
+		6E27671E21FB0D7F00911C51 /* CODNewHorseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E27671D21FB0D7F00911C51 /* CODNewHorseModel.m */; };
 		6E2946A321E48343008F162E /* UMSocialSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6E29468F21E48343008F162E /* UMSocialSDKResources.bundle */; };
 		6E2946A421E48343008F162E /* UShareUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E29469021E48343008F162E /* UShareUI.framework */; };
 		6E2946A521E48343008F162E /* UMShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E29469121E48343008F162E /* UMShare.framework */; };
@@ -113,9 +119,25 @@
 		6E5B4DDD21EC62B200BF66A9 /* CODAuthenInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B4DDC21EC62B200BF66A9 /* CODAuthenInfoViewController.m */; };
 		6E5B4DE221EC8B3B00BF66A9 /* CODNewHouseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B4DE121EC8B3B00BF66A9 /* CODNewHouseViewController.m */; };
 		6E5B4DE521EC965100BF66A9 /* CODExampTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B4DE421EC965100BF66A9 /* CODExampTableViewCell.m */; };
+		6E5D65412202980E00035760 /* CODVideoImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D65402202980E00035760 /* CODVideoImageCell.m */; };
+		6E5D65442202F08500035760 /* CODLoupanInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D65432202F08500035760 /* CODLoupanInfoViewController.m */; };
+		6E5D65472202F3BF00035760 /* CODLoupanHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D65462202F3BF00035760 /* CODLoupanHeaderView.m */; };
 		6E6224BF21F158E100C2A7E8 /* CODExamDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6224BE21F158E100C2A7E8 /* CODExamDetailViewController.m */; };
 		6E6A84A321F557C500B19D26 /* MessageActViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A84A221F557C500B19D26 /* MessageActViewController.m */; };
 		6E6A84A621F55BD200B19D26 /* MessageActTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A84A521F55BD200B19D26 /* MessageActTableViewCell.m */; };
+		6E726E7A21F9594B00540611 /* CODDIYCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E7621F9594A00540611 /* CODDIYCollectionViewCell.m */; };
+		6E726E7B21F9594B00540611 /* XHIntegralCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E7721F9594A00540611 /* XHIntegralCollectionReusableView.m */; };
+		6E726E8121F9677600540611 /* CODDIYFourItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E8021F9677600540611 /* CODDIYFourItemView.m */; };
+		6E726E8421F96FB300540611 /* CODDIYModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E8321F96FB300540611 /* CODDIYModel.m */; };
+		6E726E8721F9940B00540611 /* CODDIYCateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E8621F9940B00540611 /* CODDIYCateViewController.m */; };
+		6E726E8D21F9981000540611 /* CODAllSortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E8C21F9981000540611 /* CODAllSortViewController.m */; };
+		6E726E9021F99A9500540611 /* CODSortCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E8F21F99A9500540611 /* CODSortCollectionViewCell.m */; };
+		6E726E9321F99FCF00540611 /* CODDIYConditionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E9221F99FCF00540611 /* CODDIYConditionView.m */; };
+		6E726E9621F9A6F800540611 /* CODDIYDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E9521F9A6F800540611 /* CODDIYDetailViewController.m */; };
+		6E726E9921F9B36900540611 /* CODGoodsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E726E9821F9B36900540611 /* CODGoodsDetailViewController.m */; };
+		6E77274B2203F51B00DD00B7 /* CODSecondHouseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E77274A2203F51B00DD00B7 /* CODSecondHouseViewController.m */; };
+		6E77274E2203F58100DD00B7 /* CODSecondHouseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E77274D2203F58100DD00B7 /* CODSecondHouseTableViewCell.m */; };
+		6E7727512203F9F100DD00B7 /* CODSaleInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7727502203F9F100DD00B7 /* CODSaleInputViewController.m */; };
 		6E92815A21D4DAE2006CC8B8 /* UINavigationBar+COD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92815921D4DAE2006CC8B8 /* UINavigationBar+COD.m */; };
 		6E9D112A21F071EC00FC9EBC /* CODComentSuccViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9D112921F071EC00FC9EBC /* CODComentSuccViewController.m */; };
 		6E9D112D21F0791C00FC9EBC /* ServicePathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9D112C21F0791C00FC9EBC /* ServicePathView.m */; };
@@ -167,7 +189,6 @@
 		6ECA551421D752BA00F6C7AB /* CLLocation+YCLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECA551121D752BA00F6C7AB /* CLLocation+YCLocation.m */; };
 		6ECA551721D75A2600F6C7AB /* CODSpecialPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECA551621D75A2600F6C7AB /* CODSpecialPopView.m */; };
 		6ECA59F021F6B0C20003F0A1 /* CODDIYViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECA59EF21F6B0C20003F0A1 /* CODDIYViewController.m */; };
-		6ECA59F321F6B1F10003F0A1 /* CODDIYCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECA59F221F6B1F10003F0A1 /* CODDIYCollectionViewCell.m */; };
 		6EDB3DFB21CC7E9E006F2208 /* CODLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EDB3DFA21CC7E9E006F2208 /* CODLoginViewController.m */; };
 		6EDB3E0321CC8B62006F2208 /* CODNetWorkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EDB3E0221CC8B62006F2208 /* CODNetWorkManager.m */; };
 		6EDB3E3C21CC96A4006F2208 /* UIButton+COD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EDB3E3B21CC96A4006F2208 /* UIButton+COD.m */; };
@@ -346,10 +367,14 @@
 		6E1A7CAD21D0D605002FCAC6 /* HomeLeftRightView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeLeftRightView.m; sourceTree = "<group>"; };
 		6E1A7CB021D0D6F7002FCAC6 /* CODFindDecorateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODFindDecorateViewController.h; sourceTree = "<group>"; };
 		6E1A7CB121D0D6F7002FCAC6 /* CODFindDecorateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODFindDecorateViewController.m; sourceTree = "<group>"; };
-		6E1A7CB321D0D738002FCAC6 /* CODSecondHorseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODSecondHorseViewController.h; sourceTree = "<group>"; };
-		6E1A7CB421D0D738002FCAC6 /* CODSecondHorseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSecondHorseViewController.m; sourceTree = "<group>"; };
-		6E1A7CB621D0D748002FCAC6 /* CODNewHorseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODNewHorseViewController.h; sourceTree = "<group>"; };
-		6E1A7CB721D0D748002FCAC6 /* CODNewHorseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODNewHorseViewController.m; sourceTree = "<group>"; };
+		6E1D385222018AE70057FF29 /* CODEdgeLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODEdgeLabel.h; sourceTree = "<group>"; };
+		6E1D385322018AE70057FF29 /* CODEdgeLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODEdgeLabel.m; sourceTree = "<group>"; };
+		6E1D38582201924A0057FF29 /* CODNewHsDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODNewHsDetailViewController.h; sourceTree = "<group>"; };
+		6E1D38592201924A0057FF29 /* CODNewHsDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODNewHsDetailViewController.m; sourceTree = "<group>"; };
+		6E1D385B2201967E0057FF29 /* CODHouseDetailIntroCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODHouseDetailIntroCell.h; sourceTree = "<group>"; };
+		6E1D385C2201967E0057FF29 /* CODHouseDetailIntroCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODHouseDetailIntroCell.m; sourceTree = "<group>"; };
+		6E1D385E2201A1E80057FF29 /* CODLouPanInfoViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODLouPanInfoViewCell.h; sourceTree = "<group>"; };
+		6E1D385F2201A1E80057FF29 /* CODLouPanInfoViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODLouPanInfoViewCell.m; sourceTree = "<group>"; };
 		6E1E283D21F8083B005DCBAD /* jpush-extension-ios-1.1.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-extension-ios-1.1.1.a"; sourceTree = "<group>"; };
 		6E1E283E21F8083B005DCBAD /* jpush-ios-3.1.2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-3.1.2.a"; sourceTree = "<group>"; };
 		6E1E283F21F8083B005DCBAD /* JPushNotificationExtensionService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPushNotificationExtensionService.h; sourceTree = "<group>"; };
@@ -367,6 +392,14 @@
 		6E229DC421F1803000A91E2A /* UIView+frameAdjust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+frameAdjust.h"; sourceTree = "<group>"; };
 		6E229DC621F1AC9900A91E2A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		6E229DC721F1AC9A00A91E2A /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		6E2766C721FAA14600911C51 /* CODDIYGridTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYGridTableViewCell.h; sourceTree = "<group>"; };
+		6E2766C821FAA14600911C51 /* CODDIYGridTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYGridTableViewCell.m; sourceTree = "<group>"; };
+		6E27671521FB0CA300911C51 /* CODNewHorseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODNewHorseViewController.h; sourceTree = "<group>"; };
+		6E27671621FB0CA300911C51 /* CODNewHorseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODNewHorseViewController.m; sourceTree = "<group>"; };
+		6E27671821FB0CD100911C51 /* CODNewHorseTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODNewHorseTableViewCell.h; sourceTree = "<group>"; };
+		6E27671921FB0CD100911C51 /* CODNewHorseTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODNewHorseTableViewCell.m; sourceTree = "<group>"; };
+		6E27671C21FB0D7F00911C51 /* CODNewHorseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODNewHorseModel.h; sourceTree = "<group>"; };
+		6E27671D21FB0D7F00911C51 /* CODNewHorseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODNewHorseModel.m; sourceTree = "<group>"; };
 		6E29468F21E48343008F162E /* UMSocialSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResources.bundle; sourceTree = "<group>"; };
 		6E29469021E48343008F162E /* UShareUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UShareUI.framework; sourceTree = "<group>"; };
 		6E29469121E48343008F162E /* UMShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMShare.framework; sourceTree = "<group>"; };
@@ -456,11 +489,43 @@
 		6E5B4DE121EC8B3B00BF66A9 /* CODNewHouseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODNewHouseViewController.m; sourceTree = "<group>"; };
 		6E5B4DE321EC965100BF66A9 /* CODExampTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODExampTableViewCell.h; sourceTree = "<group>"; };
 		6E5B4DE421EC965100BF66A9 /* CODExampTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODExampTableViewCell.m; sourceTree = "<group>"; };
+		6E5D653F2202980E00035760 /* CODVideoImageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODVideoImageCell.h; sourceTree = "<group>"; };
+		6E5D65402202980E00035760 /* CODVideoImageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODVideoImageCell.m; sourceTree = "<group>"; };
+		6E5D65422202F08500035760 /* CODLoupanInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODLoupanInfoViewController.h; sourceTree = "<group>"; };
+		6E5D65432202F08500035760 /* CODLoupanInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODLoupanInfoViewController.m; sourceTree = "<group>"; };
+		6E5D65452202F3BF00035760 /* CODLoupanHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODLoupanHeaderView.h; sourceTree = "<group>"; };
+		6E5D65462202F3BF00035760 /* CODLoupanHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODLoupanHeaderView.m; sourceTree = "<group>"; };
 		6E6224BE21F158E100C2A7E8 /* CODExamDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CODExamDetailViewController.m; sourceTree = "<group>"; };
 		6E6A84A121F557C500B19D26 /* MessageActViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageActViewController.h; sourceTree = "<group>"; };
 		6E6A84A221F557C500B19D26 /* MessageActViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageActViewController.m; sourceTree = "<group>"; };
 		6E6A84A421F55BD200B19D26 /* MessageActTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageActTableViewCell.h; sourceTree = "<group>"; };
 		6E6A84A521F55BD200B19D26 /* MessageActTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageActTableViewCell.m; sourceTree = "<group>"; };
+		6E726E7621F9594A00540611 /* CODDIYCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CODDIYCollectionViewCell.m; sourceTree = "<group>"; };
+		6E726E7721F9594A00540611 /* XHIntegralCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHIntegralCollectionReusableView.m; sourceTree = "<group>"; };
+		6E726E7821F9594A00540611 /* XHIntegralCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHIntegralCollectionReusableView.h; sourceTree = "<group>"; };
+		6E726E7921F9594B00540611 /* CODDIYCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CODDIYCollectionViewCell.h; sourceTree = "<group>"; };
+		6E726E7F21F9677600540611 /* CODDIYFourItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYFourItemView.h; sourceTree = "<group>"; };
+		6E726E8021F9677600540611 /* CODDIYFourItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYFourItemView.m; sourceTree = "<group>"; };
+		6E726E8221F96FB300540611 /* CODDIYModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYModel.h; sourceTree = "<group>"; };
+		6E726E8321F96FB300540611 /* CODDIYModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYModel.m; sourceTree = "<group>"; };
+		6E726E8521F9940B00540611 /* CODDIYCateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYCateViewController.h; sourceTree = "<group>"; };
+		6E726E8621F9940B00540611 /* CODDIYCateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYCateViewController.m; sourceTree = "<group>"; };
+		6E726E8B21F9981000540611 /* CODAllSortViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODAllSortViewController.h; sourceTree = "<group>"; };
+		6E726E8C21F9981000540611 /* CODAllSortViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODAllSortViewController.m; sourceTree = "<group>"; };
+		6E726E8E21F99A9400540611 /* CODSortCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODSortCollectionViewCell.h; sourceTree = "<group>"; };
+		6E726E8F21F99A9500540611 /* CODSortCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSortCollectionViewCell.m; sourceTree = "<group>"; };
+		6E726E9121F99FCF00540611 /* CODDIYConditionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYConditionView.h; sourceTree = "<group>"; };
+		6E726E9221F99FCF00540611 /* CODDIYConditionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYConditionView.m; sourceTree = "<group>"; };
+		6E726E9421F9A6F800540611 /* CODDIYDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYDetailViewController.h; sourceTree = "<group>"; };
+		6E726E9521F9A6F800540611 /* CODDIYDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYDetailViewController.m; sourceTree = "<group>"; };
+		6E726E9721F9B36900540611 /* CODGoodsDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODGoodsDetailViewController.h; sourceTree = "<group>"; };
+		6E726E9821F9B36900540611 /* CODGoodsDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODGoodsDetailViewController.m; sourceTree = "<group>"; };
+		6E7727492203F51B00DD00B7 /* CODSecondHouseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODSecondHouseViewController.h; sourceTree = "<group>"; };
+		6E77274A2203F51B00DD00B7 /* CODSecondHouseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSecondHouseViewController.m; sourceTree = "<group>"; };
+		6E77274C2203F58100DD00B7 /* CODSecondHouseTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODSecondHouseTableViewCell.h; sourceTree = "<group>"; };
+		6E77274D2203F58100DD00B7 /* CODSecondHouseTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSecondHouseTableViewCell.m; sourceTree = "<group>"; };
+		6E77274F2203F9F100DD00B7 /* CODSaleInputViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODSaleInputViewController.h; sourceTree = "<group>"; };
+		6E7727502203F9F100DD00B7 /* CODSaleInputViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSaleInputViewController.m; sourceTree = "<group>"; };
 		6E92815821D4DAE2006CC8B8 /* UINavigationBar+COD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+COD.h"; sourceTree = "<group>"; };
 		6E92815921D4DAE2006CC8B8 /* UINavigationBar+COD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+COD.m"; sourceTree = "<group>"; };
 		6E9D112821F071EC00FC9EBC /* CODComentSuccViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODComentSuccViewController.h; sourceTree = "<group>"; };
@@ -562,8 +627,6 @@
 		6ECA551621D75A2600F6C7AB /* CODSpecialPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODSpecialPopView.m; sourceTree = "<group>"; };
 		6ECA59EE21F6B0C20003F0A1 /* CODDIYViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYViewController.h; sourceTree = "<group>"; };
 		6ECA59EF21F6B0C20003F0A1 /* CODDIYViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYViewController.m; sourceTree = "<group>"; };
-		6ECA59F121F6B1F10003F0A1 /* CODDIYCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODDIYCollectionViewCell.h; sourceTree = "<group>"; };
-		6ECA59F221F6B1F10003F0A1 /* CODDIYCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODDIYCollectionViewCell.m; sourceTree = "<group>"; };
 		6EDB3DF921CC7E9E006F2208 /* CODLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODLoginViewController.h; sourceTree = "<group>"; };
 		6EDB3DFA21CC7E9E006F2208 /* CODLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CODLoginViewController.m; sourceTree = "<group>"; };
 		6EDB3DFF21CC8225006F2208 /* CODMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODMacros.h; sourceTree = "<group>"; };
@@ -939,6 +1002,38 @@
 			path = JPush;
 			sourceTree = "<group>";
 		};
+		6E27671421FB0C4000911C51 /* new horse  */ = {
+			isa = PBXGroup;
+			children = (
+				6E27671521FB0CA300911C51 /* CODNewHorseViewController.h */,
+				6E27671621FB0CA300911C51 /* CODNewHorseViewController.m */,
+				6E27671821FB0CD100911C51 /* CODNewHorseTableViewCell.h */,
+				6E27671921FB0CD100911C51 /* CODNewHorseTableViewCell.m */,
+				6E1D38582201924A0057FF29 /* CODNewHsDetailViewController.h */,
+				6E1D38592201924A0057FF29 /* CODNewHsDetailViewController.m */,
+				6E5D65422202F08500035760 /* CODLoupanInfoViewController.h */,
+				6E5D65432202F08500035760 /* CODLoupanInfoViewController.m */,
+				6E5D65452202F3BF00035760 /* CODLoupanHeaderView.h */,
+				6E5D65462202F3BF00035760 /* CODLoupanHeaderView.m */,
+				6E5D653F2202980E00035760 /* CODVideoImageCell.h */,
+				6E5D65402202980E00035760 /* CODVideoImageCell.m */,
+				6E1D385B2201967E0057FF29 /* CODHouseDetailIntroCell.h */,
+				6E1D385C2201967E0057FF29 /* CODHouseDetailIntroCell.m */,
+				6E1D385E2201A1E80057FF29 /* CODLouPanInfoViewCell.h */,
+				6E1D385F2201A1E80057FF29 /* CODLouPanInfoViewCell.m */,
+			);
+			path = "new horse ";
+			sourceTree = "<group>";
+		};
+		6E27671B21FB0D6100911C51 /* new hourse */ = {
+			isa = PBXGroup;
+			children = (
+				6E27671C21FB0D7F00911C51 /* CODNewHorseModel.h */,
+				6E27671D21FB0D7F00911C51 /* CODNewHorseModel.m */,
+			);
+			name = "new hourse";
+			sourceTree = "<group>";
+		};
 		6E29468D21E48343008F162E /* UMSocial */ = {
 			isa = PBXGroup;
 			children = (
@@ -1134,10 +1229,6 @@
 				6E1A7CB121D0D6F7002FCAC6 /* CODFindDecorateViewController.m */,
 				6E5252D221D6112A00857773 /* CODDecorateTableViewCell.h */,
 				6E5252D321D6112A00857773 /* CODDecorateTableViewCell.m */,
-				6E1A7CB321D0D738002FCAC6 /* CODSecondHorseViewController.h */,
-				6E1A7CB421D0D738002FCAC6 /* CODSecondHorseViewController.m */,
-				6E1A7CB621D0D748002FCAC6 /* CODNewHorseViewController.h */,
-				6E1A7CB721D0D748002FCAC6 /* CODNewHorseViewController.m */,
 				6ECA54FE21D710D000F6C7AB /* CODCompanyDetailViewController.h */,
 				6ECA54FF21D710D000F6C7AB /* CODCompanyDetailViewController.m */,
 				6EBCD8CC21E74B9F00268765 /* CODShopInfoViewController.h */,
@@ -1164,6 +1255,19 @@
 				6E2A3AB621DDAB36002BE8A0 /* CODOrderPopView.m */,
 			);
 			path = "find decorate";
+			sourceTree = "<group>";
+		};
+		6E7727482203F4CB00DD00B7 /* second house */ = {
+			isa = PBXGroup;
+			children = (
+				6E7727492203F51B00DD00B7 /* CODSecondHouseViewController.h */,
+				6E77274A2203F51B00DD00B7 /* CODSecondHouseViewController.m */,
+				6E77274C2203F58100DD00B7 /* CODSecondHouseTableViewCell.h */,
+				6E77274D2203F58100DD00B7 /* CODSecondHouseTableViewCell.m */,
+				6E77274F2203F9F100DD00B7 /* CODSaleInputViewController.h */,
+				6E7727502203F9F100DD00B7 /* CODSaleInputViewController.m */,
+			);
+			path = "second house";
 			sourceTree = "<group>";
 		};
 		6EA7200321DC526800629A1B /* comment */ = {
@@ -1312,6 +1416,8 @@
 				6E9FAD1621EC22DB00C60DA5 /* CODExampDetailModel.m */,
 				6E9FAD1821EC235700C60DA5 /* CODMerchantModel.h */,
 				6E9FAD1921EC235700C60DA5 /* CODMerchantModel.m */,
+				6E726E8221F96FB300540611 /* CODDIYModel.h */,
+				6E726E8321F96FB300540611 /* CODDIYModel.m */,
 			);
 			name = decrate;
 			sourceTree = "<group>";
@@ -1332,8 +1438,26 @@
 			children = (
 				6ECA59EE21F6B0C20003F0A1 /* CODDIYViewController.h */,
 				6ECA59EF21F6B0C20003F0A1 /* CODDIYViewController.m */,
-				6ECA59F121F6B1F10003F0A1 /* CODDIYCollectionViewCell.h */,
-				6ECA59F221F6B1F10003F0A1 /* CODDIYCollectionViewCell.m */,
+				6E726E9721F9B36900540611 /* CODGoodsDetailViewController.h */,
+				6E726E9821F9B36900540611 /* CODGoodsDetailViewController.m */,
+				6E726E9421F9A6F800540611 /* CODDIYDetailViewController.h */,
+				6E726E9521F9A6F800540611 /* CODDIYDetailViewController.m */,
+				6E2766C721FAA14600911C51 /* CODDIYGridTableViewCell.h */,
+				6E2766C821FAA14600911C51 /* CODDIYGridTableViewCell.m */,
+				6E726E8521F9940B00540611 /* CODDIYCateViewController.h */,
+				6E726E8621F9940B00540611 /* CODDIYCateViewController.m */,
+				6E726E8B21F9981000540611 /* CODAllSortViewController.h */,
+				6E726E8C21F9981000540611 /* CODAllSortViewController.m */,
+				6E726E8E21F99A9400540611 /* CODSortCollectionViewCell.h */,
+				6E726E8F21F99A9500540611 /* CODSortCollectionViewCell.m */,
+				6E726E7921F9594B00540611 /* CODDIYCollectionViewCell.h */,
+				6E726E7621F9594A00540611 /* CODDIYCollectionViewCell.m */,
+				6E726E7821F9594A00540611 /* XHIntegralCollectionReusableView.h */,
+				6E726E7721F9594A00540611 /* XHIntegralCollectionReusableView.m */,
+				6E726E7F21F9677600540611 /* CODDIYFourItemView.h */,
+				6E726E8021F9677600540611 /* CODDIYFourItemView.m */,
+				6E726E9121F99FCF00540611 /* CODDIYConditionView.h */,
+				6E726E9221F99FCF00540611 /* CODDIYConditionView.m */,
 			);
 			name = "自装采购(二期)";
 			sourceTree = "<group>";
@@ -1468,6 +1592,7 @@
 		6EE5F89221CB85F600630E68 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6E27671B21FB0D6100911C51 /* new hourse */,
 				6EB1063C21ED73070078F246 /* mine */,
 				6E4BB84D21E59183003C9058 /* home */,
 				6EF73CB321E324B800ECFB4C /* user */,
@@ -1481,6 +1606,8 @@
 		6EE5F89321CB860200630E68 /* View&&Controller */ = {
 			isa = PBXGroup;
 			children = (
+				6E7727482203F4CB00DD00B7 /* second house */,
+				6E27671421FB0C4000911C51 /* new horse  */,
 				6E12592721F2B34800F0065F /* order&measure */,
 				6E5B4DDF21EC721A00BF66A9 /* find decorate */,
 				6E5B4DDE21EC71BB00BF66A9 /* search */,
@@ -1585,6 +1712,8 @@
 				6E1A7CA221D08213002FCAC6 /* 跑马灯 */,
 				6EF104C721E03CF200CF673B /* GetImage.h */,
 				6EF104C821E03CF200CF673B /* GetImage.m */,
+				6E1D385222018AE70057FF29 /* CODEdgeLabel.h */,
+				6E1D385322018AE70057FF29 /* CODEdgeLabel.m */,
 			);
 			path = commons;
 			sourceTree = "<group>";
@@ -1907,6 +2036,7 @@
 		6EE5F85221CB808B00630E68 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = "";
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = JIARUI;
 				TargetAttributes = {
@@ -2006,12 +2136,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-YiJiaNet/Pods-YiJiaNet-resources.sh",
 				"${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle",
+				"${PODS_ROOT}/JPVideoPlayer/JPVideoPlayer/JPVideoPlayer.bundle",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_ROOT}/TZImagePickerController/TZImagePickerController/TZImagePickerController/TZImagePickerController.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IQKeyboardManager.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JPVideoPlayer.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TZImagePickerController.bundle",
 			);
@@ -2032,32 +2164,40 @@
 				6EF104E321E0511B00CF673B /* WMMenuItem.m in Sources */,
 				6EF1050021E084F700CF673B /* CODTextView.m in Sources */,
 				6E9FAD1721EC22DC00C60DA5 /* CODExampDetailModel.m in Sources */,
+				6E726E8721F9940B00540611 /* CODDIYCateViewController.m in Sources */,
 				6E0713B021E0A6EA00E9C8F3 /* BRAddressModel.m in Sources */,
+				6E726E8421F96FB300540611 /* CODDIYModel.m in Sources */,
 				6EEEA06521DEF455004EA7F0 /* UIImageView+AFNetworking.m in Sources */,
 				6EA7204221DCC9E700629A1B /* WRNavigationBar.m in Sources */,
 				6EA7201021DC52F800629A1B /* CommonImageCollectVW.m in Sources */,
 				6E5B4DD921EC3E4500BF66A9 /* TAAnimatedDotView.m in Sources */,
 				6E13FC7B21D31A75008318F3 /* CODBaseTableViewController.m in Sources */,
 				6E0713AD21E0A6EA00E9C8F3 /* NSDate+BRPickerView.m in Sources */,
+				6E726E7A21F9594B00540611 /* CODDIYCollectionViewCell.m in Sources */,
 				6EDB3E3C21CC96A4006F2208 /* UIButton+COD.m in Sources */,
 				6EEEA08921DF3CD8004EA7F0 /* CODAuthenStatusViewController.m in Sources */,
+				6E5D65412202980E00035760 /* CODVideoImageCell.m in Sources */,
 				6E5252FC21D62F5E00857773 /* CODSearchResultViewController.m in Sources */,
 				6EF104F121E0615D00CF673B /* CODMineOrderViewController.m in Sources */,
 				6EB1064921EDE1140078F246 /* UIView+COD.m in Sources */,
 				6EE5F8CF21CBA12B00630E68 /* CODHomeViewController.m in Sources */,
 				6EF104E421E0511B00CF673B /* WMScrollView.m in Sources */,
 				6E229DC521F1803100A91E2A /* UIView+frameAdjust.m in Sources */,
+				6E5D65442202F08500035760 /* CODLoupanInfoViewController.m in Sources */,
 				6EBF871D21CCDE66003E7E25 /* CODRegistViewController.m in Sources */,
 				6EEEA06421DEF455004EA7F0 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				6EBCD8CE21E74B9F00268765 /* CODShopInfoViewController.m in Sources */,
 				6EF4F6D321D2392000BCE41D /* CODIntrinsicTitleView.m in Sources */,
 				6E9FAD1A21EC235700C60DA5 /* CODMerchantModel.m in Sources */,
 				6EE5F8B421CB9BA200630E68 /* CODBaseLoadView.m in Sources */,
+				6E726E9321F99FCF00540611 /* CODDIYConditionView.m in Sources */,
 				6E5252CE21D601B100857773 /* DecorateFourItemView.m in Sources */,
 				6EA7201621DC532A00629A1B /* ImageBrowserViewController.m in Sources */,
 				6E2A3AD121DE15BE002BE8A0 /* XWXShareView.m in Sources */,
 				6EB1063821ED6B4C0078F246 /* CODHisCompChildController.m in Sources */,
+				6E726E8D21F9981000540611 /* CODAllSortViewController.m in Sources */,
 				6EEEA06621DEF455004EA7F0 /* UIButton+AFNetworking.m in Sources */,
+				6E77274B2203F51B00DD00B7 /* CODSecondHouseViewController.m in Sources */,
 				6E12504221D4BB8400202FAE /* MessageSysViewController.m in Sources */,
 				6E19C26221EEDAD40036731B /* CODMineOrderTableViewCell.m in Sources */,
 				6EA69EED21E618DC008FC890 /* CODDectateListModel.m in Sources */,
@@ -2066,7 +2206,10 @@
 				6EF104F721E061F900CF673B /* CODOwnerViewController.m in Sources */,
 				6EDB3E3F21CC9967006F2208 /* CODLayoutButton.m in Sources */,
 				6E1A7C9E21D07BE9002FCAC6 /* TWHImgTitleBtn.m in Sources */,
+				6E5D65472202F3BF00035760 /* CODLoupanHeaderView.m in Sources */,
+				6E726E9021F99A9500540611 /* CODSortCollectionViewCell.m in Sources */,
 				6EB1064621EDB59C0078F246 /* MBProgressHUD+COD.m in Sources */,
+				6E726E8121F9677600540611 /* CODDIYFourItemView.m in Sources */,
 				6EE5F86D21CB808B00630E68 /* main.m in Sources */,
 				6EC264EF21D4662B00C3EA57 /* CODModifyQuantityView.m in Sources */,
 				6E12503C21D4B0DA00202FAE /* CODMessageViewController.m in Sources */,
@@ -2109,7 +2252,7 @@
 				6EB1063B21ED6B7D0078F246 /* CODHisCompTableViewCell.m in Sources */,
 				6E19C26521EEDEDA0036731B /* CODOrderModel.m in Sources */,
 				6E13FC7521D31934008318F3 /* StoreSearchCollectLayout.m in Sources */,
-				6ECA59F321F6B1F10003F0A1 /* CODDIYCollectionViewCell.m in Sources */,
+				6E2766C921FAA14600911C51 /* CODDIYGridTableViewCell.m in Sources */,
 				6EEEA06F21DEF455004EA7F0 /* AFNetworkReachabilityManager.m in Sources */,
 				6E4BB85021E591AB003C9058 /* CODHotModel.m in Sources */,
 				6EC264F321D484AC00C3EA57 /* TWHRichTextTool.m in Sources */,
@@ -2118,6 +2261,7 @@
 				6EF104EB21E0534000CF673B /* CODCompanyListViewController.m in Sources */,
 				6E13FC7E21D35BA8008318F3 /* LocationCityCollectionViewCell.m in Sources */,
 				6EEEA06721DEF455004EA7F0 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
+				6E7727512203F9F100DD00B7 /* CODSaleInputViewController.m in Sources */,
 				6E13FC6B21D3173F008318F3 /* SwitchCityCollecHeadView.m in Sources */,
 				6E9D112A21F071EC00FC9EBC /* CODComentSuccViewController.m in Sources */,
 				6EA7204321DCC9E700629A1B /* WRCustomNavigationBar.m in Sources */,
@@ -2141,8 +2285,8 @@
 				6EEEA06D21DEF455004EA7F0 /* AFURLSessionManager.m in Sources */,
 				6EE5F8D521CBA14C00630E68 /* CODMineViewController.m in Sources */,
 				6EA7200921DC529900629A1B /* CODCommentTableViewCell.m in Sources */,
-				6E1A7CB821D0D748002FCAC6 /* CODNewHorseViewController.m in Sources */,
 				6EA7202721DC6DD100629A1B /* CODCommentViewController.m in Sources */,
+				6E1D385D2201967E0057FF29 /* CODHouseDetailIntroCell.m in Sources */,
 				6E19C26B21EF0F080036731B /* CODInsetTableViewCell.m in Sources */,
 				6E6A84A321F557C500B19D26 /* MessageActViewController.m in Sources */,
 				6EA7200621DC527700629A1B /* MyCommentImfoMode.m in Sources */,
@@ -2158,6 +2302,7 @@
 				6E53865A21E4552D00253316 /* ZXPUnicode.m in Sources */,
 				6E0713AE21E0A6EA00E9C8F3 /* BRDatePickerView.m in Sources */,
 				6EEEA07021DEF455004EA7F0 /* AFSecurityPolicy.m in Sources */,
+				6E726E9621F9A6F800540611 /* CODDIYDetailViewController.m in Sources */,
 				6E07137921E0995B00E9C8F3 /* CODPersonInfoViewController.m in Sources */,
 				6EF4F6B221D1D10A00BCE41D /* CODExampleTableViewCell.m in Sources */,
 				6E4BB85321E59A54003C9058 /* CODHotDetailViewController.m in Sources */,
@@ -2170,11 +2315,12 @@
 				6E5B4DD821EC3E4500BF66A9 /* TAPageControl.m in Sources */,
 				6EE5F8C821CB9EFC00630E68 /* CODMainNavController.m in Sources */,
 				6E13FC7821D31A4C008318F3 /* SwitchCityViewController.m in Sources */,
+				6E1D385422018AE70057FF29 /* CODEdgeLabel.m in Sources */,
 				6EBF873221CCE4BE003E7E25 /* SVProgressHUD+COD.m in Sources */,
 				6E19C27C21EF22F50036731B /* TZTestCell.m in Sources */,
 				6ECA550621D7214B00F6C7AB /* CODDecoExamCollectionView.m in Sources */,
 				6EEEA06221DEF455004EA7F0 /* UIProgressView+AFNetworking.m in Sources */,
-				6E1A7CB521D0D738002FCAC6 /* CODSecondHorseViewController.m in Sources */,
+				6E27671E21FB0D7F00911C51 /* CODNewHorseModel.m in Sources */,
 				6EF4F6C421D2226000BCE41D /* CODHotViewController.m in Sources */,
 				6EBF868721CCBADD003E7E25 /* UILabel+LabQuickInit.m in Sources */,
 				6EBF872A21CCE454003E7E25 /* SVProgressHUD.m in Sources */,
@@ -2189,7 +2335,9 @@
 				6EA69EF821E72304008FC890 /* CODCommentModel.m in Sources */,
 				6EE5F8B121CB9BA200630E68 /* CODBaseBlankView.m in Sources */,
 				6EEEA08D21DF4A5D004EA7F0 /* JSWave.m in Sources */,
+				6E27671A21FB0CD100911C51 /* CODNewHorseTableViewCell.m in Sources */,
 				6E1A7CAB21D0CC0C002FCAC6 /* HomeFourItemView.m in Sources */,
+				6E726E9921F9B36900540611 /* CODGoodsDetailViewController.m in Sources */,
 				6EBF872921CCE454003E7E25 /* SVProgressAnimatedView.m in Sources */,
 				6E5252F221D62B0300857773 /* TMCache.m in Sources */,
 				6EE5F8B221CB9BA200630E68 /* CODBaseTableViewCell.m in Sources */,
@@ -2198,11 +2346,14 @@
 				6E13FC6C21D3173F008318F3 /* SwitchCityCollectionViewCell.m in Sources */,
 				6ECA550D21D726D000F6C7AB /* CODDecoExamCollectionViewCell.m in Sources */,
 				6EF104E821E0511B00CF673B /* WMStickyPageController.m in Sources */,
+				6E1D385A2201924A0057FF29 /* CODNewHsDetailViewController.m in Sources */,
+				6E1D38602201A1E80057FF29 /* CODLouPanInfoViewCell.m in Sources */,
 				6E19C27E21EF22F50036731B /* GetMultipleImagesTableViewCell.m in Sources */,
 				6E5B4DD621EC3E4500BF66A9 /* SDCollectionViewCell.m in Sources */,
 				6E5B4DDD21EC62B200BF66A9 /* CODAuthenInfoViewController.m in Sources */,
 				6ECA59F021F6B0C20003F0A1 /* CODDIYViewController.m in Sources */,
 				6EBF872B21CCE454003E7E25 /* SVIndefiniteAnimatedView.m in Sources */,
+				6E27671721FB0CA300911C51 /* CODNewHorseViewController.m in Sources */,
 				6EA7203621DCA5E800629A1B /* CODAllDecorateViewController.m in Sources */,
 				6E2A3ACA21DE0F8B002BE8A0 /* DecorateConditionView.m in Sources */,
 				6E5B4DD421EC3E4500BF66A9 /* SDCycleScrollView.m in Sources */,
@@ -2211,9 +2362,11 @@
 				6EF4F6AC21D1BC0F00BCE41D /* SGAdvertScrollView.m in Sources */,
 				6EF4F6B821D220FA00BCE41D /* CODCalcuQuoteViewController.m in Sources */,
 				6E5252DE21D6242300857773 /* CODSearchViewController.m in Sources */,
+				6E77274E2203F58100DD00B7 /* CODSecondHouseTableViewCell.m in Sources */,
 				6E229DC821F1AC9A00A91E2A /* MBProgressHUD.m in Sources */,
 				6EEEA06A21DEF455004EA7F0 /* AFImageDownloader.m in Sources */,
 				6E1A7CAE21D0D605002FCAC6 /* HomeLeftRightView.m in Sources */,
+				6E726E7B21F9594B00540611 /* XHIntegralCollectionReusableView.m in Sources */,
 				6E5252D721D611B800857773 /* CODImageLineView.m in Sources */,
 				6EE5F8C221CB9CC200630E68 /* UILabel+COD.m in Sources */,
 				6EA69EF521E717E0008FC890 /* CODCompanyDetailModel.m in Sources */,

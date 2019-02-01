@@ -22,5 +22,6 @@ target 'YiJiaNet' do
     pod 'YeeBadgeView', '~> 0.0.3'
     pod 'TZImagePickerController'
     pod 'AMapLocation'#高德定位
+    pod 'JPVideoPlayer'
 end
 

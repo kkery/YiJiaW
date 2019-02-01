@@ -123,12 +123,12 @@ static NSString * const kMessageActTableViewCell = @"MessageActTableViewCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MessageActTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMessageActTableViewCell forIndexPath:indexPath];
     CODMessageModel *message = self.dataArray[indexPath.row];
-    @weakify(self);
-    [[cell.actButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-        @strongify(self);
-        CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:message.url];
-        [self.navigationController pushViewController:webVC animated:YES];
-    }];
+//    @weakify(self);
+//    [[cell.actButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+//        @strongify(self);
+//        CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:message.url];
+//        [self.navigationController pushViewController:webVC animated:YES];
+//    }];
     [cell configureWithModel:message];
     return cell;
 }
@@ -140,6 +140,9 @@ static NSString * const kMessageActTableViewCell = @"MessageActTableViewCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    CODMessageModel *message = self.dataArray[indexPath.row];
+    CODBaseWebViewController *webVC = [[CODBaseWebViewController alloc] initWithUrlString:message.url];
+    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 #pragma mark - EmptyDataSet

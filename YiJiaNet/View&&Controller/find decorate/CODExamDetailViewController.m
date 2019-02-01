@@ -199,7 +199,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
     });
 }
 
--(WKWebView *)webView{
+- (WKWebView *)webView{
     if (!_webView) {
         WKWebViewConfiguration *wkWebConfig = [[WKWebViewConfiguration alloc] init];
         WKUserContentController *wkUController = [[WKUserContentController alloc] init];
@@ -376,7 +376,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
             [cell.contentView addSubview:largeTitleLable];
             
             UIView *lineView = [[UIView alloc] init];
-            lineView.backgroundColor = CODColorTheme;
+            lineView.backgroundColor = CODColorButtonHighlighted;
             lineView.layer.cornerRadius = 3;
             lineView.layer.masksToBounds = YES;
             [largeTitleLable addSubview:lineView];
@@ -387,7 +387,7 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
                 make.height.equalTo(@20);
             }];
             [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.equalTo(largeTitleLable);
+                make.width.equalTo(@105);
                 make.centerX.equalTo(cell.contentView);
                 make.height.equalTo(@5);
                 make.top.equalTo(largeTitleLable.mas_bottom).offset(-5);
@@ -522,7 +522,12 @@ static CGFloat const kTopViewHeight = 188;// 顶部图高度
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didScrollToIndex:(NSInteger)index {
     [self.scrollImgNumLabel setText:kFORMAT(@"%@/%@",@(index+1), @(self.exampModel.imgs.count))];
     
-//    self.scrollImgNumLabel.size = kGetTextSize(self.scrollImgNumLabel.text, 100, 20, 12);
+    CGFloat width = kGetTextSize(self.scrollImgNumLabel.text, 200, 20, 12).width;
+    if (width>35) {
+        [self.scrollImgNumLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(width+20));
+        }];
+    }
 }
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index {
     if ([UIViewController getCurrentVC]) {

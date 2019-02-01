@@ -9,5 +9,6 @@
 #import "CODBaseViewController.h"
 
 @interface CODDIYViewController : CODBaseViewController
+@property (nonatomic, assign) NSInteger decoratType;
 
 @end

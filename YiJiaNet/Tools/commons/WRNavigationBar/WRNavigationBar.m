@@ -690,11 +690,13 @@ static char kWRSystemNavBarTitleColorKey;
     //  UINavigationBar *navBar = (UINavigationBar *)[self wr_customNavBar];
     //  [navBar wr_setBackgroundColor:color];
     } else {
-        BOOL isRootViewController = (self.navigationController.viewControllers.firstObject == self);
-        if (([self pushToCurrentVCFinished] == YES || isRootViewController == YES) && [self pushToNextVCFinished] == NO) {
-            [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:color];
-        }
+//        BOOL isRootViewController = (self.navigationController.viewControllers.firstObject == self);
+//        if (([self pushToCurrentVCFinished] == YES || isRootViewController == YES) && [self pushToNextVCFinished] == NO) {
+//            [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:color];
+//        }
+        [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:color];
     }
+    [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:color];
 }
 
 // navigationBar _UIBarBackground alpha

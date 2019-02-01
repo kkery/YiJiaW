@@ -217,7 +217,15 @@ static ChoosePhotos *getImage = nil;
     imagePickerVc.showSelectBtn = YES;
     
     // 改变相册的导航栏背景颜色
-    imagePickerVc.navigationBar.barTintColor = [UIColor lightGrayColor]/* ThemeColor MYCOLOR(245, 90, 71)*/;
+//    imagePickerVc.navigationBar.barTintColor = [UIColor lightGrayColor]/* ThemeColor MYCOLOR(245, 90, 71)*/;
+//    [imagePickerVc wr_setNavBarBarTintColor:ThemeColor];
+    // WRNavigationBar 不会对 blackList 中的控制器有影响
+    [WRNavigationBar wr_setBlacklist:@[@"SpecialController",
+                                       @"TZPhotoPickerController",
+                                       @"TZGifPhotoPreviewController",
+                                       @"TZAlbumPickerController",
+                                       @"TZPhotoPreviewController",
+                                       @"TZVideoPlayerController"]];
     imagePickerVc.allowPickingVideo = NO;
     imagePickerVc.allowPickingImage = YES;
     imagePickerVc.allowPickingOriginalPhoto = YES;
